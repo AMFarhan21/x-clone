@@ -42,12 +42,12 @@ const NAVIGATION_ITEMS = [
 
 const LeftSidebar = () => {
   return (
-    <section className="fixed w-64 flex flex-col items-stretch h-screen space-y-4">
+    <section className="fixed w-70 flex flex-col items-stretch h-screen space-y-4">
           <div className="flex flex-col h-full items-stretch mt-4  pr-6">
             {NAVIGATION_ITEMS.map((item) => (
               <Link href={`/${item.title.toLowerCase()}`} key={item.title} className="flex hover:bg-white/10 transition duration-200 text-2xl items-center justify-start w-fit space-x-4 rounded-3xl p-4 py-3">
                 <div>
-                  <item.icon className="text-2xl" />
+                  <item.icon className="text-3xl" />
                 </div>
                 {item.title !== "Twitter" && <div className="text-xl"> {item.title} </div>}
               </Link>
