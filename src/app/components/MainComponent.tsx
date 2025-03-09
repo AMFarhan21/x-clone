@@ -8,7 +8,7 @@ import { MdBookmarkBorder } from "react-icons/md";
 
 const MainComponent = () => {
   return (
-    <main className="ml-70 w-[600px] h-full min-h-screen flex-col border-l border-r border-gray-600/50">
+    <main className="w-full max-w-[48%] h-full min-h-screen flex-col border-l border-r border-gray-600/50">
     <div className="text-sm font-bold flex justify-around py-5 border-b border-gray-600/50 w-full backdrop-blur-md bg-black/10 sticky top-0">
       <div>For you</div>
       <div>Following</div>
