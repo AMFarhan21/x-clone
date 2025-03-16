@@ -53,7 +53,7 @@ const MainComponent = () => {
                 </div>
               </div>
               <div className="pb-4 leading-4.5 text-[15px] mt-1">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quam quasi facilis illo unde aperiam facere. Aspernatur quibusdam consequatur quos, quod architecto enim, nulla voluptatem tempora deserunt rem nisi? Iusto, voluptas.</div>
-              <div> <img src="https://pbs.twimg.com/media/GlZlOviXAAAOox5?format=jpg&name=small" className="rounded-2xl mt-1" /> </div>
+              <div> <img src="https://pbs.twimg.com/media/Gl7W5kTXwAAne3c?format=jpg&name=medium" className="rounded-2xl mt-1" /> </div>
               <div className="flex justify-between mt-3 items-center">
                 <div className="flex text-white/50 items-end cursor-pointer space-x-1 text-[16px]"> <FaRegCommentAlt /> <div className="text-xs">123</div> </div>
                 <div className="flex text-white/50 items-end cursor-pointer space-x-1 text-xl"> <FaRetweet /> <div className="text-xs">123</div> </div>

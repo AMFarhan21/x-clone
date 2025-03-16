@@ -8,6 +8,7 @@ import { HiOutlineUser } from "react-icons/hi";
 import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
 import { BsThreeDots } from "react-icons/bs";
+import { createClient } from '@/utils/supabase/server';
 
 const NAVIGATION_ITEMS = [
     {
@@ -40,7 +41,7 @@ const NAVIGATION_ITEMS = [
     },
   ]
 
-const LeftSidebar = () => {
+const LeftSidebar = () => { 
   return (
     <section className="w-[24%] flex flex-col items-stretch h-screen space-y-4 sticky top-0">
           <div className="flex flex-col h-full items-stretch mt-1 ml-2 pr-6">
