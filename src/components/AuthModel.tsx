@@ -22,8 +22,8 @@ const AuthModel = () => {
         const checkAuth = async () => {
             const supabase = await createClient()
             const { data: { user }, error } = await supabase.auth.getUser()
-            console.log("USER: ", user);
-            console.log("ERROR: ", error);
+            // console.log("USER: ", user);
+            // console.log("ERROR: ", error);
 
             if (!user) {
                 setIsOpen(true)
