@@ -1,9 +1,9 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Dialog, DialogContent } from './ui/dialog'
-import { Input } from './ui/input'
-import { Button } from './ui/button'
+import { Dialog, DialogContent } from '../ui/dialog'
+import { Input } from '../ui/input'
+import { Button } from '../ui/button'
 import { DialogTitle } from '@radix-ui/react-dialog'
 import { signup } from '@/lib/action'
 import { createClient } from '@/utils/supabase/client'

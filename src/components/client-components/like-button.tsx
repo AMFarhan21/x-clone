@@ -1,20 +1,27 @@
 'use client'
 import React, { useTransition } from 'react'
 import { IoHeart, IoHeartOutline } from 'react-icons/io5'
-import { likePost } from '../server-components/mutation'
+import { likePost, unlikPost } from '../server-components/mutation'
 import { toast } from 'sonner'
+import { postType } from './posts'
 
+type likeButtonProps = {
+    post: postType;
+    likesCount: number;
+    isLiked: boolean;
+    userId: string
+}
 
-const LikeButton = ({ post, likesCount, isLiked, userId }) => {
+const LikeButton = ({ post, likesCount, isLiked, userId }: likeButtonProps) => {
     const [postPending, startTransition] = useTransition()
-    
+
     return (
         <div className="flex items-center text-white/50 text-[18px]">
             <button
                 disabled={postPending}
                 onClick={() => {
-                    if (post.profiles.id) {
-                        startTransition(async () => await likePost({ postId: post.id, profilesId: userId }))
+                    if (userId) {
+                        startTransition(async () => isLiked ? await unlikPost({ postId: post.id, profilesId: userId }) : await likePost({ postId: post.id, profilesId: userId }))
                     } else {
                         toast.error("Please login to like a post")
                     }
@@ -25,7 +32,7 @@ const LikeButton = ({ post, likesCount, isLiked, userId }) => {
                 <div className={`mt-[3px] text-xs ${isLiked ? "text-red-400" : ""}`}>{likesCount ?? 0}</div>
             </button>
 
-        </div>
+        </div >
     )
 }
 

@@ -1,7 +1,7 @@
 import LeftSidebar from "../components/LeftSidebar";
 import MainComponent from "../components/MainComponent";
 import RightSection from "../components/RightSection";
-import AuthModel from "@/components/AuthModel";
+import AuthModel from "@/components/client-components/AuthModel";
 
 
 const Home = async () => {

@@ -14,13 +14,33 @@ import { createClient } from "@/utils/supabase/server";
 
 dayjs.extend(relativeTime)
 
-const Posts = async({ post }) => {
+export type profilesType = {
+    id: string;
+    username: string;
+    full_name: string;
+    email: string;
+    created_at: string;
+}
+
+export type postType = {
+    id: string;
+    text: string;
+    profilesid: string;
+    created_at: string;
+    profiles: profilesType;
+}
+
+type postProps = {
+    post: postType;
+}
+
+const Posts = async({ post }: postProps) => {
 
     const supabase = await createClient();
     const user = await supabase.auth.getUser()
 
     const getPostLikesCount = await getLikesCount(post.id);
-    const isLikedByUser = await isLiked({postId: post.id, userId: user.data.user?.id});
+    const isLikedByUser = await isLiked({postId: post.id, profilesId: user.data.user?.id});
     
     return (
         <div>
