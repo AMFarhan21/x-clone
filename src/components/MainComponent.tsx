@@ -4,11 +4,21 @@ import { createServiceRoleClient } from "@/utils/supabase/serverSecret";
 
 import Posts from "./client-components/posts";
 import { getPosts } from "./server-components/fetch-data";
+import { createClient } from "@/utils/supabase/server";
 
 
 const MainComponent = async () => {
 
-  const posts = await getPosts();
+  const supabase = await createClient();
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+  const user = userData.user?.id
+  // console.log("SUCCESS MainComponent/getPosts -> getUser:", user)
+  // console.log("ERROR MainComponent/getPosts -> getUser: ", userError)
+
+  
+  const posts = await getPosts(user);
+
+
 
 
   return (
@@ -24,7 +34,6 @@ const MainComponent = async () => {
 
       {/* LIST OF POSTS */}
       <div className="flex flex-col">
-
         {
           posts?.map(post => (
             <Posts key={post.id} post={post} />

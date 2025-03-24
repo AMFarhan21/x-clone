@@ -39,8 +39,8 @@ const Posts = async({ post }: postProps) => {
     const supabase = await createClient();
     const user = await supabase.auth.getUser()
 
-    const getPostLikesCount = await getLikesCount(post.id);
-    const isLikedByUser = await isLiked({postId: post.id, profilesId: user.data.user?.id});
+    // const getPostLikesCount = await getLikesCount(post.id);
+    // const isLikedByUser = await isLiked({postId: post.id, profilesId: user.data.user?.id});
     
     return (
         <div>
@@ -49,8 +49,8 @@ const Posts = async({ post }: postProps) => {
                 <div className="ml-4 w-full">
                     <div className="flex justify-between">
                         <div className="flex items-center">
-                            <div className="font-semibold">{post.profiles.username ?? ""}</div>
-                            <div className="text-white/50 text-sm ml-1">@{post.profiles.username}</div>
+                            <div className="font-semibold">{post.username ?? ""}</div>
+                            <div className="text-white/50 text-sm ml-1">@{post.username}</div>
                             <div className="text-white/50 text-sm"> <BsDot /> </div>
                             <div className="text-white/50 text-sm"> {dayjs(post.created_at).fromNow()} </div>
                         </div>
@@ -68,7 +68,7 @@ const Posts = async({ post }: postProps) => {
                         <div className="flex items-center text-white/50 text-[18px]">
                             <button className="flex mt-[6px] rounded-full bg-transparent hover:bg-white/5 p-2 my-1 text-white/35 items-end cursor-pointer space-x-1"> <FaRetweet className="text-xl" /><div className="mt-[-20px] text-xs text-white/50">1</div></button>
                         </div>
-                        <LikeButton post={post} likesCount={getPostLikesCount} isLiked={isLikedByUser} userId={user.data.user?.id}/>
+                        <LikeButton post={post} likesCount={post.likes_count} isLiked={post.is_liked} userId={user.data.user?.id}/>
                         <div className="flex items-center text-white/50 text-[18px]">
                             <button className="flex rounded-full bg-transparent hover:bg-white/5 p-2 my-1 text-white/35 items-end cursor-pointer space-x-1"> <IoStatsChart /><div className="mt-[3px] text-xs">1</div></button>
                         </div>
