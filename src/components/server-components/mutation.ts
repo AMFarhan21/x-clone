@@ -1,5 +1,7 @@
 "use server";
 
+import { db } from "@/lib/db";
+import { post } from "@/lib/db/schema";
 import { createClient } from "@/utils/supabase/server";
 import { createServiceRoleClient } from "@/utils/supabase/serverSecret";
 import { randomUUID } from "crypto";
@@ -8,27 +10,40 @@ import { revalidatePath } from "next/cache";
 const supabaseService = createServiceRoleClient();
 
 export const handlePostSubmit = async (formData: FormData) => {
-  const post = formData.get("post") as string;
-  if (!post) return { success: false, message: "Type something" };
+  const postForm = formData.get("post") as string;
+  if (!postForm) return { success: false, message: "Type something" };
 
   const supabase = await createClient();
   const { data: userData, error: userError } = await supabase.auth.getUser();
 
   if (userError) return { success: false, message: "User not authenticated" };
-
-  const { error } = await supabaseService.from("post").insert({
-    profilesid: userData.user.id,
-    text: post.toString(),
-    id: randomUUID(),
-  });
-  // console.log(error);
-  // console.log(supabaseSecret);
-
-  if (error) return { success: false, message: "Failed to insert post" };
-
+  // const { error } = await supabaseService.from("post").insert({
+  //   profilesid: userData.user.id,
+  //   text: post.toString(),
+  //   id: randomUUID(),
+  // });
+  const error = "";
+  await db
+    .insert(post)
+    .values({
+      profilesId: userData.user.id,
+      text: postForm.toString(),
+      id: randomUUID(),
+    })
+    .returning()
+    .catch((error) => {
+      if (error) return { success: false, message: "Failed to insert post" };
+      console.log(
+        "ERROR server-component/mutation - handlePostSubmit: ",
+        error
+      );
+    });
   revalidatePath("/");
   return { success: true, message: "Post created successfully" };
 };
+
+
+
 
 export const likePost = async ({
   postId,
@@ -47,6 +62,9 @@ export const likePost = async ({
   void revalidatePath("/");
 };
 
+
+
+
 export const unlikPost = async ({
   postId,
   profilesId,
@@ -54,7 +72,6 @@ export const unlikPost = async ({
   postId: string;
   profilesId: string;
 }) => {
-
   const { error: errorUnliking } = await supabaseService
     .from("likes")
     .delete()

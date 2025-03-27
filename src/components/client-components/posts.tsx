@@ -14,21 +14,19 @@ import { createClient } from "@/utils/supabase/server";
 
 dayjs.extend(relativeTime)
 
-export type profilesType = {
-    id: string;
-    username: string;
-    full_name: string;
-    email: string;
-    created_at: string;
-}
-
 export type postType = {
-    id: string;
-    text: string;
-    profilesid: string;
-    created_at: string;
-    profiles: profilesType;
-}
+    post: {
+        id: string;
+        text: string;
+        profilesId: string;
+        createdAt: string;
+    };
+    profiles: {
+        id: string;
+        username: string;
+        fullName?: string | null;
+    };
+};
 
 type postProps = {
     post: postType;
@@ -44,22 +42,22 @@ const Posts = async({ post }: postProps) => {
     
     return (
         <div>
-            <div key={post.id} className="border-b border-gray-600/50 flex pt-3 px-4">
+            <div key={post.post.id} className="border-b border-gray-600/50 flex pt-3 px-4">
                 <div className="bg-white/50 min-w-10 h-10 rounded-full p">  </div>
                 <div className="ml-4 w-full">
                     <div className="flex justify-between">
                         <div className="flex items-center">
-                            <div className="font-semibold">{post.username ?? ""}</div>
-                            <div className="text-white/50 text-sm ml-1">@{post.username}</div>
+                            <div className="font-semibold">{post.profiles.username ?? ""}</div>
+                            <div className="text-white/50 text-sm ml-1">@{post.profiles.username}</div>
                             <div className="text-white/50 text-sm"> <BsDot /> </div>
-                            <div className="text-white/50 text-sm"> {dayjs(post.created_at).fromNow()} </div>
+                            <div className="text-white/50 text-sm"> {dayjs(post.post.createdAt).fromNow()} </div>
                         </div>
                         <div className="flex space-x-2 items-center">
                             <div>grok</div>
                             <div> <BsThreeDots /> </div>
                         </div>
                     </div>
-                    <div className="pb leading-4.5 text-[15px] mt-1"> {post.text} </div>
+                    <div className="pb leading-4.5 text-[15px] mt-1"> {post.post.text} </div>
                     <div> <img src="https://pbs.twimg.com/media/GmYXVr0aYAA0_i1?format=jpg&name=small" className="rounded-2xl mt-2" /> </div>
                     <div className="flex justify-between items-center">
                         <div className="flex items-center text-white/50 text-[18px]">

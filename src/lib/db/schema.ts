@@ -1,13 +1,22 @@
+import { relations } from "drizzle-orm";
 import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex } from "drizzle-orm/pg-core";
 
 
-export const profiles = pgTable("profiles", {
+  export const profiles = pgTable("profiles", {
     id: uuid("id").defaultRandom().primaryKey().notNull(),//.references(() => authUsers.id, { onDelete: "cascade" }),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
     username: text("username").unique(),
     fullName: text("full_name"),
     email: text("email"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   });
+  export const profilesRelations = relations(profiles, ({one, many}) => ({
+    post: many(post),
+    likes: many(likes),
+    bookmark: many(bookmark),
+    reply: many(reply),
+  }))
+
   
   export const post = pgTable("post", {
     id: uuid("id").defaultRandom().primaryKey(),
@@ -16,18 +25,46 @@ export const profiles = pgTable("profiles", {
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   });
-  
+  export const postRelations = relations(post, ({one, many}) => ({
+    profiles: one(profiles, {
+      fields: [post.profilesId],
+      references: [profiles.id]
+    }),
+    likes: many(likes),
+    bookmark: many(bookmark),
+    reply: many(reply),
+    postHashtag: many(postHashtag),
+  }))
+   
+
   export const hashtag = pgTable("hashtag", {
     id: uuid("id").defaultRandom().primaryKey(),
     name: text("name").notNull(),
   });
+  export const hashtagRelations = relations(hashtag, ({many}) => ({
+    postHashtag: many(postHashtag),
+  }))
   
+
   export const postHashtag = pgTable("post_hashtag", {
     postId: uuid("postId").references(() => post.id, { onDelete: "cascade" }),
     hashtagId: uuid("hashtagId").references(() => hashtag.id, { onDelete: "cascade" }),
   }, (table) => ({
     pk: unique().on(table.postId, table.hashtagId),
   }));
+
+  export const postHashtagRelations = relations(postHashtag, ({one}) => ({
+    post: one(post, {
+      fields: [postHashtag.postId],
+      references: [post.id]
+    }),
+    hashtag: one(hashtag, {
+      fields: [postHashtag.hashtagId],
+      references: [hashtag.id]
+    }),
+    
+  }))
+
   
   export const likes = pgTable("likes", {
     id: uuid("id").defaultRandom().primaryKey(),
@@ -37,8 +74,19 @@ export const profiles = pgTable("profiles", {
   }, (likes) => [
     uniqueIndex("likes_profilesId_postId_idx").on(likes.profilesId, likes.postId)
   ]
-)
+  )
+  export const likesRelations = relations(likes, ({one}) => ({
+    profiles: one(profiles, {
+      fields: [likes.profilesId],
+      references: [profiles.id]
+    }),
+    post: one(post, {
+      fields: [likes.postId],
+      references: [post.id]
+    })
+  }))
   
+
   export const bookmark = pgTable("bookmark", {
     id: uuid("id").defaultRandom().primaryKey(),
     profilesId: uuid("profilesId").notNull().references(() => profiles.id, { onDelete: "cascade" }),
@@ -47,6 +95,17 @@ export const profiles = pgTable("profiles", {
   }, (bookmark) => [
     uniqueIndex("bookmark_profilesId_postId_idx").on(bookmark.profilesId, bookmark.postId)
   ]);
+  export const bookmarkRelations = relations(bookmark, ({one}) => ({
+    profiles: one(profiles, {
+      fields: [bookmark.profilesId],
+      references: [profiles.id]
+    }),
+    post: one(post, {
+      fields: [bookmark.postId],
+      references: [post.id]
+    })
+  }))
+
   
   export const reply = pgTable("reply", {
     id: uuid("id").defaultRandom().primaryKey(),
@@ -54,5 +113,18 @@ export const profiles = pgTable("profiles", {
     profilesId: uuid("profilesId").notNull().references(() => profiles.id, { onDelete: "cascade" }),
     postId: uuid("postId").notNull().references(() => post.id, { onDelete: "cascade" }),
     replyId: uuid("replyId").references(():AnyPgColumn => reply.id, { onDelete: "set null" }),
-  });
-  
+  });  
+  export const replyRelations = relations(reply, ({one}) => ({
+    profiles: one(profiles, {
+      fields: [reply.profilesId],
+      references: [profiles.id]
+    }),
+    post: one(post, {
+      fields: [reply.postId],
+      references: [post.id]
+    }),
+    reply: one(reply, {
+      fields: [reply.replyId],
+      references: [reply.id]
+    }),
+  }))

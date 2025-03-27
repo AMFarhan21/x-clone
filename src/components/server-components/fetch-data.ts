@@ -1,7 +1,10 @@
+import { db } from "@/lib/db";
+import { likes, post, profiles } from "@/lib/db/schema";
 import { createServiceRoleClient } from "@/utils/supabase/serverSecret";
+import { desc, eq } from "drizzle-orm";
 
-// const queryWithUserId = `SELECT 
-//   post.*, 
+// const queryWithUserId = `SELECT
+//   post.*,
 //   profiles.username,
 //   profiles.full_name,
 //   COUNT(likes.id) AS likes_count,
@@ -17,8 +20,8 @@ import { createServiceRoleClient } from "@/utils/supabase/serverSecret";
 //   ORDER BY post.created_at DESC
 // `;
 
-// const queryWithoutUserId = `SELECT 
-//   post.*, 
+// const queryWithoutUserId = `SELECT
+//   post.*,
 //   COUNT(likes.id) AS likes_count,
 //   profiles.username,
 //   profiles.full_name
@@ -29,25 +32,38 @@ import { createServiceRoleClient } from "@/utils/supabase/serverSecret";
 //   ORDER BY post.created_at DESC
 // `;
 
-
-
-
 export const getPosts = async (user?: string) => {
-  const query = user ? queryWithUserId : queryWithoutUserId;
-  const values = user ? [user] : []
+  // const result = await db.query.post.findMany({
+  //   with: {
+  //     profiles: {
+  //       columns: {
+  //         username: true,
+  //         fullName: true,
+  //       }
+  //     }
+  //   }
+  // })
 
-  const result = await pool.query(query, values);
+  const result = await db
+    .select()
+    .from(post)
+    .leftJoin(likes, eq(post.id, likes.postId))
+    .innerJoin(profiles, eq(post.profilesId, profiles.id))
+    .orderBy(desc(post.createdAt))
+    .limit(2);
+
   try {
-    console.log(
-      "SUCCESS server-components/fetch-data -> getPosts: ",
-      result.rows
-    );
-    return result.rows;
+    console.log("SUCCESS server-components/fetch-data -> getPosts: ", result);
+    return result;
   } catch (error) {
-    console.log("ERROR server-components/fetch-data -> getPosts: ", error)
-    return {error: "ERROR server-components/fetch-data -> getPosts"}
+    console.log("ERROR server-components/fetch-data -> getPosts: ", error);
+    return { error: "ERROR server-components/fetch-data -> getPosts" };
   }
 };
+
+
+
+
 
 export const getLikesCount = async (postId: string) => {
   const supabase = await createServiceRoleClient();
@@ -64,6 +80,10 @@ export const getLikesCount = async (postId: string) => {
   //   console.log(data);
   return data ? data.length : 0;
 };
+
+
+
+
 
 export const isLiked = async ({
   postId,

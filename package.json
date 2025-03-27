@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate": "drizzle-kit generate:pg",
+    "migrate": "npx bun run src/lib/db/migrate.ts"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.6",
