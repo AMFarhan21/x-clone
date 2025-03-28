@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { toast } from 'sonner';
 import { handlePostSubmit } from '../server-components/mutation';
@@ -10,15 +10,17 @@ const ComposeTweet = () => {
     try {
       const res = await handlePostSubmit(formData);
       if (res.success) {
-        toast.success('Post created successfully!');
+        toast.success('Post created successfully!') ;
       } else {
-        toast.error('Failed to create post.');
+        toast.error(res.message);
       }
     } catch (error) {
       console.error('Error:', error);
       toast.error('An error occurred while creating the post.');
     }
   };
+
+  const [post, setPost] = useState("")
 
   return (
     <div>
@@ -28,6 +30,8 @@ const ComposeTweet = () => {
           <div className="flex flex-col w-full pr-4">
             <div className="pb-4">
               <textarea
+                value={post}
+                onChange={e => setPost(e.target.value)}
                 typeof="text"
                 name="post"
                 placeholder="What is happening?!"
@@ -40,7 +44,7 @@ const ComposeTweet = () => {
                 <div className="w-4 h-4 bg-slate-400 rounded-full"></div>
                 <div className="w-4 h-4 bg-slate-400 rounded-full"></div>
               </div>
-              <Button type="submit" className="bg-white/40 py-2 px-5 rounded-full text-black font-bold">
+              <Button type="submit" className={`py-2 px-5 rounded-full text-black font-bold ${post ? "bg-white/100 hover:bg-white/90" : "bg-white/40 hover:bg-white/40"}`}>
                 Post
               </Button>
             </div>

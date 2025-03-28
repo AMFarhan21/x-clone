@@ -1,7 +1,9 @@
 import { db } from "@/lib/db";
 import { likes, post, profiles } from "@/lib/db/schema";
+import { createClient } from "@/utils/supabase/server";
 import { createServiceRoleClient } from "@/utils/supabase/serverSecret";
-import { desc, eq } from "drizzle-orm";
+import { count } from "console";
+import { and, desc, eq, exists, sql } from "drizzle-orm";
 
 // const queryWithUserId = `SELECT
 //   post.*,
@@ -32,29 +34,36 @@ import { desc, eq } from "drizzle-orm";
 //   ORDER BY post.created_at DESC
 // `;
 
-export const getPosts = async (user?: string) => {
-  // const result = await db.query.post.findMany({
-  //   with: {
-  //     profiles: {
-  //       columns: {
-  //         username: true,
-  //         fullName: true,
-  //       }
-  //     }
-  //   }
-  // })
+export const getPosts = async (user: string) => {
+
+  // const supabaseUser = await createClient();
+  // const {data: userData, error: userError} = await supabaseUser.auth.getUser();
+  // console.log(userData.user?.id)
+  // const user = userData.user?.id
 
   const result = await db
-    .select()
+    .select({post, 
+      id: post.id,
+      text: post.text,
+      profilesId: post.profilesId,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+      username: profiles.username,
+      full_name: profiles.fullName,
+      likesCount: sql<number>`count(likes.id)`.as("likesCount"),
+      isLiked: exists(
+        db.select().from(likes).where(and(eq(likes.postId, post.id), eq(likes.profilesId, user ?? "default-user-id")))
+      ).as("isLiked")
+    })
     .from(post)
     .leftJoin(likes, eq(post.id, likes.postId))
     .innerJoin(profiles, eq(post.profilesId, profiles.id))
+    .groupBy(post.id, profiles.username, profiles.fullName, post.createdAt, post.text, post.profilesId, post.updatedAt)
     .orderBy(desc(post.createdAt))
-    .limit(2);
 
   try {
-    console.log("SUCCESS server-components/fetch-data -> getPosts: ", result);
-    return result;
+    // console.log("SUCCESS server-components/fetch-data -> getPosts: ", result);
+    return {result, user};
   } catch (error) {
     console.log("ERROR server-components/fetch-data -> getPosts: ", error);
     return { error: "ERROR server-components/fetch-data -> getPosts" };
@@ -65,48 +74,48 @@ export const getPosts = async (user?: string) => {
 
 
 
-export const getLikesCount = async (postId: string) => {
-  const supabase = await createServiceRoleClient();
-  const { data, error } = await supabase
-    .from("likes")
-    .select("*")
-    .eq("postid", postId);
+// export const getLikesCount = async (postId: string) => {
+//   const supabase = await createServiceRoleClient();
+//   const { data, error } = await supabase
+//     .from("likes")
+//     .select("*")
+//     .eq("postid", postId);
 
-  if (error) {
-    console.log("failed getting likes: ", error);
-    return { error: error.message };
-  }
+//   if (error) {
+//     console.log("failed getting likes: ", error);
+//     return { error: error.message };
+//   }
 
-  //   console.log(data);
-  return data ? data.length : 0;
-};
-
-
+//   //   console.log(data);
+//   return data ? data.length : 0;
+// };
 
 
 
-export const isLiked = async ({
-  postId,
-  profilesId,
-}: {
-  postId: string;
-  profilesId: string;
-}) => {
-  const supabase = await createServiceRoleClient();
 
-  const { data, error } = await supabase
-    .from("likes")
-    .select("*")
-    .eq("postid", postId)
-    .eq("profilesid", profilesId)
-    .single();
 
-  if (!profilesId) return;
+// export const isLiked = async ({
+//   postId,
+//   profilesId,
+// }: {
+//   postId: string;
+//   profilesId: string;
+// }) => {
+//   const supabase = await createServiceRoleClient();
 
-  // if (error) {
-  //   console.log("ERRORS on server-components/fetch-data -> isLiked(): ", error);
-  //   return false;
-  // }
+//   const { data, error } = await supabase
+//     .from("likes")
+//     .select("*")
+//     .eq("postid", postId)
+//     .eq("profilesid", profilesId)
+//     .single();
 
-  return data !== null;
-};
+//   if (!profilesId) return;
+
+//   // if (error) {
+//   //   console.log("ERRORS on server-components/fetch-data -> isLiked(): ", error);
+//   //   return false;
+//   // }
+
+//   return data !== null;
+// };

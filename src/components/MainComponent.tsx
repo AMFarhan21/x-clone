@@ -16,7 +16,7 @@ const MainComponent = async () => {
   // console.log("ERROR MainComponent/getPosts -> getUser: ", userError)
 
   
-  const posts = await getPosts(user);
+  const posts = await getPosts(user as string);
 
 
 
@@ -35,8 +35,8 @@ const MainComponent = async () => {
       {/* LIST OF POSTS */}
       <div className="flex flex-col">
         {
-          posts?.map(post => (
-            <Posts key={post.id} post={post} />
+          posts?.result?.map(post => (
+            <Posts key={post.id} post={post} userId={user} />
           ))
         }
       </div>

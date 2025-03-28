@@ -12,7 +12,7 @@ import { createClient } from '@/utils/supabase/server';
 
 const NAVIGATION_ITEMS = [
     {
-      title: "Twitter",
+      title: "",
       icon: FaXTwitter
     },
     {
