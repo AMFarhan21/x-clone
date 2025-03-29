@@ -12,7 +12,7 @@ import { createClient } from '@/utils/supabase/server';
 
 const NAVIGATION_ITEMS = [
     {
-      title: "",
+      title: "Twitter",
       icon: FaXTwitter
     },
     {
@@ -46,7 +46,7 @@ const LeftSidebar = () => {
     <section className="w-[24%] flex flex-col items-stretch h-screen space-y-4 sticky top-0">
           <div className="flex flex-col h-full items-stretch mt-1 ml-2 pr-6">
             {NAVIGATION_ITEMS.map((item) => (
-              <Link href={`/${item.title.toLowerCase()}`} key={item.title} className="flex hover:bg-white/10 transition duration-200 text-2xl items-center justify-start w-fit space-x-4 rounded-3xl p-4 py-3">
+              <Link href={item.title === "Twitter" || item.title === "Home" ? '/' : `/${item.title.toLowerCase()}`} key={item.title} className="flex hover:bg-white/10 transition duration-200 text-2xl items-center justify-start w-fit space-x-4 rounded-3xl p-4 py-3">
                 <div>
                   <item.icon className="text-3xl" />
                 </div>

@@ -11,19 +11,20 @@ import { toast } from 'sonner'
 
 type postProps = {
     post: postType
-    dayjs: any
+    // dayjs: any
     userId: string
     postId: string
+    postUsername: string
 }
 
-const ReplyButton = ({ post, dayjs, userId, postId }: postProps) => {
+const ReplyButton = ({ post, userId, postId, postUsername }: postProps) => {
 
     const [reply, setReply] = useState("")
     const [isOpen, setIsOpen] = useState(false)
 
 
     const handleSubmit = async (formData: FormData) => {
-        const res = await handleReplySubmit(formData, postId, userId)
+        const res = await handleReplySubmit(formData, postId, userId, postUsername)
         if (res?.success) {
             toast.success(res.message)
             setIsOpen(false)
@@ -56,7 +57,7 @@ const ReplyButton = ({ post, dayjs, userId, postId }: postProps) => {
                                     <div className="font-semibold">{post.username ?? ""}</div>
                                     <div className="text-white/50 text-sm ml-1">@{post.username}</div>
                                     <div className="text-white/50 text-sm"> <BsDot /> </div>
-                                    <div className="text-white/50 text-sm"> {dayjs(post.createdAt).fromNow()} </div>
+                                    <div className="text-white/50 text-sm"> post.createdAt </div>
                                     {post.id}
                                 </div>
                             </div>

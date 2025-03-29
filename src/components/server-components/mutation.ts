@@ -49,7 +49,7 @@ export const handlePostSubmit = async (formData: FormData) => {
 };
 
 
-export const handleReplySubmit = async(formData: FormData, postId: string, userId: string) => {
+export const handleReplySubmit = async(formData: FormData, postId: string, userId: string, postUsername: string) => {
 
   const replyForm = formData.get("reply") as string;
   if(replyForm.length < 1) {
@@ -68,7 +68,7 @@ export const handleReplySubmit = async(formData: FormData, postId: string, userI
     profilesId: userId,
     postId,
   })
-
+  revalidatePath(`/${postUsername}/status/${postId}`)
   return {success: true, message: "Replies created successfully"}
 
 

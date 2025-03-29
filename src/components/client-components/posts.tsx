@@ -68,7 +68,7 @@ const Posts = ({ post, userId }: postProps) => {
                     <div> <img src="https://pbs.twimg.com/media/GmYXVr0aYAA0_i1?format=jpg&name=small" className="rounded-2xl mt-2" /> </div>
                     <div className="flex justify-between items-center">
                         <div className="flex items-center text-white/50 text-[18px] " onClick={handleClick}>
-                            <ReplyButton post={post} dayjs={dayjs} userId={userId} postId={post.id}/>
+                            <ReplyButton post={post} userId={userId} postId={post.id} postUsername={post.username}/>
                         </div>
                         <div className="flex items-center text-white/50 text-[18px]" onClick={handleClick}>
                             <button className="flex mt-[6px] rounded-full bg-transparent hover:bg-white/5 p-2 my-1 text-white/35 items-end cursor-pointer space-x-1"> <FaRetweet className="text-xl" /><div className="mt-[-20px] text-xs text-white/50">1</div></button>
