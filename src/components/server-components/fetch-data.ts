@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { likes, post, profiles } from "@/lib/db/schema";
+import { likes, post, profiles, reply } from "@/lib/db/schema";
 import { createClient } from "@/utils/supabase/server";
 import { createServiceRoleClient } from "@/utils/supabase/serverSecret";
 import { count } from "console";
@@ -35,19 +35,14 @@ import { and, desc, eq, exists, sql } from "drizzle-orm";
 // `;
 
 export const getPosts = async (user: string) => {
-  // const supabaseUser = await createClient();
-  // const {data: userData, error: userError} = await supabaseUser.auth.getUser();
-  // console.log(userData.user?.id)
-  // const user = userData.user?.id
-
   const result = await db
     .select({
       post,
       id: post.id,
       text: post.text,
       profilesId: post.profilesId,
-      createdAt: post.createdAt,
-      updatedAt: post.updatedAt,
+      created_at: post.created_at,
+      updated_at: post.updated_at,
       username: profiles.username,
       full_name: profiles.fullName,
       likesCount: sql<number>`count(${likes.id})`.as("likesCount"),
@@ -66,16 +61,8 @@ export const getPosts = async (user: string) => {
     .from(post)
     .leftJoin(likes, eq(post.id, likes.postId))
     .innerJoin(profiles, eq(post.profilesId, profiles.id))
-    .groupBy(
-      post.id,
-      profiles.username,
-      profiles.fullName,
-      post.createdAt,
-      post.text,
-      post.profilesId,
-      post.updatedAt
-    )
-    .orderBy(desc(post.createdAt));
+    .groupBy(post.id, profiles.username, profiles.fullName, post.created_at)
+    .orderBy(desc(post.created_at));
 
   try {
     // console.log("SUCCESS server-components/fetch-data -> getPosts: ", result);
@@ -86,32 +73,30 @@ export const getPosts = async (user: string) => {
   }
 };
 
-
-
-
-export const getOnePost = async(userId: string, postId: string) => {
-  const res = await db.select({
-    post,
-    id: post.id,
-    profilesId: post.profilesId,
-    text: post.text,
-    created_at: post.createdAt,
-    updated_at: post.updatedAt,
-    username: profiles.username,
-    full_name: profiles.fullName,
-    likesCount: sql<number>`count(${likes.id})`.as("likesCount"),
-    isLiked: exists(
-      db
-        .select()
-        .from(likes)
-        .where(
-          and(
-            eq(likes.profilesId, userId ?? "default-user-id"),
-            eq(likes.postId, post.id)
+export const getOnePost = async (userId: string, postId: string) => {
+  const res = await db
+    .select({
+      post,
+      id: post.id,
+      profilesId: post.profilesId,
+      text: post.text,
+      created_at: post.created_at,
+      updated_at: post.updated_at,
+      username: profiles.username,
+      full_name: profiles.fullName,
+      likesCount: sql<number>`count(${likes.id})`.as("likesCount"),
+      isLiked: exists(
+        db
+          .select()
+          .from(likes)
+          .where(
+            and(
+              eq(likes.profilesId, userId ?? "default-user-id"),
+              eq(likes.postId, post.id)
+            )
           )
-        )
-    ).as("isLiked"),
-  })
+      ).as("isLiked"),
+    })
     .from(post)
     .leftJoin(likes, eq(post.id, likes.postId))
     .where(eq(post.id, postId))
@@ -120,53 +105,55 @@ export const getOnePost = async(userId: string, postId: string) => {
       post.id,
       post.profilesId,
       post.text,
-      post.createdAt,
-      post.updatedAt,
+      post.created_at,
+      post.updated_at,
       profiles.username,
       profiles.fullName
     );
-    console.log(postId)
-    return res[0]
+  return res[0];
 };
 
-// export const getLikesCount = async (postId: string) => {
-//   const supabase = await createServiceRoleClient();
-//   const { data, error } = await supabase
-//     .from("likes")
-//     .select("*")
-//     .eq("postid", postId);
 
-//   if (error) {
-//     console.log("failed getting likes: ", error);
-//     return { error: error.message };
-//   }
 
-//   //   console.log(data);
-//   return data ? data.length : 0;
-// };
 
-// export const isLiked = async ({
-//   postId,
-//   profilesId,
-// }: {
-//   postId: string;
-//   profilesId: string;
-// }) => {
-//   const supabase = await createServiceRoleClient();
+export const getReplies = async (userId: string, postId: string) => {
+  const res = await db
+    .select({
+      id: reply.id,
+      text: reply.text,
+      profilesId: reply.profilesId,
+      postId: reply.postId,
+      replyId: reply.id,
+      created_at: reply.created_at,
+      updated_at: reply.updated_at,
+      username: profiles.username,
+      full_name: profiles.fullName,
+      likesReplyCount: sql<number>`count(${likes.id})`.as(
+        "likesReplyCount"
+      ),
+      isReplyLiked: exists(
+        db
+          .select()
+          .from(likes)
+          .where(and(eq(likes.replyId, reply.id), eq(likes.profilesId, userId)))
+      ).as("isReplyLiked"),
+    })
+    .from(reply)
+    .where(eq(reply.postId, postId))
+    .leftJoin(likes, eq(reply.id, likes.replyId))
+    .innerJoin(profiles, eq(profiles.id, reply.profilesId))
+    .groupBy(
+      reply.id,
+      reply.text,
+      reply.postId,
+      reply.profilesId,
+      reply.created_at,
+      reply.updated_at,
+      profiles.username,
+      profiles.fullName,
+    )
+    ;
 
-//   const { data, error } = await supabase
-//     .from("likes")
-//     .select("*")
-//     .eq("postid", postId)
-//     .eq("profilesid", profilesId)
-//     .single();
-
-//   if (!profilesId) return;
-
-//   // if (error) {
-//   //   console.log("ERRORS on server-components/fetch-data -> isLiked(): ", error);
-//   //   return false;
-//   // }
-
-//   return data !== null;
-// };
+    console.log(res)
+    return res
+};

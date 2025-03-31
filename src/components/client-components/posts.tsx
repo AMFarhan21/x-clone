@@ -6,18 +6,18 @@ import { IoStatsChart } from "react-icons/io5";
 import { FiShare } from "react-icons/fi";
 import { MdBookmarkBorder } from "react-icons/md";
 import dayjs from "dayjs";
-import relativeTime from 'dayjs/plugin/relativeTime'
 import LikeButton from "./like-button";
 import { useRouter } from "next/navigation";
 import ReplyButton from "./reply-button";
-
-dayjs.extend(relativeTime)
+import DayJs from "./DayJs";
+import DeleteButton from "./DeleteButton";
+import DropdownButton from "./DropdownButton";
 
 export type postType = {
     id: string;
     text: string;
     profilesId: string;
-    createdAt: string;
+    created_at: string;
     username: string;
     fullName?: string | null;
     isLiked: boolean;
@@ -41,7 +41,7 @@ const Posts = ({ post, userId }: postProps) => {
 
     const handlePostClick = () => {
         const select = window.getSelection();
-        if(select && select.toString().length > 0) {
+        if (select && select.toString().length > 0) {
             return;
         }
         router.push(`/${post.username}/status/${post.id}`)
@@ -57,23 +57,25 @@ const Posts = ({ post, userId }: postProps) => {
                             <div className="font-semibold">{post.username ?? ""}</div>
                             <div className="text-white/50 text-sm ml-1">@{post.username}</div>
                             <div className="text-white/50 text-sm"> <BsDot /> </div>
-                            <div className="text-white/50 text-sm"> {dayjs(post.createdAt).fromNow()} </div>
+                            <div className="text-white/50 text-sm"> <DayJs date={post.created_at} /> </div>
                         </div>
                         <div className="flex space-x-2 items-center">
-                            <div>grok</div>
-                            <div> <BsThreeDots /> </div>
+                            <div>Grok</div>
+                            <div>
+                                <DropdownButton username={post.username} data={post} userId={userId} />
+                            </div>
                         </div>
                     </div>
                     <div className="pb leading-4.5 text-[15px] mt-1"> {post.text} </div>
                     <div> <img src="https://pbs.twimg.com/media/GmYXVr0aYAA0_i1?format=jpg&name=small" className="rounded-2xl mt-2" /> </div>
                     <div className="flex justify-between items-center">
                         <div className="flex items-center text-white/50 text-[18px] " onClick={handleClick}>
-                            <ReplyButton post={post} userId={userId} postId={post.id} postUsername={post.username}/>
+                            <ReplyButton post={post} userId={userId} postId={post.id} postUsername={post.username} />
                         </div>
                         <div className="flex items-center text-white/50 text-[18px]" onClick={handleClick}>
                             <button className="flex mt-[6px] rounded-full bg-transparent hover:bg-white/5 p-2 my-1 text-white/35 items-end cursor-pointer space-x-1"> <FaRetweet className="text-xl" /><div className="mt-[-20px] text-xs text-white/50">1</div></button>
                         </div>
-                        <LikeButton post={post} likesCount={post.likesCount} isLiked={post.isLiked} userId={userId} />
+                        <LikeButton replyId={null} postId={post.id} likesCount={post.likesCount} isLiked={post.isLiked} userId={userId} />
                         <div className="flex items-center text-white/50 text-[18px]" onClick={handleClick}>
                             <button className="flex rounded-full bg-transparent hover:bg-white/5 p-2 my-1 text-white/35 items-end cursor-pointer space-x-1"> <IoStatsChart /><div className="mt-[3px] text-xs">1</div></button>
                         </div>

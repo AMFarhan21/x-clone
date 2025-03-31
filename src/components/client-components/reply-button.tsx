@@ -7,11 +7,11 @@ import { postType } from './posts'
 import { useState } from 'react'
 import { handleReplySubmit } from '../server-components/mutation'
 import { toast } from 'sonner'
+import DayJs from './DayJs'
 
 
 type postProps = {
     post: postType
-    // dayjs: any
     userId: string
     postId: string
     postUsername: string
@@ -28,6 +28,7 @@ const ReplyButton = ({ post, userId, postId, postUsername }: postProps) => {
         if (res?.success) {
             toast.success(res.message)
             setIsOpen(false)
+            setReply("")
         } else {
             toast.error(res.message)
         }
@@ -57,8 +58,7 @@ const ReplyButton = ({ post, userId, postId, postUsername }: postProps) => {
                                     <div className="font-semibold">{post.username ?? ""}</div>
                                     <div className="text-white/50 text-sm ml-1">@{post.username}</div>
                                     <div className="text-white/50 text-sm"> <BsDot /> </div>
-                                    <div className="text-white/50 text-sm"> post.createdAt </div>
-                                    {post.id}
+                                    <div className="text-white/50 text-sm"> <DayJs date={post.created_at} /> </div>
                                 </div>
                             </div>
                             <div className="text-[15px] line-clamp-12"> {post.text} </div>

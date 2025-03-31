@@ -4,11 +4,11 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex } from
 
   export const profiles = pgTable("profiles", {
     id: uuid("id").defaultRandom().primaryKey().notNull(),//.references(() => authUsers.id, { onDelete: "cascade" }),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+    updated_at: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
     username: text("username").unique(),
     fullName: text("full_name"),
     email: text("email"),
-    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+    created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
   });
   export const profilesRelations = relations(profiles, ({one, many}) => ({
     post: many(post),
@@ -22,8 +22,9 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex } from
     id: uuid("id").defaultRandom().primaryKey(),
     text: text("text"),
     profilesId: uuid("profilesId").references(() => profiles.id, { onDelete: "cascade" }),
-    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+    imageUrl: text("imageUrl"),
+    created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
+    updated_at: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   });
   export const postRelations = relations(post, ({one, many}) => ({
     profiles: one(profiles, {
@@ -69,10 +70,11 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex } from
   export const likes = pgTable("likes", {
     id: uuid("id").defaultRandom().primaryKey(),
     profilesId: uuid("profilesId").notNull().references(() => profiles.id, { onDelete: "cascade" }),
-    postId: uuid("postId").notNull().references(() => post.id, { onDelete: "cascade" }),
-    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+    postId: uuid("postId").references(() => post.id, { onDelete: "cascade" }),
+    replyId: uuid("replyId").references(() => reply.id, { onDelete: "cascade" }),
+    created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
   }, (likes) => [
-    uniqueIndex("likes_profilesId_postId_idx").on(likes.profilesId, likes.postId)
+    uniqueIndex("likes_profilesId_postId_idx").on(likes.profilesId, likes.postId, likes.replyId)
   ]
   )
   export const likesRelations = relations(likes, ({one}) => ({
@@ -83,6 +85,10 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex } from
     post: one(post, {
       fields: [likes.postId],
       references: [post.id]
+    }),
+    reply: one(reply, {
+      fields: [likes.replyId],
+      references: [reply.id]
     })
   }))
   
@@ -91,7 +97,7 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex } from
     id: uuid("id").defaultRandom().primaryKey(),
     profilesId: uuid("profilesId").notNull().references(() => profiles.id, { onDelete: "cascade" }),
     postId: uuid("postId").notNull().references(() => post.id, { onDelete: "cascade" }),
-    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+    created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
   }, (bookmark) => [
     uniqueIndex("bookmark_profilesId_postId_idx").on(bookmark.profilesId, bookmark.postId)
   ]);
@@ -113,8 +119,11 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex } from
     profilesId: uuid("profilesId").notNull().references(() => profiles.id, { onDelete: "cascade" }),
     postId: uuid("postId").notNull().references(() => post.id, { onDelete: "cascade" }),
     replyId: uuid("replyId").references(():AnyPgColumn => reply.id, { onDelete: "set null" }),
+    imageUrl: text("imageUrl"),
+    created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
+    updated_at: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   });  
-  export const replyRelations = relations(reply, ({one}) => ({
+  export const replyRelations = relations(reply, ({one, many}) => ({
     profiles: one(profiles, {
       fields: [reply.profilesId],
       references: [profiles.id]
@@ -127,4 +136,5 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex } from
       fields: [reply.replyId],
       references: [reply.id]
     }),
+    likes: many(likes),
   }))
