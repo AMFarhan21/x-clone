@@ -34,44 +34,7 @@ import { and, desc, eq, exists, sql } from "drizzle-orm";
 //   ORDER BY post.created_at DESC
 // `;
 
-export const getPosts = async (user: string) => {
-  const result = await db
-    .select({
-      post,
-      id: post.id,
-      text: post.text,
-      profilesId: post.profilesId,
-      created_at: post.created_at,
-      updated_at: post.updated_at,
-      username: profiles.username,
-      full_name: profiles.fullName,
-      likesCount: sql<number>`count(${likes.id})`.as("likesCount"),
-      isLiked: exists(
-        db
-          .select()
-          .from(likes)
-          .where(
-            and(
-              eq(likes.postId, post.id),
-              eq(likes.profilesId, user ?? "default-user-id")
-            )
-          )
-      ).as("isLiked"),
-    })
-    .from(post)
-    .leftJoin(likes, eq(post.id, likes.postId))
-    .innerJoin(profiles, eq(post.profilesId, profiles.id))
-    .groupBy(post.id, profiles.username, profiles.fullName, post.created_at)
-    .orderBy(desc(post.created_at));
 
-  try {
-    // console.log("SUCCESS server-components/fetch-data -> getPosts: ", result);
-    return { result, user };
-  } catch (error) {
-    console.log("ERROR server-components/fetch-data -> getPosts: ", error);
-    return { error: "ERROR server-components/fetch-data -> getPosts" };
-  }
-};
 
 export const getOnePost = async (userId: string, postId: string) => {
   const res = await db
@@ -80,6 +43,7 @@ export const getOnePost = async (userId: string, postId: string) => {
       id: post.id,
       profilesId: post.profilesId,
       text: post.text,
+      imageUrl: post.imageUrl,
       created_at: post.created_at,
       updated_at: post.updated_at,
       username: profiles.username,
@@ -91,7 +55,7 @@ export const getOnePost = async (userId: string, postId: string) => {
           .from(likes)
           .where(
             and(
-              eq(likes.profilesId, userId ?? "default-user-id"),
+              eq(likes.profilesId, userId),
               eq(likes.postId, post.id)
             )
           )
@@ -105,6 +69,7 @@ export const getOnePost = async (userId: string, postId: string) => {
       post.id,
       post.profilesId,
       post.text,
+      post.imageUrl,
       post.created_at,
       post.updated_at,
       profiles.username,

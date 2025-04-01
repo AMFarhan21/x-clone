@@ -12,6 +12,7 @@ import ReplyButton from "./reply-button";
 import DayJs from "./DayJs";
 import DeleteButton from "./DeleteButton";
 import DropdownButton from "./DropdownButton";
+import Image from "next/image";
 
 export type postType = {
     id: string;
@@ -22,6 +23,7 @@ export type postType = {
     fullName?: string | null;
     isLiked: boolean;
     likesCount: number;
+    imageUrl: string;
 
 
 };
@@ -45,7 +47,13 @@ const Posts = ({ post, userId }: postProps) => {
             return;
         }
         router.push(`/${post.username}/status/${post.id}`)
+        // const imageArray = JSON.parse(post.imageUrl);
     }
+
+    const imageArray = post.imageUrl ? JSON.parse(post.imageUrl) : [];
+    // console.log(imageArray)
+
+
 
     return (
         <div>
@@ -66,18 +74,30 @@ const Posts = ({ post, userId }: postProps) => {
                             </div>
                         </div>
                     </div>
-                    <div className="pb leading-4.5 text-[15px] mt-1"> {post.text} </div>
-                    <div> <img src="https://pbs.twimg.com/media/GmYXVr0aYAA0_i1?format=jpg&name=small" className="rounded-2xl mt-2" /> </div>
+                    <div className="pb leading-4.5 text-[15px] mt-1 mb-1"> {post.text} </div>
+
+                    {
+                        imageArray.length > 0 && (<div className="grid gap-1 roundex-2xl overflow-hidden grid-cols-2">
+                            {imageArray.slice(0, 4).map((fileUrl, index) => (
+                                <img src={fileUrl}
+                                    alt="Post Image"
+                                    key={index}
+                                    className="w-full h-full object-cover" />
+                            ))}
+                        </div>)
+                    }
+
+
                     <div className="flex justify-between items-center">
-                        <div className="flex items-center text-white/50 text-[18px] " onClick={handleClick}>
+                        <div className="flex items-center text-white/50 text-[18px] ">
                             <ReplyButton post={post} userId={userId} postId={post.id} postUsername={post.username} />
                         </div>
-                        <div className="flex items-center text-white/50 text-[18px]" onClick={handleClick}>
-                            <button className="flex mt-[6px] rounded-full bg-transparent hover:bg-white/5 p-2 my-1 text-white/35 items-end cursor-pointer space-x-1"> <FaRetweet className="text-xl" /><div className="mt-[-20px] text-xs text-white/50">1</div></button>
+                        <div className="flex items-center text-white/50 text-[18px]">
+                            <button onClick={handleClick} className="flex mt-[6px] rounded-full bg-transparent hover:bg-white/5 p-2 my-1 text-white/35 items-end cursor-pointer space-x-1"> <FaRetweet className="text-xl" /><div className="mt-[-20px] text-xs text-white/50">1</div></button>
                         </div>
                         <LikeButton replyId={null} postId={post.id} likesCount={post.likesCount} isLiked={post.isLiked} userId={userId} />
-                        <div className="flex items-center text-white/50 text-[18px]" onClick={handleClick}>
-                            <button className="flex rounded-full bg-transparent hover:bg-white/5 p-2 my-1 text-white/35 items-end cursor-pointer space-x-1"> <IoStatsChart /><div className="mt-[3px] text-xs">1</div></button>
+                        <div className="flex items-center text-white/50 text-[18px]" >
+                            <button onClick={handleClick} className="flex rounded-full bg-transparent hover:bg-white/5 p-2 my-1 text-white/35 items-end cursor-pointer space-x-1"> <IoStatsChart /><div className="mt-[3px] text-xs">1</div></button>
                         </div>
                         <div className="flex text-white/50 items-center space-x-0 text-[18px]">
                             <button className="text-xl rounded-full bg-transparent hover:bg-white/5 p-2 my-1 text-white/50 cursor-pointer" onClick={handleClick}> <MdBookmarkBorder /> </button>

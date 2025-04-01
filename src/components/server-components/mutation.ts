@@ -12,6 +12,10 @@ const supabaseService = createServiceRoleClient();
 
 export const handlePostSubmit = async (formData: FormData) => {
   const postForm = formData.get("post") as string;
+  const files = formData.getAll("files") as File[];
+
+  console.log("POSt FORM: ", postForm);
+  console.log("FILE FORM: ", files);
 
   if (postForm.length < 1) {
     return { success: false, message: "Type something" };
@@ -21,20 +25,31 @@ export const handlePostSubmit = async (formData: FormData) => {
 
   const supabase = await createClient();
   const { data: userData, error: userError } = await supabase.auth.getUser();
-
   if (userError) return { success: false, message: "User not authenticated" };
-  // const { error } = await supabaseService.from("post").insert({
-  //   profilesid: userData.user.id,
-  //   text: post.toString(),
-  //   id: randomUUID(),
-  // });
-  const error = "";
+
+  // FILES STORAGE MANAGEMENT
+  let uploadedFiles: string[] = []
+  for(const file of files) {
+    const {data, error} = await supabase.storage.from("x-clone-bucket").upload(`post-files/${randomUUID()}-${file.name}`, file);
+    if(error) {
+      console.log("ERROR STORING FILES: ", error)
+    } else if(!data) {
+      console.log("Upload failed: ", error)
+      continue
+    }
+
+    const publicURL = supabase.storage.from("x-clone-bucket").getPublicUrl(data?.path).data.publicUrl;
+    uploadedFiles.push(publicURL)
+  }
+
+
   await db
     .insert(post)
     .values({
       profilesId: userData.user.id,
       text: postForm.toString(),
       id: randomUUID(),
+      imageUrl: uploadedFiles.length > 0 ? JSON.stringify(uploadedFiles) : null
     })
     .returning()
     .catch((error) => {

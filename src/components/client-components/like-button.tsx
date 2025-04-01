@@ -10,7 +10,7 @@ type likeButtonProps = {
     likesCount: number;
     isLiked: boolean;
     userId: string;
-    replyId: string,
+    replyId: string | null,
 }
 
 
