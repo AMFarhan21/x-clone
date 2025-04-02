@@ -34,7 +34,45 @@ import { and, desc, eq, exists, sql } from "drizzle-orm";
 //   ORDER BY post.created_at DESC
 // `;
 
+export const getPosts = async (user: string) => {
+  const result = await db
+    .select({
+      post,
+      id: post.id,
+      text: post.text,
+      imageUrl: post.imageUrl,
+      profilesId: post.profilesId,
+      created_at: post.created_at,
+      updated_at: post.updated_at,
+      username: profiles.username,
+      full_name: profiles.fullName,
+      likesCount: sql<number>`count(${likes.id})`.as("likesCount"),
+      isLiked: exists(
+        db
+          .select()
+          .from(likes)
+          .where(
+            and(
+              eq(likes.postId, post.id),
+              eq(likes.profilesId, user)
+            )
+          )
+      ).as("isLiked"),
+    })
+    .from(post)
+    .leftJoin(likes, eq(post.id, likes.postId))
+    .innerJoin(profiles, eq(post.profilesId, profiles.id))
+    .groupBy(post.id, post.imageUrl,profiles.username, profiles.fullName, post.created_at)
+    .orderBy(desc(post.created_at));
 
+  try {
+    // console.log("SUCCESS server-components/fetch-data -> getPosts: ", result);
+    return { result, user };
+  } catch (error) {
+    console.log("ERROR server-components/fetch-data -> getPosts: ", error);
+    return { error: "ERROR server-components/fetch-data -> getPosts" };
+  }
+};
 
 export const getOnePost = async (userId: string, postId: string) => {
   const res = await db

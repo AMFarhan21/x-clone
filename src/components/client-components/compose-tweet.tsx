@@ -45,9 +45,7 @@ const ComposeTweet = () => {
         method: "POST",
         body: formData,
       })
-
-      console.log(response.headers)
-
+      
       const res = await response.json()
       
       if (res.success) {
