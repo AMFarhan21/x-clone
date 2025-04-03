@@ -24,6 +24,7 @@ export type postType = {
     isLiked: boolean;
     likesCount: number;
     imageUrl: string;
+    replyCount: number;
 
 
 };
@@ -90,12 +91,14 @@ const Posts = ({ post, userId }: postProps) => {
 
                     <div className="flex justify-between items-center">
                         <div className="flex items-center text-white/50 text-[18px] ">
-                            <ReplyButton post={post} userId={userId} postId={post.id} postUsername={post.username} />
+                            <ReplyButton post={post} userId={userId} postId={post.id} postUsername={post.username} replyCount={post.replyCount} />
                         </div>
                         <div className="flex items-center text-white/50 text-[18px]">
                             <button onClick={handleClick} className="flex mt-[6px] rounded-full bg-transparent hover:bg-white/5 p-2 my-1 text-white/35 items-end cursor-pointer space-x-1"> <FaRetweet className="text-xl" /><div className="mt-[-20px] text-xs text-white/50">1</div></button>
                         </div>
-                        <LikeButton replyId={null} postId={post.id} likesCount={post.likesCount} isLiked={post.isLiked} userId={userId} />
+                        <div className="flex items-center text-white/50 text-[18px]">
+                            <LikeButton replyId={null} postId={post.id} likesCount={post.likesCount} isLiked={post.isLiked} userId={userId} />
+                        </div >
                         <div className="flex items-center text-white/50 text-[18px]" >
                             <button onClick={handleClick} className="flex rounded-full bg-transparent hover:bg-white/5 p-2 my-1 text-white/35 items-end cursor-pointer space-x-1"> <IoStatsChart /><div className="mt-[3px] text-xs">1</div></button>
                         </div>

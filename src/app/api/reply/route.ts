@@ -13,6 +13,47 @@ export async function GET(req: Request) {
   const userId = searchParams.get("userId");
   const postId = searchParams.get("postId");
 
+  const resOnePost = await db
+    .select({
+      post,
+      id: post.id,
+      profilesId: post.profilesId,
+      text: post.text,
+      imageUrl: post.imageUrl,
+      created_at: post.created_at,
+      updated_at: post.updated_at,
+      username: profiles.username,
+      full_name: profiles.fullName,
+      likesCount: sql<number>`count(distinct ${likes.id})`.as("likesCount"),
+      replyCount: sql<number>`count(distinct ${reply.id})`.as("replyCount"),
+      isLiked: exists(
+        db
+          .select()
+          .from(likes)
+          .where(
+            and(
+              eq(likes.profilesId, userId),
+              eq(likes.postId, post.id)
+            )
+          )
+      ).as("isLiked"),
+    })
+    .from(post)
+    .leftJoin(likes, eq(post.id, likes.postId))
+    .leftJoin(reply, eq(post.id, reply.postId))
+    .where(eq(post.id, postId))
+    .innerJoin(profiles, eq(profiles.id, post.profilesId))
+    .groupBy(
+      post.id,
+      post.profilesId,
+      post.text,
+      post.imageUrl,
+      post.created_at,
+      post.updated_at,
+      profiles.username,
+      profiles.fullName
+    );
+
   const res = await db
     .select({
       reply,
@@ -21,6 +62,7 @@ export async function GET(req: Request) {
       profilesId: reply.profilesId,
       postId: reply.postId,
       replyId: reply.id,
+      imageUrl: reply.imageUrl,
       created_at: reply.created_at,
       updated_at: reply.updated_at,
       username: profiles.username,
@@ -46,6 +88,7 @@ export async function GET(req: Request) {
       reply.postId,
       reply.created_at,
       reply.updated_at,
+      reply.imageUrl,
       profiles.username,
       profiles.fullName
     )
@@ -60,8 +103,13 @@ export async function GET(req: Request) {
     success: true,
     message: "SUCCESSFULLY FETCH REPLY FOR THIS POST",
     res,
+    resOnePost
   });
 }
+
+
+
+
 
 export async function POST(req: Request) {
   const formData = await req.formData();

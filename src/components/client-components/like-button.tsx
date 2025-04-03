@@ -37,13 +37,27 @@ const LikeButton = ({ replyId, postId, likesCount, isLiked, userId }: likeButton
         }
     }
 
-    const handlePostUnliked = async () => {
+    const handleReplyLiked = async () => {
+        const response = await fetch(`http://localhost:3000/api/reply/likes?replyId=${replyId}&profilesId=${userId}`, {
+            method: isLiked ? "DELETE" : "POST"
+        })
+        const data = await response.json()
 
+        if(data.success) {
+            toast.success(data.message)
+            startTransition(() => {
+                router.refresh()
+            })
+        } else {
+            toast.error(data.message)
+            console.log(data.error)
+        }
+        
     }
 
 
     return (
-        <div className="flex items-center text-white/50 text-[18px]">
+        
             <button
                 disabled={postPending}
                 onClick={(e) => {
@@ -52,7 +66,11 @@ const LikeButton = ({ replyId, postId, likesCount, isLiked, userId }: likeButton
                         toast.error("Please login first")
                     }
 
-                    handlePostLiked()
+                    if(replyId) {
+                        handleReplyLiked()
+                    } else {
+                        handlePostLiked()
+                    }
 
                     // startTransition(async () => {
                     //     if (replyId) {
@@ -78,7 +96,7 @@ const LikeButton = ({ replyId, postId, likesCount, isLiked, userId }: likeButton
                 <div className={`mt-[3px] text-xs ${isLiked ? "text-red-400" : ""}`}>{likesCount ?? 0}</div>
             </button>
 
-        </div >
+       
     )
 }
 

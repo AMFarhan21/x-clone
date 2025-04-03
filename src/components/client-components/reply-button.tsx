@@ -1,5 +1,5 @@
 'use client'
-import { BsDot } from 'react-icons/bs'
+import { BsDot, BsEmojiSmile } from 'react-icons/bs'
 import { Button } from '../ui/button'
 import { Dialog, DialogContent, DialogOverlay, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { HiOutlineChatBubbleOvalLeft } from 'react-icons/hi2'
@@ -8,8 +8,12 @@ import { useRef, useState } from 'react'
 import { handleReplySubmit } from '../server-components/mutation'
 import { toast } from 'sonner'
 import DayJs from './DayJs'
-import { RiImage2Line } from 'react-icons/ri'
+import { RiCalendarScheduleLine, RiImage2Line } from 'react-icons/ri'
 import { useRouter } from 'next/navigation'
+import { MdOutlineGifBox } from 'react-icons/md'
+import { FaRegCircle } from 'react-icons/fa'
+import { BiPoll } from 'react-icons/bi'
+import { IoLocationOutline } from 'react-icons/io5'
 
 
 type postProps = {
@@ -19,26 +23,23 @@ type postProps = {
     postUsername: string
 }
 
-const ReplyButton = ({ post, userId, postId, postUsername }: postProps) => {
-
+const ReplyButton = ({ post, userId, postId, postUsername, replyCount }: postProps) => {
     const [reply, setReply] = useState("")
     const [isOpen, setIsOpen] = useState(false)
 
     // IMAGE AND VIDEO
-
     const [file, setFile] = useState<File[]>([])
     const fileInputRef = useRef<HTMLInputElement | null>(null)
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if(e.target.files) {
+        if (e.target.files) {
             setFile(Array.from(e.target.files))
         }
     }
 
-
     // REPLY FORM DATA
     const router = useRouter()
     const [loading, setLoading] = useState(false)
-    const handleSubmit = async(e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
             setLoading(true)
@@ -47,18 +48,19 @@ const ReplyButton = ({ post, userId, postId, postUsername }: postProps) => {
             formData.append("text", reply);
             file.forEach((f) => formData.append("files", f))
 
-
             const response = await fetch(`http://localhost:3000/api/reply?postId=${postId}&profilesId=${userId}`, {
                 method: "POST",
                 body: formData,
             })
             const data = await response.json();
-            
-            if(data.success) {
+
+            if (data.success) {
                 toast.success(data.message)
                 router.refresh()
                 console.log(data.message)
                 setReply("")
+                setIsOpen(false)
+                setLoading(false)
             } else {
                 toast.error(data.message)
                 console.log(data.message)
@@ -68,30 +70,19 @@ const ReplyButton = ({ post, userId, postId, postUsername }: postProps) => {
         }
     }
 
-    // const handleSubmit = async (formData: FormData) => {
-    //     const res = await handleReplySubmit(formData, postId, userId, postUsername)
-    //     if (res?.success) {
-    //         toast.success(res.message)
-    //         setIsOpen(false)
-    //         setReply("")
-    //     } else {
-    //         toast.error(res.message)
-    //     }
-
-    // }
-
-
     return (
         <div>
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
 
                 <DialogTrigger onClick={(e) => e.stopPropagation()} className="flex rounded-full bg-transparent  hover:bg-blue-400/10 hover:text-blue-400 p-2 my-1 transition duration-400 text-white/50 items-end cursor-pointer space-x-1 ">
                     <HiOutlineChatBubbleOvalLeft />
-                    <div className="mt-[3px] text-xs"></div>
+                    <div className="mt-[3px] text-xs">
+                        {replyCount}
+                    </div>
                 </DialogTrigger>
                 <DialogOverlay className="bg-blue-300/20" />
                 <DialogTitle></DialogTitle>
-                <DialogContent className="bg-black/100 border-transparent min-w-150">
+                <DialogContent onClick={(e) => e.stopPropagation()} className="bg-black/100 border-transparent min-w-150">
                     <div className="flex mt-6">
                         <div className="bg-white/50 min-w-10 h-10 rounded-full p"></div>
                         <div className="ml-2 w-full">
@@ -128,7 +119,7 @@ const ReplyButton = ({ post, userId, postId, postUsername }: postProps) => {
 
                         </div>
                         <div className="flex justify-between w-full items-center">
-                            <div className="flex space-x-2">
+                            <div className="flex space-x-3">
                                 <div className='text-blue-400 text-[18px] cursor-pointer flex items-center' onClick={(e) => {
                                     e.stopPropagation();
                                     fileInputRef.current?.click()
@@ -136,18 +127,23 @@ const ReplyButton = ({ post, userId, postId, postUsername }: postProps) => {
                                     <RiImage2Line />
                                     <input className='hidden' type='file' name='files' accept='image/*, video/*' ref={fileInputRef} onChange={handleFileChange} multiple></input>
                                 </div>
-                                <div className="w-4 h-4 bg-slate-400 rounded-full"></div>
-                                <div className="w-4 h-4 bg-slate-400 rounded-full"></div>
+                                <div className="text-blue-400 text-[18px] cursor-pointer"> <MdOutlineGifBox /> </div>
+                                <div className="text-blue-400 text-[18px] cursor-pointer"> <FaRegCircle /> </div>
+                                <div className="text-blue-400 text-[18px] cursor-pointer"> <BiPoll /> </div>
+                                <div className="text-blue-400 text-[18px] cursor-pointer"> <BsEmojiSmile/> </div>
+                                <div className="text-blue-400 text-[18px] cursor-pointer"> <RiCalendarScheduleLine /> </div>
+                                <div className="text-blue-400/50 text-[18px] cursor-pointer"> <IoLocationOutline /> </div>
                             </div>
                             <Button disabled={loading} type="submit" className={`rounded-full text-black font-bold ${reply ? "bg-white/100 hover:bg-white/90" : "bg-white/40 hover:bg-white/40"} `} >
                                 Reply
                             </Button>
                         </div>
                     </form>
-
                 </DialogContent>
             </Dialog>
         </div>
+
+
     )
 }
 

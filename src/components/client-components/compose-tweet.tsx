@@ -89,12 +89,12 @@ const ComposeTweet = () => {
                   <RiImage2Line />
                   <input className='hidden' type='file' name='files' accept='image/*, video/*' ref={fileInputRef} onChange={handleFileChange} multiple />
                 </div>
-                <div className="text-blue-400 text-[18px]"> <MdOutlineGifBox /> </div>
-                <div className="text-blue-400 text-[18px]"> <FaRegCircle /> </div>
-                <div className="text-blue-400 text-[18px]"> <BiPoll /> </div>
-                <div className="text-blue-400 text-[18px]"> <BsEmojiSmile /> </div>
-                <div className="text-blue-400 text-[18px]"> <RiCalendarScheduleLine /> </div>
-                <div className="text-blue-400/50 text-[18px]"> <IoLocationOutline /> </div>
+                <div className="text-blue-400 text-[18px] cursor-pointer"> <MdOutlineGifBox /> </div>
+                <div className="text-blue-400 text-[18px] cursor-pointer"> <FaRegCircle /> </div>
+                <div className="text-blue-400 text-[18px] cursor-pointer"> <BiPoll /> </div>
+                <div className="text-blue-400 text-[18px] cursor-pointer"> <BsEmojiSmile /> </div>
+                <div className="text-blue-400 text-[18px] cursor-pointer"> <RiCalendarScheduleLine /> </div>
+                <div className="text-blue-400/50 text-[18px] cursor-pointer"> <IoLocationOutline /> </div>
               </div>
               <Button disabled={loading} type="submit" className={`py-2 px-5 rounded-full text-black font-bold ${post ? "bg-white/100 hover:bg-white/90" : "bg-white/40 hover:bg-white/40"}`}>
                 Post

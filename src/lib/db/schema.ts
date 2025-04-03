@@ -36,6 +36,23 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex } from
     reply: many(reply),
     postHashtag: many(postHashtag),
   }))
+
+
+  export const rePost = pgTable("rePost", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    profilesId: uuid("profilesId").references(() => profiles.id, { onDelete: "cascade" }),
+    postId: uuid("postId").references(() => post.id, { onDelete: "cascade" }),
+  })
+  export const rePostRelations = relations(rePost, ({one})=> ({
+    profiles: one(profiles, {
+      fields: [rePost.profilesId],
+      references: [profiles.id]
+    }),
+    post: one(post, {
+      fields: [rePost.postId],
+      references: [post.id]
+    }),
+  })) 
    
 
   export const hashtag = pgTable("hashtag", {
@@ -97,6 +114,7 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex } from
     id: uuid("id").defaultRandom().primaryKey(),
     profilesId: uuid("profilesId").notNull().references(() => profiles.id, { onDelete: "cascade" }),
     postId: uuid("postId").notNull().references(() => post.id, { onDelete: "cascade" }),
+    replyId: uuid("replyId").notNull().references(() => reply.id, { onDelete: "cascade" }),
     created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
   }, (bookmark) => [
     uniqueIndex("bookmark_profilesId_postId_idx").on(bookmark.profilesId, bookmark.postId)
@@ -109,6 +127,10 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex } from
     post: one(post, {
       fields: [bookmark.postId],
       references: [post.id]
+    }),
+    reply: one(reply, {
+      fields: [bookmark.replyId],
+      references: [reply.id]
     })
   }))
 

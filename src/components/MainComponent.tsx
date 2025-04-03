@@ -29,6 +29,7 @@ const MainComponent = async () => {
 
   const response = await fetch(`http://localhost:3000/api/posts?user=${user}`)
   const posts = await response.json()
+  
 
   // console.log(posts)
 

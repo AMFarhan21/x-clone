@@ -1,11 +1,10 @@
 'use server'
 
 import { db } from "@/lib/db";
-import { likes, post, profiles } from "@/lib/db/schema";
+import { likes, post, profiles, reply } from "@/lib/db/schema";
 import { createClient } from "@/utils/supabase/server";
 import { randomUUID } from "crypto";
 import { and, desc, eq, exists, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
@@ -24,16 +23,18 @@ export async function GET(req: Request) {
         updated_at: post.updated_at,
         username: profiles.username,
         full_name: profiles.fullName,
-        likesCount: sql<number>`count(${likes.id})`.as("likesCount"),
+        likesCount: sql<number>`count(distinct ${likes.id})`.as("likesCount"),
         isLiked: exists(
           db
             .select()
             .from(likes)
             .where(and(eq(likes.postId, post.id), eq(likes.profilesId, user)))
         ).as("isLiked"),
+        replyCount: sql<number>`count(distinct ${reply.id})`.as("replyCount")
       })
       .from(post)
       .leftJoin(likes, eq(post.id, likes.postId))
+      .leftJoin(reply, eq(post.id, reply.postId))
       .innerJoin(profiles, eq(post.profilesId, profiles.id))
       .groupBy(
         post.id,
