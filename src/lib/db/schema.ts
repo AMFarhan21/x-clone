@@ -3,12 +3,15 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex } from
 
 
   export const profiles = pgTable("profiles", {
-    id: uuid("id").defaultRandom().primaryKey().notNull(),//.references(() => authUsers.id, { onDelete: "cascade" }),
-    updated_at: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+    id: uuid("id").defaultRandom().primaryKey().notNull(),//.references(() => authUsers.id, { onDelete: "cascade" }), 
     username: text("username").unique(),
     fullName: text("full_name"),
     email: text("email"),
+    password: text("password"),
+    profilePicture: text("profilePicture"),
+    backgroundPicture: text("backgroundPicture"),
     created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
+    updated_at: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   });
   export const profilesRelations = relations(profiles, ({one, many}) => ({
     post: many(post),
@@ -42,7 +45,9 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex } from
     id: uuid("id").defaultRandom().primaryKey(),
     profilesId: uuid("profilesId").references(() => profiles.id, { onDelete: "cascade" }),
     postId: uuid("postId").references(() => post.id, { onDelete: "cascade" }),
+    replyId: uuid("replyId").references(() => reply.id, { onDelete: "cascade" }),
   })
+  
   export const rePostRelations = relations(rePost, ({one})=> ({
     profiles: one(profiles, {
       fields: [rePost.profilesId],
@@ -51,6 +56,10 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex } from
     post: one(post, {
       fields: [rePost.postId],
       references: [post.id]
+    }),
+    reply: one(reply, {
+      fields: [rePost.replyId],
+      references: [reply.id]
     }),
   })) 
    
@@ -113,8 +122,8 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex } from
   export const bookmark = pgTable("bookmark", {
     id: uuid("id").defaultRandom().primaryKey(),
     profilesId: uuid("profilesId").notNull().references(() => profiles.id, { onDelete: "cascade" }),
-    postId: uuid("postId").notNull().references(() => post.id, { onDelete: "cascade" }),
-    replyId: uuid("replyId").notNull().references(() => reply.id, { onDelete: "cascade" }),
+    postId: uuid("postId").references(() => post.id, { onDelete: "cascade" }),
+    replyId: uuid("replyId").references(() => reply.id, { onDelete: "cascade" }),
     created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
   }, (bookmark) => [
     uniqueIndex("bookmark_profilesId_postId_idx").on(bookmark.profilesId, bookmark.postId)

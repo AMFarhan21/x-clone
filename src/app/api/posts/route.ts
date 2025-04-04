@@ -1,7 +1,7 @@
-'use server'
+"use server";
 
 import { db } from "@/lib/db";
-import { likes, post, profiles, reply } from "@/lib/db/schema";
+import { bookmark, likes, post, profiles, reply, rePost } from "@/lib/db/schema";
 import { createClient } from "@/utils/supabase/server";
 import { randomUUID } from "crypto";
 import { and, desc, eq, exists, sql } from "drizzle-orm";
@@ -24,17 +24,31 @@ export async function GET(req: Request) {
         username: profiles.username,
         full_name: profiles.fullName,
         likesCount: sql<number>`count(distinct ${likes.id})`.as("likesCount"),
+        replyCount: sql<number>`count(distinct ${reply.id})`.as("replyCount"),
+        rePostCount: sql<number>`count(distinct ${rePost.id})`.as("rePostCount"),
         isLiked: exists(
           db
             .select()
             .from(likes)
             .where(and(eq(likes.postId, post.id), eq(likes.profilesId, user)))
         ).as("isLiked"),
-        replyCount: sql<number>`count(distinct ${reply.id})`.as("replyCount")
+        isRePosted: exists(
+          db
+            .select()
+            .from(rePost)
+            .where(and(eq(rePost.postId, post.id), eq(rePost.profilesId, user)))
+        ).as("isRePosted"),
+        isBookmarked: exists(
+          db
+          .select()
+          .from(bookmark)
+          .where(and(eq(bookmark.postId, post.id), eq(bookmark.profilesId, user)))
+        ).as("isBookmarked")
       })
       .from(post)
       .leftJoin(likes, eq(post.id, likes.postId))
       .leftJoin(reply, eq(post.id, reply.postId))
+      .leftJoin(rePost, eq(post.id, rePost.postId))
       .innerJoin(profiles, eq(post.profilesId, profiles.id))
       .groupBy(
         post.id,
@@ -100,11 +114,10 @@ export async function POST(req: Request) {
       })
       .returning();
 
-      // console.log("revalidating the path")
-      // res.revalidate("/")
-      // console.log("revalidating triggered")
-      return NextResponse.json({ success: true, res });
-    
+    // console.log("revalidating the path")
+    // res.revalidate("/")
+    // console.log("revalidating triggered")
+    return NextResponse.json({ success: true, res });
   } catch (error) {
     console.log("ERROR INSERTING POST: ", error);
     return NextResponse.json({ success: false, error });

@@ -1,0 +1,2 @@
+ALTER TABLE "rePost" ADD COLUMN "replyId" uuid;--> statement-breakpoint
+ALTER TABLE "rePost" ADD CONSTRAINT "rePost_replyId_reply_id_fk" FOREIGN KEY ("replyId") REFERENCES "public"."reply"("id") ON DELETE cascade ON UPDATE no action;

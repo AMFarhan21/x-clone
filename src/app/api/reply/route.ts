@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { likes, post, profiles, reply } from "@/lib/db/schema";
+import { likes, post, profiles, reply, rePost } from "@/lib/db/schema";
 import { createClient } from "@/utils/supabase/server";
 import { randomUUID } from "crypto";
 import { and, desc, eq, exists, like, sql } from "drizzle-orm";
@@ -26,6 +26,7 @@ export async function GET(req: Request) {
       full_name: profiles.fullName,
       likesCount: sql<number>`count(distinct ${likes.id})`.as("likesCount"),
       replyCount: sql<number>`count(distinct ${reply.id})`.as("replyCount"),
+      rePostCount: sql<number>`count(distinct ${rePost.id})`.as("rePostCount"),
       isLiked: exists(
         db
           .select()
@@ -37,10 +38,17 @@ export async function GET(req: Request) {
             )
           )
       ).as("isLiked"),
+      isRePosted: exists(
+        db
+          .select()
+          .from(rePost)
+          .where(and(eq(rePost.postId, post.id), eq(rePost.profilesId, userId)))
+      ).as("isRePosted"),
     })
     .from(post)
     .leftJoin(likes, eq(post.id, likes.postId))
     .leftJoin(reply, eq(post.id, reply.postId))
+    .leftJoin(rePost, eq(post.id, rePost.postId))
     .where(eq(post.id, postId))
     .innerJoin(profiles, eq(profiles.id, post.profilesId))
     .groupBy(
@@ -67,19 +75,27 @@ export async function GET(req: Request) {
       updated_at: reply.updated_at,
       username: profiles.username,
       full_name: profiles.fullName,
-      replyLikesCount: sql<number>`count(${likes.replyId})`.as(
-        "replyLikesCount"
-      ),
+      replyLikesCount: sql<number>`count(distinct ${likes.replyId})`.as("replyLikesCount"),
+      replyRepostCount: sql<number>`count(distinct ${rePost.replyId})`.as("replyRepostCount"),
       isReplyLiked: exists(
         db
           .select()
           .from(likes)
           .where(and(eq(likes.replyId, reply.id), eq(likes.profilesId, userId)))
       ).as("isReplyLiked"),
+      isReplyReposted: exists(
+        db
+        .select()
+        .from(rePost)
+        .where(
+          and(eq(rePost.replyId, reply.id), eq(rePost.profilesId, userId))
+        )
+      )
     })
     .from(reply)
     .where(eq(reply.postId, postId))
     .leftJoin(likes, eq(likes.replyId, reply.id))
+    .leftJoin(rePost, eq(rePost.replyId, reply.id))
     .innerJoin(profiles, eq(profiles.id, reply.profilesId))
     .groupBy(
       reply.id,

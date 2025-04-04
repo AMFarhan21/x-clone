@@ -8,6 +8,7 @@ import { FaRetweet } from 'react-icons/fa6'
 import { IoStatsChart } from 'react-icons/io5'
 import { MdBookmarkBorder } from 'react-icons/md'
 import { FiShare } from 'react-icons/fi'
+import Repost from './rePost-button'
 
 const Replies = ({ reply, userId, post, username }) => {
     const imageArray = reply.imageUrl ? JSON.parse(reply.imageUrl) : [];
@@ -46,9 +47,11 @@ const Replies = ({ reply, userId, post, username }) => {
                         <ReplyButton post={post} userId={userId} postId={post.id} postUsername={username} />
                     </div>
                     <div className="flex items-center text-white/50 text-[18px]">
-                        <button className="flex mt-[6px] rounded-full bg-transparent hover:bg-white/5 p-2 my-1 text-white/35 items-end cursor-pointer space-x-1"> <FaRetweet className="text-xl" /><div className="mt-[-20px] text-xs text-white/50">1</div></button>
+                        <Repost postId={null} userId={userId} isRePosted={reply.isReplyReposted} rePostCount={reply.replyRepostCount} replyId={reply.id} />
                     </div>
-                    <LikeButton replyId={reply.id || null} postId={reply.postId} likesCount={reply.replyLikesCount} isLiked={reply.isReplyLiked} userId={userId} />
+                    <div className="flex items-center text-white/50 text-[18px]">
+                        <LikeButton replyId={reply.id || null} postId={reply.postId} likesCount={reply.replyLikesCount} isLiked={reply.isReplyLiked} userId={userId} />
+                    </div>
                     <div className="flex items-center text-white/50 text-[18px]">
                         <button className="flex rounded-full bg-transparent hover:bg-white/5 p-2 my-1 text-white/35 items-end cursor-pointer space-x-1"> <IoStatsChart /><div className="mt-[3px] text-xs">1</div></button>
                     </div>
@@ -58,7 +61,7 @@ const Replies = ({ reply, userId, post, username }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 
 

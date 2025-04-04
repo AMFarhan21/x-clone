@@ -74,7 +74,7 @@ const ReplyButton = ({ post, userId, postId, postUsername, replyCount }: postPro
         <div>
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
 
-                <DialogTrigger onClick={(e) => e.stopPropagation()} className="flex rounded-full bg-transparent  hover:bg-blue-400/10 hover:text-blue-400 p-2 my-1 transition duration-400 text-white/50 items-end cursor-pointer space-x-1 ">
+                <DialogTrigger onClick={(e) => e.stopPropagation()} className="flex rounded-full bg-transparent  hover:bg-blue-400/10 hover:text-blue-400 p-2 my-1 transition duration-300 text-white/50 items-end cursor-pointer space-x-1 ">
                     <HiOutlineChatBubbleOvalLeft />
                     <div className="mt-[3px] text-xs">
                         {replyCount}
