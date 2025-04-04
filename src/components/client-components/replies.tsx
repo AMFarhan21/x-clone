@@ -9,6 +9,7 @@ import { IoStatsChart } from 'react-icons/io5'
 import { MdBookmarkBorder } from 'react-icons/md'
 import { FiShare } from 'react-icons/fi'
 import Repost from './rePost-button'
+import BookmarkButton from './bookmark-button'
 
 const Replies = ({ reply, userId, post, username }) => {
     const imageArray = reply.imageUrl ? JSON.parse(reply.imageUrl) : [];
@@ -56,7 +57,7 @@ const Replies = ({ reply, userId, post, username }) => {
                         <button className="flex rounded-full bg-transparent hover:bg-white/5 p-2 my-1 text-white/35 items-end cursor-pointer space-x-1"> <IoStatsChart /><div className="mt-[3px] text-xs">1</div></button>
                     </div>
                     <div className="flex text-white/50 items-center space-x-0 text-[18px]">
-                        <button className="text-xl rounded-full bg-transparent hover:bg-white/5 p-2 my-1 text-white/50 cursor-pointer"> <MdBookmarkBorder /> </button>
+                        <BookmarkButton postId={null} userId={userId} replyId={reply.id} isBookmarked={reply.isReplyBookmarked} />
                         <button className="rounded-full bg-transparent hover:bg-white/5 p-2 my-1 text-white/50 cursor-pointer"> <FiShare /> </button>
                     </div>
                 </div>

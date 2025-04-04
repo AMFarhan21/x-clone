@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { likes, post, profiles, reply, rePost } from "@/lib/db/schema";
+import { bookmark, likes, post, profiles, reply, rePost } from "@/lib/db/schema";
 import { createClient } from "@/utils/supabase/server";
 import { randomUUID } from "crypto";
 import { and, desc, eq, exists, like, sql } from "drizzle-orm";
@@ -44,6 +44,12 @@ export async function GET(req: Request) {
           .from(rePost)
           .where(and(eq(rePost.postId, post.id), eq(rePost.profilesId, userId)))
       ).as("isRePosted"),
+      isBookmarked: exists(
+        db
+        .select()
+        .from(bookmark)
+        .where(and(eq(bookmark.postId, post.id), eq(bookmark.profilesId, userId)))
+      ).as("isBookmarked")
     })
     .from(post)
     .leftJoin(likes, eq(post.id, likes.postId))
@@ -90,7 +96,13 @@ export async function GET(req: Request) {
         .where(
           and(eq(rePost.replyId, reply.id), eq(rePost.profilesId, userId))
         )
-      )
+      ).as("isReplyReposted"),
+      isReplyBookmarked: exists(
+        db
+        .select()
+        .from(bookmark)
+        .where(and(eq(bookmark.replyId, reply.id), eq(bookmark.profilesId, userId)))
+      ).as("isReplyBookmarked")
     })
     .from(reply)
     .where(eq(reply.postId, postId))
