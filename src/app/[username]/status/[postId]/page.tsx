@@ -23,7 +23,7 @@ const PostStatus = async ({ params }: { params: Promise<{ username: string; post
   const { username, postId } = await params
 
 
-  const post = await getOnePost(userId, postId)
+  // const post = await getOnePost(userId, postId)
 
 
   // const replies = await getReplies(userId, postId)
@@ -42,8 +42,8 @@ const PostStatus = async ({ params }: { params: Promise<{ username: string; post
   return (
 
     <div className="w-full xl:max-w-[48%] h-full min-h-screen flex-col border-l border-r border-gray-600/50">
-      <BackNavigation />
-      {replies.resOnePost ? <Posts key={post.id} post={replies.resOnePost[0]} userId={userId} /> : <div>This post not exists</div>}
+      <BackNavigation user={null} />
+      {replies.resOnePost ? <Posts key={replies.resOnePost[0].id} post={replies.resOnePost[0]} userId={userId} /> : <div>This post not exists</div>}
 
       {replies.res.map((reply) => (
         <Replies key={reply.id} reply={reply} userId={userId} post={post} username={username} />

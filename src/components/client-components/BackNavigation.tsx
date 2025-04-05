@@ -11,7 +11,7 @@ const BackNavigation = ({user}) => {
                 router.refresh()
                 router.push("/")
             }} className='cursor-pointer hover:bg-white/5 rounded-full w-9 h-9 p-2' />
-            <div className='mt-[-2px] font-bold ml-4'> {user ? user.username : Post} </div>
+            <div className='mt-[-2px] font-bold ml-4'> {user ? user.username : "Post"} </div>
         </div>
     )
 }

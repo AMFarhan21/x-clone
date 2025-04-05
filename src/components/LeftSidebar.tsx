@@ -10,6 +10,7 @@ import Link from "next/link";
 import { BsThreeDots } from "react-icons/bs";
 import { createClient } from '@/utils/supabase/server';
 import { signOut } from '@/lib/action';
+import { RiQuillPenAiLine } from 'react-icons/ri';
 
 const NAVIGATION_ITEMS = [
   {
@@ -54,7 +55,7 @@ const LeftSidebar = async () => {
 
 
   return (
-    <section className="w-[27%] flex flex-col items-stretch h-screen space-y-4 sticky top-0">
+    <section className="w-[24%] flex flex-col items-stretch h-screen space-y-4 sticky top-0">
       <div className="flex flex-col h-full items-stretch mt-1 ml-2 pr-6">
         {NAVIGATION_ITEMS.map((item) => (
           <Link href={item.title === "Twitter" || item.title === "Home" ? '/' : item.title === "Profile" ? `/${username}` : `/${item.title.toLowerCase()}`} key={item.title} className="flex hover:bg-white/10 transition duration-200 text-2xl items-center justify-start w-fit space-x-4 rounded-3xl p-4 py-3">
@@ -65,9 +66,14 @@ const LeftSidebar = async () => {
           </Link>
 
         ))}
-        <button className="w-full bg-white text-black rounded-full p-4 font-bold hover:bg-white/90 transition duration-200">
+        <button className="w-full bg-white text-black rounded-full p-4 font-bold hover:bg-white/90 transition duration-200 lg:flex hidden justify-around">
           Post
         </button>
+        <div className='lg:hidden flex justify-start pl-2 py-2'>
+          <button className="min-w-12 h-12 items-center justify-center bg-white text-black rounded-full hover:bg-white/90 transition duration-200">
+            <RiQuillPenAiLine className='text-2xl items-center justify-center m-auto' />
+          </button>
+        </div>
       </div>
 
       <form>
