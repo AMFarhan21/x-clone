@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { createClient } from '@/utils/supabase/server'
 import React from 'react'
+import { FaRetweet } from 'react-icons/fa6';
 import { MdCalendarMonth } from 'react-icons/md';
 import { RiVerifiedBadgeFill } from 'react-icons/ri';
 
@@ -97,7 +98,10 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                 <TabsContent value="posts">
                     <div>
                         {data.posts.map((post) => (
-                            <Posts key={post.id} post={post} userId={userId} />
+                            <div key={post.id}>
+                                {post.isRePosted && <div className='text-sm text-white/50 font-semibold flex items-center gap-x-2 ml-10'><FaRetweet className='text-base' /> You reposted</div>}
+                                <Posts post={post} userId={userId} />
+                            </div>
                         ))}
                     </div>
                 </TabsContent>

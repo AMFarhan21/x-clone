@@ -1,4 +1,5 @@
 'use client'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { FaRetweet } from 'react-icons/fa6'
 import { toast } from 'sonner'
@@ -7,6 +8,7 @@ const Repost = ({postId, userId, isRePosted, rePostCount, replyId}) => {
 
     const [reposted, setReposted] = useState(isRePosted)
     const [count, setCount] = useState(Number(rePostCount))
+    const router = useRouter()
 
     const handleRepost = async() => {
 

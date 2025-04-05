@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { bookmark, likes, post, profiles, reply, rePost } from "@/lib/db/schema";
-import { and, desc, eq, exists, sql } from "drizzle-orm";
+import { and, desc, eq, exists, or, sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
@@ -49,6 +49,7 @@ export async function GET(req: Request) {
     .leftJoin(reply, eq(post.id, reply.postId))
     .leftJoin(rePost, eq(post.id, rePost.postId))
     .leftJoin(bookmark, eq(post.id, bookmark.postId))
+    .where(or(eq(profiles.id, userId), eq(rePost.profilesId, userId)))
     .innerJoin(profiles, eq(post.profilesId, profiles.id))
     .groupBy(
       post.id,
