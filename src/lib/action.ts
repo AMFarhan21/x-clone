@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { profiles } from "./db/schema";
 import { db } from "./db";
+import { NextResponse } from "next/server";
 
 export async function signup(formData: FormData) {
   const supabase = await createClient();
@@ -14,23 +15,12 @@ export async function signup(formData: FormData) {
   const username = formData.get("username") as string;
   const password = formData.get("password") as string;
 
-  // Check if username exists
-  // const existing = await db
-  //   .select()
-  //   .from(profiles)
-  //   .where(eq(profiles.username, username.trim()));
-
-  // if (existing.length > 0) {
-  //   console.log("Username already existed", existing);
-  // }
-
-  const { error: signUpError } = await supabase.auth.signUp({
+  const { data: signedUp, error: signUpError } = await supabase.auth.signUp({
     email: email.trim(),
     password: password,
     options: {
       data: {
         username,
-        password,
         email,
       },
     },
@@ -38,28 +28,30 @@ export async function signup(formData: FormData) {
 
   if (signUpError) {
     console.log("ERROR SIGNIN: ", signUpError);
-    return { error: signUpError.message };
+    return { success: false, message: "ERROR SIGNIN", error: signUpError.message };
   }
 
-  // const user = data.user;
-  // if(!user) {
-  //   console.log("USER IS NOT CREATED")
-  //   return {error: "USER IS NOT CREATED"}
-  // }
-
-  // await db.insert(profiles).values({
-  //   id: user.id,
-  //   email: email,
-  //   username: username,
-  //   password: password,
-  // })
-
-  console.log("user is created");
-
   revalidatePath("/");
+
+  console.log("CHECK YOUR EMAIL");
+  console.log(signedUp)
+
+  if(signedUp?.user?.id) {
+    await db.update(profiles).set({
+      username,
+      email
+  }).where(eq(profiles.id, signedUp?.user.id))
+  }
+
+  return { success: true, message: "Check your email to validate", signedUp };
+
+
+  
+
   redirect("/");
 
-  // return { message: "user is created" };
+  
+
 }
 
 export async function signin(formData: FormData) {

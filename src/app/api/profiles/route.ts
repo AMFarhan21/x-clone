@@ -7,6 +7,11 @@ export async function GET(req: Request) {
     const {searchParams} = new URL(req.url)
     const userId = searchParams.get("userId")
 
+    const userProfiles = await db.query.profiles.findFirst({
+      where: (profiles, {eq}) => 
+        eq(profiles.id, userId)
+    })
+
     const posts = await db
           .select({
             post,
@@ -86,5 +91,5 @@ export async function GET(req: Request) {
         });
     
 
-    return NextResponse.json({userId, posts, replies})
+    return NextResponse.json({userId, userProfiles, posts, replies})
 }

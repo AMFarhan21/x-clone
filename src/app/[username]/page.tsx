@@ -7,15 +7,14 @@ import React from 'react'
 const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }) => {
     const supabase = await createClient();
     const { data: user, error } = await supabase.auth.getUser();
-    if (error) {
-        console.log(error)
-    }
+    if (error) {console.log(error)}
 
     const userId = user.user?.id
     const { username } = await params
 
     const response = await fetch(`http://localhost:3000/api/profiles?userId=${userId}`)
     const data = await response.json()
+    // console.log(user)
 
     return (
         <div className="w-full xl:max-w-[48%] h-full min-h-screen flex-col border-l border-r border-gray-600/50">
