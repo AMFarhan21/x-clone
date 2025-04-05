@@ -4,7 +4,10 @@ import DropdownButton from '@/components/client-components/DropdownButton';
 import LikeButton from '@/components/client-components/like-button';
 import Posts from '@/components/client-components/posts';
 import Replies from '@/components/client-components/replies';
+<<<<<<< Updated upstream
 import ReplyButton from '@/components/client-components/reply-button';
+=======
+>>>>>>> Stashed changes
 import { getOnePost } from '@/components/server-components/fetch-data';
 import { createClient } from '@/utils/supabase/server';
 import React from 'react'

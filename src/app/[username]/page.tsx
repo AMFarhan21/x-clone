@@ -1,5 +1,6 @@
 import BackNavigation from '@/components/client-components/BackNavigation';
 import DayJs from '@/components/client-components/DayJs';
+import EditProfile from '@/components/client-components/EditProfile';
 import Posts from '@/components/client-components/posts';
 import Replies from '@/components/client-components/replies';
 import { Button } from '@/components/ui/button';
@@ -30,7 +31,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                 <div>
                     <div className='flex'>
                         <div className='w-33 h-33 bg-gray-600 rounded-full mx-6 mb-7 mt-[-70px] border-3 border-black cursor-pointer'></div>
-                        <Button className='ml-auto mr-3 mt-3 rounded-full border border-white/50 bg-black font-bold cursor-pointer'>Edit profile</Button>
+                        <EditProfile />
                     </div>
                     <div className='mx-4 mb-5 space-y-2'>
                         <div>
