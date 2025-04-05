@@ -108,6 +108,7 @@ export async function GET(req: Request) {
     .where(eq(reply.postId, postId))
     .leftJoin(likes, eq(likes.replyId, reply.id))
     .leftJoin(rePost, eq(rePost.replyId, reply.id))
+    .leftJoin(bookmark, eq(bookmark.replyId, reply.id))
     .innerJoin(profiles, eq(profiles.id, reply.profilesId))
     .groupBy(
       reply.id,
@@ -131,7 +132,7 @@ export async function GET(req: Request) {
     success: true,
     message: "SUCCESSFULLY FETCH REPLY FOR THIS POST",
     res,
-    resOnePost
+    resOnePost,
   });
 }
 

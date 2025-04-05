@@ -88,7 +88,7 @@ const AuthModel = () => {
                             toast.success(data.message)
                             router.refresh()
                             router.push("/")
-                            console.log(data.signedUp)
+                            // console.log(data.signedUp)
 
                             
                         } else {

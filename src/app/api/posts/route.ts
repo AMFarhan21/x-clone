@@ -49,6 +49,7 @@ export async function GET(req: Request) {
       .leftJoin(likes, eq(post.id, likes.postId))
       .leftJoin(reply, eq(post.id, reply.postId))
       .leftJoin(rePost, eq(post.id, rePost.postId))
+      .leftJoin(bookmark, eq(post.id, bookmark.postId))
       .innerJoin(profiles, eq(post.profilesId, profiles.id))
       .groupBy(
         post.id,

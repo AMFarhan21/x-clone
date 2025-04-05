@@ -45,13 +45,7 @@ export async function signup(formData: FormData) {
 
   return { success: true, message: "Check your email to validate", signedUp };
 
-
-  
-
   redirect("/");
-
-  
-
 }
 
 export async function signin(formData: FormData) {
