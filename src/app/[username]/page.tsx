@@ -40,7 +40,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                             </div>
                             <div className='text-white/50 text-base font-light'> @{data.userProfiles.username} </div>
                         </div>
-                        <div className='flex gap-x-1 text-white/50 text-base font-light items-center'><MdCalendarMonth className='text-base font-light' /> Joined <DayJs date={data.userProfiles.created_at} /> </div>
+                        <div className='flex gap-x-1 text-white/50 text-base font-light items-center'><MdCalendarMonth className='text-base font-light' /> Joined <DayJs date={null} profilesCreated={data.userProfiles.created_at} /> </div>
                         <div className='flex space-x-5'>
                             <div className='text-white/50 text-base font-light'><span className='font-bold text-white'>10</span> Following</div>
                             <div className='text-white/50 text-base font-light'><span className='font-bold text-white'>35</span> Followers</div>

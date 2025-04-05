@@ -5,9 +5,15 @@ import relativeTime from "dayjs/plugin/relativeTime"
 
 dayjs.extend(relativeTime)
 
-const DayJs = ({date}: {date: string}) => {
+const DayJs = ({date, profilesCreated}: {date: string | null, profilesCreated: string | null}) => {
+  
+  let formatedDate;
 
-  let formatedDate = dayjs(date).fromNow().replace(/\ban\b/g, "1").replace(/\ba minute\b/g, "1 minute")
+  if(profilesCreated) {
+    formatedDate = dayjs(profilesCreated).format('MMMM YYYY')
+  } else {
+    formatedDate = dayjs(date).fromNow().replace(/\ban\b/g, "1").replace(/\ba minute\b/g, "1 minute")
+  }
 
 
   return (

@@ -1,18 +1,8 @@
 import BackNavigation from '@/components/client-components/BackNavigation';
-import DayJs from '@/components/client-components/DayJs';
-import DropdownButton from '@/components/client-components/DropdownButton';
-import LikeButton from '@/components/client-components/like-button';
 import Posts from '@/components/client-components/posts';
 import Replies from '@/components/client-components/replies';
-import ReplyButton from '@/components/client-components/reply-button';
-import { getOnePost } from '@/components/server-components/fetch-data';
 import { createClient } from '@/utils/supabase/server';
 import React from 'react'
-import { BsDot } from 'react-icons/bs';
-import { FaRetweet } from 'react-icons/fa6';
-import { FiShare } from 'react-icons/fi';
-import { IoArrowBack, IoStatsChart } from 'react-icons/io5';
-import { MdBookmarkBorder } from 'react-icons/md';
 
 const PostStatus = async ({ params }: { params: Promise<{ username: string; postId: string }> }) => {
 

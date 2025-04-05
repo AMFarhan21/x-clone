@@ -24,7 +24,7 @@ const Replies = ({ reply, userId, post, username }) => {
                         <div className="text-white/50 text-sm"> <BsDot /> </div>
                         <div className="text-white/50 text-sm">
                             {/* {dayjs(reply.profiles.createdAt).fromNow()} */}
-                            <DayJs date={reply.created_at} />
+                            <DayJs date={reply.created_at} profilesCreated={null} />
                         </div>
                     </div>
                     <div className="flex space-x-2 items-center">

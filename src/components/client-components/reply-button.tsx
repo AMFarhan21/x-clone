@@ -91,7 +91,7 @@ const ReplyButton = ({ post, userId, postId, postUsername, replyCount }: postPro
                                     <div className="font-semibold">{post.username ?? ""}</div>
                                     <div className="text-white/50 text-sm ml-1">@{post.username}</div>
                                     <div className="text-white/50 text-sm"> <BsDot /> </div>
-                                    <div className="text-white/50 text-sm"> <DayJs date={post.created_at} /> </div>
+                                    <div className="text-white/50 text-sm"> <DayJs date={post.created_at} profilesCreated={null} /> </div>
                                 </div>
                             </div>
                             <div className="text-[15px] line-clamp-12"> {post.text} </div>

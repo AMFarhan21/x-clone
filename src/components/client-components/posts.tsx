@@ -68,7 +68,7 @@ const Posts = ({ post, userId }: postProps) => {
                             <div className="font-semibold">{post.username ?? ""}</div>
                             <div className="text-white/50 text-sm ml-1">@{post.username}</div>
                             <div className="text-white/50 text-sm"> <BsDot /> </div>
-                            <div className="text-white/50 text-sm"> <DayJs date={post.created_at} /> </div>
+                            <div className="text-white/50 text-sm"> <DayJs date={post.created_at} profilesCreated={null} /> </div>
                         </div>
                         <div className="flex space-x-2 items-center">
                             <div>Grok</div>
