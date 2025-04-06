@@ -6,7 +6,7 @@ import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 
 function RightSection() {
     return (
-        <section className="lg:flex hidden flex-col ml-8 my-1 w-[30%] h-screen space-y-4 sticky top-1 overflow-scroll" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+        <section className="lg:flex hidden flex-col ml-8 my-1 w-[33%] h-screen space-y-4 sticky top-1 overflow-scroll" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
             {/* SEARCH */}
             <div className=" bg-black sticky top-2">
                 <div className="relative w-full h-full">

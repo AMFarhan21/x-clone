@@ -17,7 +17,7 @@ export type postType = {
     profilesId: string;
     created_at: string;
     username: string;
-    fullName?: string | null;
+    displayName?: string | null;
     likesCount: number;
     imageUrl: string;
     replyCount: number;
@@ -25,6 +25,7 @@ export type postType = {
     isLiked: boolean;
     isRePosted: boolean;
     isBookmarked: boolean;
+    profilePicture: any;
 };
 
 type postProps = {
@@ -52,6 +53,12 @@ const Posts = ({ post, userId }: postProps) => {
         // const imageArray = JSON.parse(post.imageUrl);
     }
 
+    const handlePostProfileClick = () => {
+        router.push(`/${post.username}`)
+        router.refresh()
+    }
+
+
     const imageArray = post.imageUrl ? JSON.parse(post.imageUrl) : [];
     // console.log(imageArray)
 
@@ -61,12 +68,16 @@ const Posts = ({ post, userId }: postProps) => {
         <div>
 
             <div key={post.id} className="border-b border-gray-600/50 flex pt-3 px-4 cursor-pointer hover:bg-white/2" onClick={handlePostClick}>
-                <div className="bg-white/50 min-w-10 h-10 rounded-full p">  </div>
+                {post.profilePicture ? (
+                    <img src={post.profilePicture} className="bg-white/50 w-10 h-10 rounded-full object-cover" onClick={(e) => {e.stopPropagation(); handlePostProfileClick()}} />
+                ) : (
+                    <div className="bg-white/50 min-w-10 h-10 rounded-full" onClick={(e) => {e.stopPropagation(); handlePostProfileClick()}}>  </div>
+                )}
                 <div className="ml-4 w-full">
                     <div className="flex justify-between">
                         <div className="flex items-center">
-                            <div className="font-semibold">{post.username ?? ""}</div>
-                            <div className="text-white/50 text-sm ml-1">@{post.username}</div>
+                            <div className="font-semibold hover:border-b-2 border-white" onClick={(e) => {e.stopPropagation(); handlePostProfileClick()}}>{post.username ?? ""}</div>
+                            <div className="text-white/50 text-sm ml-1" onClick={(e) => {e.stopPropagation(); handlePostProfileClick()}}>@{post.username}</div>
                             <div className="text-white/50 text-sm"> <BsDot /> </div>
                             <div className="text-white/50 text-sm"> <DayJs date={post.created_at} profilesCreated={null} /> </div>
                         </div>

@@ -1,5 +1,14 @@
 import { db } from "@/lib/db";
-import { bookmark, likes, post, profiles, reply, rePost } from "@/lib/db/schema";
+import {
+  bookmark,
+  likes,
+  post,
+  profiles,
+  reply,
+  rePost,
+} from "@/lib/db/schema";
+import { createClient } from "@/utils/supabase/server";
+import { randomUUID } from "crypto";
 import { and, desc, eq, exists, or, sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
@@ -21,7 +30,7 @@ export async function GET(req: Request) {
       created_at: post.created_at,
       updated_at: post.updated_at,
       username: profiles.username,
-      full_name: profiles.fullName,
+      displayName: profiles.displayName,
       likesCount: sql<number>`count(${likes.id})`.as("likesCount"),
       replyCount: sql<number>`count(distinct ${reply.id})`.as("replyCount"),
       rePostCount: sql<number>`count(distinct ${rePost.id})`.as("rePostCount"),
@@ -31,18 +40,20 @@ export async function GET(req: Request) {
           .from(likes)
           .where(and(eq(likes.postId, post.id), eq(likes.profilesId, userId)))
       ).as("isLiked"),
-        isRePosted: exists(
-          db
-            .select()
-            .from(rePost)
-            .where(and(eq(rePost.postId, post.id), eq(rePost.profilesId, userId)))
-        ).as("isRePosted"),
-        isBookmarked: exists(
-          db
+      isRePosted: exists(
+        db
+          .select()
+          .from(rePost)
+          .where(and(eq(rePost.postId, post.id), eq(rePost.profilesId, userId)))
+      ).as("isRePosted"),
+      isBookmarked: exists(
+        db
           .select()
           .from(bookmark)
-          .where(and(eq(bookmark.postId, post.id), eq(bookmark.profilesId, userId)))
-        ).as("isBookmarked")
+          .where(
+            and(eq(bookmark.postId, post.id), eq(bookmark.profilesId, userId))
+          )
+      ).as("isBookmarked"),
     })
     .from(post)
     .leftJoin(likes, eq(post.id, likes.postId))
@@ -55,7 +66,7 @@ export async function GET(req: Request) {
       post.id,
       post.imageUrl,
       profiles.username,
-      profiles.fullName,
+      profiles.displayName,
       post.created_at
     )
     .orderBy(desc(post.created_at))
@@ -76,11 +87,13 @@ export async function GET(req: Request) {
       created_at: reply.created_at,
       updated_at: reply.updated_at,
       username: profiles.username,
-      full_name: profiles.fullName,
+      displayName: profiles.displayName,
       replyLikesCount: sql<number>`count(${likes.replyId})`.as(
         "replyLikesCount"
       ),
-      replyRepostCount: sql<number>`count(distinct ${rePost.replyId})`.as("replyRepostCount"),
+      replyRepostCount: sql<number>`count(distinct ${rePost.replyId})`.as(
+        "replyRepostCount"
+      ),
       isReplyLiked: exists(
         db
           .select()
@@ -89,18 +102,20 @@ export async function GET(req: Request) {
       ).as("isReplyLiked"),
       isReplyReposted: exists(
         db
-        .select()
-        .from(rePost)
-        .where(
-          and(eq(rePost.replyId, reply.id), eq(rePost.profilesId, userId))
-        )
+          .select()
+          .from(rePost)
+          .where(
+            and(eq(rePost.replyId, reply.id), eq(rePost.profilesId, userId))
+          )
       ).as("isReplyReposted"),
       isReplyBookmarked: exists(
         db
-        .select()
-        .from(bookmark)
-        .where(and(eq(bookmark.replyId, reply.id), eq(bookmark.profilesId, userId)))
-      ).as("isReplyBookmarked")
+          .select()
+          .from(bookmark)
+          .where(
+            and(eq(bookmark.replyId, reply.id), eq(bookmark.profilesId, userId))
+          )
+      ).as("isReplyBookmarked"),
     })
     .from(reply)
     .leftJoin(likes, eq(likes.replyId, reply.id))
@@ -116,7 +131,7 @@ export async function GET(req: Request) {
       reply.updated_at,
       reply.imageUrl,
       profiles.username,
-      profiles.fullName
+      profiles.displayName
     )
     .orderBy(desc(reply.created_at))
     .catch((error) => {
@@ -125,4 +140,65 @@ export async function GET(req: Request) {
     });
 
   return NextResponse.json({ userId, userProfiles, posts, replies });
+}
+
+export async function POST(req: Request) {
+  const formData = await req.formData();
+  const userId = formData.get("userId") as string;
+  const name = formData.get("name") as string;
+  const bio = formData.get("bio") as string;
+  const location = formData.get("location") as string;
+  const website = formData.get("website") as string;
+  const birthMonth = formData.get("birthMonth") as string;
+  const birthDay = formData.get("birthDay") as string;
+  const birthYear = formData.get("birthYear") as string;
+  const birthDate = `${birthMonth} ${birthDay}, ${birthYear}`;
+  const coverImageData = formData.get("coverImage");
+  const profileImageData = formData.get("profileImage");
+
+  const coverImage = coverImageData instanceof File ? coverImageData : null;
+  const profileImage = profileImageData instanceof File ? profileImageData : null;
+
+  const supabase = await createClient();
+
+  const coverImageURL = async () => {
+    const coverImageName = `profiles-cover/${randomUUID()}-${coverImage.name}`;
+    const { data, error } = await supabase.storage
+      .from("x-clone-bucket")
+      .upload(coverImageName, coverImage);
+    if (error) {
+      console.log("ERROR INSERTING COVER IMAGE TO STORAGE: ", error);
+      return null;
+    }
+
+    return supabase.storage.from("x-clone-bucket").getPublicUrl(data?.path).data.publicUrl;
+  };
+
+  const profileImageURL = async() => {
+    const profileImageName = `profiles-image/${randomUUID()}-${profileImage.name}`
+    const {data, error} = await supabase.storage
+      .from("x-clone-bucket")
+      .upload(profileImageName, profileImage);
+    if(error) {
+      console.log("ERROR INSERTING PROFILE IMAGE TO STORAGE: ", error)
+      return null;
+    }
+    return supabase.storage.from("x-clone-bucket").getPublicUrl(data?.path).data.publicUrl;
+  }
+
+  const res = await db.update(profiles).set({
+    displayName: name,
+    bio,
+    location,
+    website,
+    birthDate,
+    ...(coverImage ? {backgroundPicture: await coverImageURL()} : {}),
+    ...(profileImage ? {profilePicture: await profileImageURL()} : {}),
+  }).where(eq(profiles.id, userId)).catch((error) => {
+    console.log("ERROR UPDATING PROFILES DETAILS: ", error);
+    return NextResponse.json({success: false, error, message: "ERROR UPDATING PROFILES DETAILS"})
+  })
+
+  console.log("PROFILES UPDATED");
+  return NextResponse.json({success: true, res, message: "Profile is updated"});
 }
