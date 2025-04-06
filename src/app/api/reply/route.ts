@@ -5,7 +5,6 @@ import { bookmark, likes, post, profiles, reply, rePost } from "@/lib/db/schema"
 import { createClient } from "@/utils/supabase/server";
 import { randomUUID } from "crypto";
 import { and, desc, eq, exists, like, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
@@ -23,7 +22,7 @@ export async function GET(req: Request) {
       created_at: post.created_at,
       updated_at: post.updated_at,
       username: profiles.username,
-      full_name: profiles.fullName,
+      displayName: profiles.displayName,
       likesCount: sql<number>`count(distinct ${likes.id})`.as("likesCount"),
       replyCount: sql<number>`count(distinct ${reply.id})`.as("replyCount"),
       rePostCount: sql<number>`count(distinct ${rePost.id})`.as("rePostCount"),
@@ -65,7 +64,7 @@ export async function GET(req: Request) {
       post.created_at,
       post.updated_at,
       profiles.username,
-      profiles.fullName
+      profiles.displayName
     );
 
   const res = await db
@@ -80,7 +79,7 @@ export async function GET(req: Request) {
       created_at: reply.created_at,
       updated_at: reply.updated_at,
       username: profiles.username,
-      full_name: profiles.fullName,
+      displayName: profiles.displayName,
       replyLikesCount: sql<number>`count(distinct ${likes.replyId})`.as("replyLikesCount"),
       replyRepostCount: sql<number>`count(distinct ${rePost.replyId})`.as("replyRepostCount"),
       isReplyLiked: exists(
@@ -119,7 +118,7 @@ export async function GET(req: Request) {
       reply.updated_at,
       reply.imageUrl,
       profiles.username,
-      profiles.fullName
+      profiles.displayName
     )
     .orderBy(desc(reply.created_at))
     .catch((error) => {
@@ -165,7 +164,7 @@ export async function POST(req: Request) {
         console.log("ERROR STORING FILE TO BUCKET: ", error);
       }
 
-      return supabase.storage.from("x-clone-bucket").getPublicUrl(data?.path)
+      return supabase.storage.from("x-clone-bucket").getPublicUrl(data?.path as string)
         .data.publicUrl;
     })
   );

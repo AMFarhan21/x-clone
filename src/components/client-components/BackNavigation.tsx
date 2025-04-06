@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { IoArrowBack } from 'react-icons/io5'
 
-const BackNavigation = ({user}) => {
+const BackNavigation = ({user}: any) => {
     const router = useRouter();
     return (
         <div className='flex items-center space-x-4 text-xl mx-2 my-2'>
@@ -11,7 +11,7 @@ const BackNavigation = ({user}) => {
                 router.refresh()
                 router.push("/")
             }} className='cursor-pointer hover:bg-white/5 rounded-full w-9 h-9 p-2' />
-            <div className='mt-[-2px] font-bold ml-4'> {user ? user.username : Post} </div>
+            <div className='mt-[-2px] font-bold ml-4'> {user ? user.username : "Post"} </div>
         </div>
     )
 }

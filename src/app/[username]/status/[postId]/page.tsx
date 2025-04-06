@@ -1,21 +1,10 @@
 import BackNavigation from '@/components/client-components/BackNavigation';
-import DayJs from '@/components/client-components/DayJs';
-import DropdownButton from '@/components/client-components/DropdownButton';
-import LikeButton from '@/components/client-components/like-button';
 import Posts from '@/components/client-components/posts';
 import Replies from '@/components/client-components/replies';
-<<<<<<< Updated upstream
-import ReplyButton from '@/components/client-components/reply-button';
-=======
->>>>>>> Stashed changes
 import { getOnePost } from '@/components/server-components/fetch-data';
 import { createClient } from '@/utils/supabase/server';
 import React from 'react'
-import { BsDot } from 'react-icons/bs';
-import { FaRetweet } from 'react-icons/fa6';
-import { FiShare } from 'react-icons/fi';
-import { IoArrowBack, IoStatsChart } from 'react-icons/io5';
-import { MdBookmarkBorder } from 'react-icons/md';
+
 
 const PostStatus = async ({ params }: { params: Promise<{ username: string; postId: string }> }) => {
 
@@ -35,17 +24,16 @@ const PostStatus = async ({ params }: { params: Promise<{ username: string; post
   const replies = await response.json();
 
   if (replies.success) {
-    // console.log(replies.resOnePost[0])
+    console.log(replies.resOnePost[0])
   } else {
     console.log(replies.message)
   }
 
 
-
   return (
 
     <div className="w-full xl:max-w-[48%] h-full min-h-screen flex-col border-l border-r border-gray-600/50">
-      <BackNavigation />
+      <BackNavigation user={null} />
       {replies.resOnePost ? <Posts key={post.id} post={replies.resOnePost[0]} userId={userId} /> : <div>This post not exists</div>}
 
       {replies.res.map((reply) => (

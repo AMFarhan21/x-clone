@@ -22,7 +22,7 @@ export async function GET(req: Request) {
         created_at: post.created_at,
         updated_at: post.updated_at,
         username: profiles.username,
-        full_name: profiles.fullName,
+        displayName: profiles.displayName,
         likesCount: sql<number>`count(distinct ${likes.id})`.as("likesCount"),
         replyCount: sql<number>`count(distinct ${reply.id})`.as("replyCount"),
         rePostCount: sql<number>`count(distinct ${rePost.id})`.as("rePostCount"),
@@ -55,7 +55,7 @@ export async function GET(req: Request) {
         post.id,
         post.imageUrl,
         profiles.username,
-        profiles.fullName,
+        profiles.displayName,
         post.created_at
       )
       .orderBy(desc(post.created_at));
