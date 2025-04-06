@@ -23,6 +23,7 @@ export async function GET(req: Request) {
       updated_at: post.updated_at,
       username: profiles.username,
       displayName: profiles.displayName,
+      profilePicture: profiles.profilePicture,
       likesCount: sql<number>`count(distinct ${likes.id})`.as("likesCount"),
       replyCount: sql<number>`count(distinct ${reply.id})`.as("replyCount"),
       rePostCount: sql<number>`count(distinct ${rePost.id})`.as("rePostCount"),
@@ -64,7 +65,8 @@ export async function GET(req: Request) {
       post.created_at,
       post.updated_at,
       profiles.username,
-      profiles.displayName
+      profiles.displayName,
+      profiles.profilePicture
     );
 
   const res = await db
@@ -80,6 +82,7 @@ export async function GET(req: Request) {
       updated_at: reply.updated_at,
       username: profiles.username,
       displayName: profiles.displayName,
+      profilePicture: profiles.profilePicture,
       replyLikesCount: sql<number>`count(distinct ${likes.replyId})`.as("replyLikesCount"),
       replyRepostCount: sql<number>`count(distinct ${rePost.replyId})`.as("replyRepostCount"),
       isReplyLiked: exists(
@@ -118,7 +121,8 @@ export async function GET(req: Request) {
       reply.updated_at,
       reply.imageUrl,
       profiles.username,
-      profiles.displayName
+      profiles.displayName,
+      profiles.profilePicture
     )
     .orderBy(desc(reply.created_at))
     .catch((error) => {

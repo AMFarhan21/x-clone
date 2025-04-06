@@ -192,8 +192,8 @@ export async function POST(req: Request) {
     location,
     website,
     birthDate,
-    backgroundPicture: coverImage ? await coverImageURL() : null,
-    profilePicture: profileImage ?  await profileImageURL() : null,
+    ...(coverImage ? {backgroundPicture: await coverImageURL()} : {}),
+    ...(profileImage ? {profilePicture: await profileImageURL()} : {}),
   }).where(eq(profiles.id, userId)).catch((error) => {
     console.log("ERROR UPDATING PROFILES DETAILS: ", error);
     return NextResponse.json({success: false, error, message: "ERROR UPDATING PROFILES DETAILS"})

@@ -6,6 +6,7 @@ import Replies from '@/components/client-components/replies';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { createClient } from '@/utils/supabase/server'
+import Link from 'next/link';
 import React from 'react'
 import { FaRetweet } from 'react-icons/fa6';
 import { IoLocationOutline } from 'react-icons/io5';
@@ -51,7 +52,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                     <div className='mx-4 mb-5 space-y-2'>
                         <div>
                             <div className='flex space-x-4 items-center'>
-                                <div className='font-bold text-xl'> {data.userProfiles.displayName} </div>
+                                <div className='font-bold text-xl'> {data.userProfiles.displayName ? data.userProfiles.displayName : data.userProfiles.username} </div>
                                 <Button className='h-6 rounded-full border border-white/50 bg-black font-bold cursor-pointer my-auto'><RiVerifiedBadgeFill className='text-blue-400' />Get verified</Button>
                             </div>
                             <div className='text-white/50 text-base font-light'> @{data.userProfiles.username} </div>
@@ -60,8 +61,8 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                             {data.userProfiles.bio}
                         </div>
                         <div className='flex space-x-4 text-white/50 text-base font-light items-center flex-wrap'>
-                            <div className='flex items-center gap-x-1'><IoLocationOutline className='text-[17px]' /> <div>{data.userProfiles.location} </div></div>
-                            <div className='flex items-center gap-x-1'><RiLinkM className='text-white/50 text-[17px]' /> <div className='text-blue-400'>{data.userProfiles.website} </div></div>
+                            {data.userProfiles.location && <div className='flex items-center gap-x-1'><IoLocationOutline className='text-[17px]' /> <div>{data.userProfiles.location} </div></div>}
+                            {data.userProfiles.website && <div className='flex items-center gap-x-1'><RiLinkM className='text-white/50 text-[17px]' /> <div className='text-blue-400'> <Link href={data.userProfiles.website.slice(0, 3) === "htt" || data.userProfiles.website.slice(0, 3) === "www" ? data.userProfiles.website : `https://www.${data.userProfiles.website}` }>{data.userProfiles.website}</Link> </div></div>}
                             <div className='flex gap-x-1 items-center'><MdCalendarMonth className='text-[17px] font-light' /> Joined <DayJs date={data.userProfiles.created_at} /> </div>
                         </div>
                         <div className='flex space-x-5'>
@@ -118,7 +119,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                         Likes
                     </TabsTrigger>
                 </TabsList>
-                <TabsContent value="posts">
+                <TabsContent value="posts" className='min-h-160'>
                     <div>
                         {data.posts.map((post) => (
                             <div key={post.id}>
@@ -128,7 +129,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                         ))}
                     </div>
                 </TabsContent>
-                <TabsContent value='replies'>
+                <TabsContent value='replies' className='min-h-160'>
                     <div>
                         {data.replies.map(reply => (
                             <Replies key={reply.id} reply={reply} userId={userId} post={data.posts} username={username} />

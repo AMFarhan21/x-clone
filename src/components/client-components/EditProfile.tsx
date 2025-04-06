@@ -6,6 +6,7 @@ import { Button } from '../ui/button'
 import { DotIcon, XIcon } from 'lucide-react'
 import { IoIosArrowForward } from "react-icons/io";
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 const EditProfile = ({ userId, userProfiles }) => {
 
@@ -17,11 +18,13 @@ const EditProfile = ({ userId, userProfiles }) => {
     const [profileImage, setProfileImage] = useState<File | null>(null)
     const [previewCoverImage, setPreviewCoverImage] = useState<string | null>(null)
     const [previewProfileImage, setPreviewProfileImage] = useState<string | null>(null)
-    const [birthMonth, setBirthMonth] = useState("")
-    const [birthDay, setBirthDay] = useState("")
-    const [birthYear, setBirthYear] = useState("")
+    const [birthMonth, setBirthMonth] = useState(userProfiles.birthDate ? userProfiles.birthDate.split(" ")[0] : "")
+    const [birthDay, setBirthDay] = useState(userProfiles.birthDate ? userProfiles.birthDate.split(" ")[1].replace(",", "") : "")
+    const [birthYear, setBirthYear] = useState(userProfiles.birthDate ? userProfiles.birthDate.split(" ")[2] : "")
     const [openDialog, setOpenDialog] = useState(false)
     const [open, setOpen] = useState(false)
+
+    const router = useRouter()
 
 
     const updateProfileDetails = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -36,8 +39,12 @@ const EditProfile = ({ userId, userProfiles }) => {
         formData.append('birthDay', birthDay);
         formData.append('birthYear', birthYear);
         formData.append('userId', userId)
-        if (coverImage) formData.append('coverImage', coverImage);
-        if (profileImage) formData.append('profileImage', profileImage);
+        if (coverImage) {
+            formData.append('coverImage', coverImage)
+        };
+        if (profileImage) {
+            formData.append('profileImage', profileImage)
+        };
 
 
         const response = await fetch("http://localhost:3000/api/profiles", {
@@ -51,6 +58,9 @@ const EditProfile = ({ userId, userProfiles }) => {
             console.log(data.message)
             toast.success(data.message)
             setOpenDialog(false)
+            router.refresh()
+            setPreviewCoverImage(null)
+            setPreviewProfileImage(null)
         } else {
             console.log(data.message, data.error)
             toast.error(data.message)
@@ -145,10 +155,10 @@ const EditProfile = ({ userId, userProfiles }) => {
                                 }} form='form-editProfile' name='profileImage' type='file' accept='image/*' className='hidden' />
                             </label>
                             <div className='px-4 space-y-8 flex flex-col text-base text-white/80' >
-                                <input form='form-editProfile' value={name} onChange={(e) => setName(e.target.value)} name='name' className={`border border-white/20 rounded-[4px] py-4 px-2 ${userProfiles.displayName && "text-white"}`} placeholder='Name' />
-                                <textarea form='form-editProfile' value={bio} onChange={(e) => setBio(e.target.value)} name='bio' className={`border border-white/20 w-full p-2 rounded-[4px] py-6 px-2 ${userProfiles.bio && "text-white"}`} placeholder='Bio'></textarea>
-                                <input form='form-editProfile' value={location} onChange={(e) => setLocation(e.target.value)} name='location' className={`border border-white/20 rounded-[4px] py-4 px-2 ${userProfiles.location && "text-white"}`} placeholder='Location' />
-                                <input form='form-editProfile' value={website} onChange={(e) => setWebsite(e.target.value)} name='website' className={`border border-white/20 rounded-[4px] py-4 px-2 ${userProfiles.website && "text-white"}`} placeholder='Website' />
+                                <input form='form-editProfile' value={name} onChange={(e) => setName(e.target.value)} name='name' className={`border border-white/20 rounded-[4px] py-4 px-2 ${name.length > 0 && "text-white"}`} placeholder='Name' />
+                                <textarea form='form-editProfile' value={bio} onChange={(e) => setBio(e.target.value)} name='bio' className={`border border-white/20 w-full p-2 rounded-[4px] py-6 px-2 ${bio.length > 0 && "text-white"}`} placeholder='Bio'></textarea>
+                                <input form='form-editProfile' value={location} onChange={(e) => setLocation(e.target.value)} name='location' className={`border border-white/20 rounded-[4px] py-4 px-2 ${location.length > 0 && "text-white"}`} placeholder='Location' />
+                                <input form='form-editProfile' value={website} onChange={(e) => setWebsite(e.target.value)} name='website' className={`border border-white/20 rounded-[4px] py-4 px-2 ${website.length > 0 && "text-white"}`} placeholder='Website' />
                             </div>
 
                             {
