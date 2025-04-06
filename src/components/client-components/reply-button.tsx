@@ -82,7 +82,7 @@ const ReplyButton = ({ post, userId, postId, postUsername, replyCount }: postPro
                 </DialogTrigger>
                 <DialogOverlay className="bg-blue-300/20" />
                 <DialogTitle></DialogTitle>
-                <DialogContent onClick={(e) => e.stopPropagation()} className="bg-black/100 border-transparent min-w-150">
+                <DialogContent onClick={(e) => e.stopPropagation()} className="bg-black/100 border-transparent min-w-150 p-4">
                     <div className="flex mt-6">
                         <div className="bg-white/50 min-w-10 h-10 rounded-full p"></div>
                         <div className="ml-2 w-full">
