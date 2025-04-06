@@ -1,13 +1,17 @@
 import { relations } from "drizzle-orm";
-import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex, date } from "drizzle-orm/pg-core";
 
 
   export const profiles = pgTable("profiles", {
     id: uuid("id").defaultRandom().primaryKey().notNull(),//.references(() => authUsers.id, { onDelete: "cascade" }), 
     username: text("username").unique(),
-    fullName: text("full_name"),
+    displayName: text("displayName"),
+    bio: text("bio"),
+    location: text("location"),
+    website: text("website"),
+    birthDate: date("birthDate"),
+    category: text("category"),
     email: text("email"),
-    password: text("password"),
     profilePicture: text("profilePicture"),
     backgroundPicture: text("backgroundPicture"),
     created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
