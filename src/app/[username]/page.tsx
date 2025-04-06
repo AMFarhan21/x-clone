@@ -63,7 +63,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                         <div className='flex space-x-4 text-white/50 text-base font-light items-center flex-wrap'>
                             {data.userProfiles.location && <div className='flex items-center gap-x-1'><IoLocationOutline className='text-[17px]' /> <div>{data.userProfiles.location} </div></div>}
                             {data.userProfiles.website && <div className='flex items-center gap-x-1'><RiLinkM className='text-white/50 text-[17px]' /> <div className='text-blue-400'> <Link href={data.userProfiles.website.slice(0, 3) === "htt" || data.userProfiles.website.slice(0, 3) === "www" ? data.userProfiles.website : `https://www.${data.userProfiles.website}` }>{data.userProfiles.website}</Link> </div></div>}
-                            <div className='flex gap-x-1 items-center'><MdCalendarMonth className='text-[17px] font-light' /> Joined <DayJs date={data.userProfiles.created_at} /> </div>
+                            <div className='flex gap-x-1 items-center'><MdCalendarMonth className='text-[17px] font-light' /> Joined <DayJs date={data.userProfiles.created_at} profilesCreated={data.userProfiles.created_at} /> </div>
                         </div>
                         <div className='flex space-x-5'>
                             <div className='text-white/50 text-base font-light'><span className='font-bold text-white'>10</span> Following</div>
