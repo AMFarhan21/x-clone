@@ -17,7 +17,7 @@ export type postType = {
     profilesId: string;
     created_at: string;
     username: string;
-    fullName?: string | null;
+    displayName?: string | null;
     likesCount: number;
     imageUrl: string;
     replyCount: number;
