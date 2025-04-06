@@ -37,7 +37,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                 }
                 <div>
                     <div className='flex'>
-                        
+
                         {
                             data.userProfiles.profilePicture ? (
                                 <img src={data.userProfiles.profilePicture} className='w-33 h-33 bg-gray-600 rounded-full mx-6 mb-7 mt-[-70px] border-3 border-black cursor-pointer object-cover' />
@@ -140,14 +140,18 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                     <div className='text-white/50 font-thin mb-6'>You must be subscribed to Premium to highlight posts on your profile.</div>
                     <button className='rounded-full bg-white text-black font-bold py-3 text-base max-w-60'>Subscribe to Premium</button>
                 </TabsContent>
-                <TabsContent value='article'>
-                    article
+                <TabsContent value='article' className='m-auto flex flex-col w-80 py-6 min-h-160'>
+                    <div className='text-3xl font-bold mb-1'>Write Articles on X</div>
+                    <div className='text-white/50 font-thin mb-6'>You must be subscribed to Premium to highlight posts on your profile.</div>
+                    <button className='rounded-full bg-white text-black font-bold py-3 text-base max-w-60'>Subscribe to Premium</button>
                 </TabsContent>
-                <TabsContent value='media'>
-                    media
+                <TabsContent value='media' className='m-auto flex flex-col w-80 py-6 min-h-160'>
+                    <div className='text-3xl font-bold mb-1'>Lights, camera … attachments!</div>
+                    <div className='text-white/50 font-thin mb-6'>When you post photos or videos, they will show up here.</div>
                 </TabsContent>
-                <TabsContent value='likes'>
-                    likes
+                <TabsContent value='likes' className='m-auto flex flex-col w-80 py-6 min-h-160'>
+                    <div className='text-3xl font-bold mb-1'>You don’t have any likes yet</div>
+                    <div className='text-white/50 font-thin mb-6'>Tap the heart on any post to show it some love. When you do, it’ll show up here.</div>
                 </TabsContent>
             </Tabs>
 
