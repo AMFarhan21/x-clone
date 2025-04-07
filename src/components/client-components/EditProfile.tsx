@@ -21,6 +21,7 @@ const EditProfile = ({ userId, userProfiles }) => {
     const [birthMonth, setBirthMonth] = useState(userProfiles.birthDate ? userProfiles.birthDate.split(" ")[0] : "")
     const [birthDay, setBirthDay] = useState(userProfiles.birthDate ? userProfiles.birthDate.split(" ")[1].replace(",", "") : "")
     const [birthYear, setBirthYear] = useState(userProfiles.birthDate ? userProfiles.birthDate.split(" ")[2] : "")
+    const [save, setSave] = useState(false)
     const [openDialog, setOpenDialog] = useState(false)
     const [open, setOpen] = useState(false)
 
@@ -28,6 +29,8 @@ const EditProfile = ({ userId, userProfiles }) => {
 
 
     const updateProfileDetails = async (e: React.FormEvent<HTMLFormElement>) => {
+        setSave(true)
+
         e.preventDefault();
 
         const formData = new FormData();
@@ -58,9 +61,11 @@ const EditProfile = ({ userId, userProfiles }) => {
             console.log(data.message)
             toast.success(data.message)
             setOpenDialog(false)
+            setOpen(false)
             router.refresh()
             setPreviewCoverImage(null)
             setPreviewProfileImage(null)
+            setSave(false)
         } else {
             console.log(data.message, data.error)
             toast.error(data.message)
@@ -100,7 +105,7 @@ const EditProfile = ({ userId, userProfiles }) => {
                                 <span className="sr-only">Close</span>
                             </DialogClose>
                             <div className='ml-4'>Edit profile</div>
-                            <Button form='form-editProfile' type='submit' className='bg-white text-black font-bold rounded-full w-18 hover:bg-white/90 ml-auto mr-4'>Save</Button>
+                            <Button disabled={save} form='form-editProfile' type='submit' className='bg-white text-black font-bold rounded-full w-18 hover:bg-white/90 ml-auto mr-4'>Save</Button>
                         </DialogTitle>
 
 
@@ -108,12 +113,9 @@ const EditProfile = ({ userId, userProfiles }) => {
 
                             <label className='block w-full h-[27vh] bg-gray-600 cursor-pointer mt-[-8px]'>
                                 {
-                                    previewCoverImage && (
+                                    previewCoverImage ? (
                                         <img src={previewCoverImage} alt='Preview Cover Image' className='w-full h-full object-cover' />
-                                    )
-                                }
-                                {
-                                     userProfiles.backgroundPicture && (
+                                    ) : (
                                         <img src={userProfiles.backgroundPicture} alt='Preview Cover Image' className='w-full h-full object-cover' />
                                     )
                                 }
@@ -131,14 +133,11 @@ const EditProfile = ({ userId, userProfiles }) => {
                             <label className='z-10 block w-28 h-28 bg-gray-600 rounded-full mx-6 mb-6 mt-[-50px] border-3 border-black cursor-pointer'>
 
                                 {
-                                    previewProfileImage && (
+                                    previewProfileImage ? (
                                         <div>
                                             <img src={previewProfileImage} alt="Preview Profile Image" className='block w-28 h-28 rounded-full border-3 border-black cursor-pointer object-cover object-top' />
                                         </div>
-                                    )
-                                }
-                                {
-                                    userProfiles.profilePicture && (
+                                    ) : (
                                         <div>
                                             <img src={userProfiles.profilePicture} alt="Preview Profile Image" className='block w-28 h-28 rounded-full border-3 border-black cursor-pointer object-cover object-top' />
                                         </div>

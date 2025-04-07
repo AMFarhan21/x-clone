@@ -21,57 +21,110 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
     const userId = user.user?.id
     const { username } = await params
 
-    const response = await fetch(`http://localhost:3000/api/profiles?userId=${userId}`)
+    const response = await fetch(`http://localhost:3000/api/profiles?userId=${userId}&username=${username}`)
     const data = await response.json()
-    // console.log(data.posts)
+    // console.log(data.getOneProfiles)
+
 
     return (
         <div className="w-full xl:max-w-[48%] h-full min-h-screen flex-col border-l border-r border-gray-600/50">
-            <BackNavigation user={data.userProfiles} />
-            <div>
-                {
-                    data.userProfiles.backgroundPicture ? (
-                        <img src={data.userProfiles.backgroundPicture} className='w-full h-[27vh] bg-gray-600 cursor-pointer object-cover' />
-                    ) : (
-                        <div className='w-full h-[27vh] bg-gray-600 cursor-pointer'></div>
-                    )
-                }
-                <div>
-                    <div className='flex'>
-
-                        {
-                            data.userProfiles.profilePicture ? (
-                                <img src={data.userProfiles.profilePicture} className='w-33 h-33 bg-gray-600 rounded-full mx-6 mb-7 mt-[-70px] border-3 border-black cursor-pointer object-cover' />
-                            ) : (
-                                <div className='w-33 h-33 bg-gray-600 rounded-full mx-6 mb-7 mt-[-70px] border-3 border-black cursor-pointer'></div>
-                            )
-                        }
-
-                        <EditProfile userId={userId} userProfiles={data.userProfiles} />
-                    </div>
-                    <div className='mx-4 mb-5 space-y-2'>
+            {
+                data.getOneProfiles ? (
+                    <><BackNavigation user={data.getOneProfiles.username} />
                         <div>
-                            <div className='flex space-x-4 items-center'>
-                                <div className='font-bold text-xl'> {data.userProfiles.displayName ? data.userProfiles.displayName : data.userProfiles.username} </div>
-                                <Button className='h-6 rounded-full border border-white/50 bg-black font-bold cursor-pointer my-auto'><RiVerifiedBadgeFill className='text-blue-400' />Get verified</Button>
+                            {
+                                data.getOneProfiles.backgroundPicture ? (
+                                    <img src={data.getOneProfiles.backgroundPicture} className='w-full h-[27vh] bg-gray-600 cursor-pointer object-cover' />
+                                ) : (
+                                    <div className='w-full h-[27vh] bg-gray-600 cursor-pointer'></div>
+                                )
+                            }
+                            <div>
+                                <div className='flex'>
+
+                                    {
+                                        data.getOneProfiles.profilePicture ? (
+                                            <img src={data.getOneProfiles.profilePicture} className='w-33 h-33 bg-gray-600 rounded-full mx-6 mb-7 mt-[-70px] border-3 border-black cursor-pointer object-cover' />
+                                        ) : (
+                                            <div className='w-33 h-33 bg-gray-600 rounded-full mx-6 mb-7 mt-[-70px] border-3 border-black cursor-pointer'></div>
+                                        )
+                                    }
+
+                                    <EditProfile userId={userId} userProfiles={data.getOneProfiles} />
+                                </div>
+                                <div className='mx-4 mb-5 space-y-2'>
+                                    <div>
+                                        <div className='flex space-x-4 items-center'>
+                                            <div className='font-bold text-xl'> {data.getOneProfiles.displayName ? data.getOneProfiles.displayName : data.getOneProfiles.username} </div>
+                                            <Button className='h-6 rounded-full border border-white/50 bg-black font-bold cursor-pointer my-auto'><RiVerifiedBadgeFill className='text-blue-400' />Get verified</Button>
+                                        </div>
+                                        <div className='text-white/50 text-base font-light'> @{data.getOneProfiles.username} </div>
+                                    </div>
+                                    <div>
+                                        {data.getOneProfiles.bio}
+                                    </div>
+                                    <div className='flex space-x-4 text-white/50 text-base font-light items-center flex-wrap'>
+                                        {data.getOneProfiles.location && <div className='flex items-center gap-x-1'><IoLocationOutline className='text-[17px]' /> <div>{data.getOneProfiles.location} </div></div>}
+                                        {data.getOneProfiles.website && <div className='flex items-center gap-x-1'><RiLinkM className='text-white/50 text-[17px]' /> <div className='text-blue-400'> <Link href={data.getOneProfiles.website.slice(0, 3) === "htt" || data.getOneProfiles.website.slice(0, 3) === "www" ? data.getOneProfiles.website : `https://www.${data.getOneProfiles.website}`}>{data.getOneProfiles.website}</Link> </div></div>}
+                                        <div className='flex gap-x-1 items-center'><MdCalendarMonth className='text-[17px] font-light' /> Joined <DayJs date={data.getOneProfiles.created_at} profilesCreated={data.getOneProfiles.created_at} /> </div>
+                                    </div>
+                                    <div className='flex space-x-5'>
+                                        <div className='text-white/50 text-base font-light'><span className='font-bold text-white'>10</span> Following</div>
+                                        <div className='text-white/50 text-base font-light'><span className='font-bold text-white'>35</span> Followers</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div className='text-white/50 text-base font-light'> @{data.userProfiles.username} </div>
-                        </div>
+                        </div></>
+                ) : (
+                    <>
+                        <BackNavigation user={data.userProfiles.username} />
                         <div>
-                            {data.userProfiles.bio}
+                            {
+                                data.userProfiles.backgroundPicture ? (
+                                    <img src={data.userProfiles.backgroundPicture} className='w-full h-[27vh] bg-gray-600 cursor-pointer object-cover' />
+                                ) : (
+                                    <div className='w-full h-[27vh] bg-gray-600 cursor-pointer'></div>
+                                )
+                            }
+                            <div>
+                                <div className='flex'>
+
+                                    {
+                                        data.userProfiles.profilePicture ? (
+                                            <img src={data.userProfiles.profilePicture} className='w-33 h-33 bg-gray-600 rounded-full mx-6 mb-7 mt-[-70px] border-3 border-black cursor-pointer object-cover' />
+                                        ) : (
+                                            <div className='w-33 h-33 bg-gray-600 rounded-full mx-6 mb-7 mt-[-70px] border-3 border-black cursor-pointer'></div>
+                                        )
+                                    }
+
+                                    <EditProfile userId={userId} userProfiles={data.userProfiles} />
+                                </div>
+                                <div className='mx-4 mb-5 space-y-2'>
+                                    <div>
+                                        <div className='flex space-x-4 items-center'>
+                                            <div className='font-bold text-xl'> {data.userProfiles.displayName ? data.userProfiles.displayName : data.userProfiles.username} </div>
+                                            <Button className='h-6 rounded-full border border-white/50 bg-black font-bold cursor-pointer my-auto'><RiVerifiedBadgeFill className='text-blue-400' />Get verified</Button>
+                                        </div>
+                                        <div className='text-white/50 text-base font-light'> @{data.userProfiles.username} </div>
+                                    </div>
+                                    <div>
+                                        {data.userProfiles.bio}
+                                    </div>
+                                    <div className='flex space-x-4 text-white/50 text-base font-light items-center flex-wrap'>
+                                        {data.userProfiles.location && <div className='flex items-center gap-x-1'><IoLocationOutline className='text-[17px]' /> <div>{data.userProfiles.location} </div></div>}
+                                        {data.userProfiles.website && <div className='flex items-center gap-x-1'><RiLinkM className='text-white/50 text-[17px]' /> <div className='text-blue-400'> <Link href={data.userProfiles.website.slice(0, 3) === "htt" || data.userProfiles.website.slice(0, 3) === "www" ? data.userProfiles.website : `https://www.${data.userProfiles.website}`}>{data.userProfiles.website}</Link> </div></div>}
+                                        <div className='flex gap-x-1 items-center'><MdCalendarMonth className='text-[17px] font-light' /> Joined <DayJs date={data.userProfiles.created_at} profilesCreated={data.userProfiles.created_at} /> </div>
+                                    </div>
+                                    <div className='flex space-x-5'>
+                                        <div className='text-white/50 text-base font-light'><span className='font-bold text-white'>10</span> Following</div>
+                                        <div className='text-white/50 text-base font-light'><span className='font-bold text-white'>35</span> Followers</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div className='flex space-x-4 text-white/50 text-base font-light items-center flex-wrap'>
-                            {data.userProfiles.location && <div className='flex items-center gap-x-1'><IoLocationOutline className='text-[17px]' /> <div>{data.userProfiles.location} </div></div>}
-                            {data.userProfiles.website && <div className='flex items-center gap-x-1'><RiLinkM className='text-white/50 text-[17px]' /> <div className='text-blue-400'> <Link href={data.userProfiles.website.slice(0, 3) === "htt" || data.userProfiles.website.slice(0, 3) === "www" ? data.userProfiles.website : `https://www.${data.userProfiles.website}` }>{data.userProfiles.website}</Link> </div></div>}
-                            <div className='flex gap-x-1 items-center'><MdCalendarMonth className='text-[17px] font-light' /> Joined <DayJs date={data.userProfiles.created_at} profilesCreated={data.userProfiles.created_at} /> </div>
-                        </div>
-                        <div className='flex space-x-5'>
-                            <div className='text-white/50 text-base font-light'><span className='font-bold text-white'>10</span> Following</div>
-                            <div className='text-white/50 text-base font-light'><span className='font-bold text-white'>35</span> Followers</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                    </>
+                )
+            }
 
 
             <Tabs defaultValue="posts">
