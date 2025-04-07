@@ -12,6 +12,10 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const user = searchParams.get("user") || null;
 
+    const userProfiles = await db.query.profiles.findFirst({
+      where: (profiles, {eq}) => eq(profiles.id, user)
+    })
+
     const result = await db
       .select({
         post,
@@ -62,7 +66,7 @@ export async function GET(req: Request) {
       )
       .orderBy(desc(post.created_at));
 
-    return NextResponse.json({ success: true, result, user });
+    return NextResponse.json({ success: true, result, user, userProfiles });
   } catch (error) {
     console.log("ERROR server-components/fetch-data -> getPosts: ", error);
     return NextResponse.json({

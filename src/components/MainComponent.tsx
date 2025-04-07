@@ -1,5 +1,5 @@
 
-import ComposeTweet from "./client-components/compose-tweet";
+import ComposeTweet from "./client-components/compose-post";
 import { createServiceRoleClient } from "@/utils/supabase/serverSecret";
 
 import Posts from "./client-components/posts";
@@ -30,6 +30,7 @@ const MainComponent = async () => {
 
   const response = await fetch(`http://localhost:3000/api/posts?user=${user}`)
   const posts = await response.json()
+  // console.log(posts.userProfiles)
 
 
 
@@ -50,7 +51,7 @@ const MainComponent = async () => {
       <div className="flex flex-col">
         {
           user ? posts.result.map((post: Post) => (
-            <Posts key={post.id} post={post} userId={user || ""} />
+            <Posts key={post.id} post={post} userId={user || ""} userProfiles={posts.userProfiles} />
           )) : <div></div>
         }
       </div>

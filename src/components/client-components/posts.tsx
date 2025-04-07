@@ -33,7 +33,7 @@ type postProps = {
     userId: string;
 }
 
-const Posts = ({ post, userId }: postProps) => {
+const Posts = ({ post, userId, userProfiles }: postProps) => {
 
 
     const router = useRouter();
@@ -76,7 +76,7 @@ const Posts = ({ post, userId }: postProps) => {
                 <div className="ml-4 w-full">
                     <div className="flex justify-between">
                         <div className="flex items-center">
-                            <div className="font-semibold hover:border-b-2 border-white" onClick={(e) => {e.stopPropagation(); handlePostProfileClick()}}>{post.username ?? ""}</div>
+                            <div className="font-semibold hover:border-b-2 border-white" onClick={(e) => {e.stopPropagation(); handlePostProfileClick()}}>{post.displayName ? post.displayName : post.username}</div>
                             <div className="text-white/50 text-sm ml-1" onClick={(e) => {e.stopPropagation(); handlePostProfileClick()}}>@{post.username}</div>
                             <div className="text-white/50 text-sm"> <BsDot /> </div>
                             <div className="text-white/50 text-sm"> <DayJs date={post.created_at} profilesCreated={null} /> </div>
@@ -112,7 +112,7 @@ const Posts = ({ post, userId }: postProps) => {
 
                     <div className="flex justify-between items-center">
                         <div className="flex items-center text-white/50 text-[18px] ">
-                            <ReplyButton post={post} userId={userId} postId={post.id} postUsername={post.username} replyCount={post.replyCount} />
+                            <ReplyButton userProfiles={userProfiles} post={post} userId={userId} postId={post.id} postUsername={post.username} replyCount={post.replyCount} />
                         </div>
                         <div className="flex items-center text-white/50 text-[18px]">
                             <Repost postId={post.id} userId={userId} isRePosted={post.isRePosted} rePostCount={post.rePostCount} replyId={null} />

@@ -23,7 +23,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
 
     const response = await fetch(`http://localhost:3000/api/profiles?userId=${userId}&username=${username}`)
     const data = await response.json()
-    // console.log(data.getOneProfiles)
+    console.log(data.replies)
 
 
     return (
@@ -177,7 +177,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                         {data.posts.map((post) => (
                             <div key={post.id}>
                                 {post.isRePosted && <div className='text-sm text-white/50 font-semibold flex items-center gap-x-2 ml-10'><FaRetweet className='text-base' /> You reposted</div>}
-                                <Posts post={post} userId={userId} />
+                                <Posts userProfiles={data.userProfiles} post={post} userId={userId} />
                             </div>
                         ))}
                     </div>
@@ -185,7 +185,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                 <TabsContent value='replies' className='min-h-160'>
                     <div>
                         {data.replies.map(reply => (
-                            <Replies key={reply.id} reply={reply} userId={userId} post={data.posts} username={username} />
+                            <Replies key={reply.id} userProfiles={data.userProfiles} reply={reply} userId={userId} post={data.posts} username={username} />
                         ))}
                     </div>
                 </TabsContent>

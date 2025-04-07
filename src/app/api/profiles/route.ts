@@ -140,8 +140,8 @@ export async function GET(req: Request) {
     .leftJoin(likes, eq(likes.replyId, reply.id))
     .leftJoin(rePost, eq(rePost.replyId, reply.id))
     .leftJoin(bookmark, eq(bookmark.replyId, reply.id))
+    .where(or(eq(reply.profilesId, targetUserId), eq(rePost.profilesId, targetUserId)))    
     .innerJoin(profiles, eq(profiles.id, reply.profilesId))
-    .where(and(eq(profiles.id, targetUserId), (eq(rePost.profilesId, targetUserId))))
     .groupBy(
       reply.id,
       reply.text,
@@ -150,6 +150,7 @@ export async function GET(req: Request) {
       reply.created_at,
       reply.updated_at,
       reply.imageUrl,
+      rePost.replyId,
       profiles.username,
       profiles.displayName
     )
@@ -161,7 +162,7 @@ export async function GET(req: Request) {
 
 
     
-    console.log(getOneProfiles)
+    // console.log(getOneProfiles)
 
   return NextResponse.json({ userId, userProfiles, getOneProfiles, posts, replies });
 }

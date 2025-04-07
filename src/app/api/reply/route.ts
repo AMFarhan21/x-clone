@@ -12,6 +12,10 @@ export async function GET(req: Request) {
   const userId = searchParams.get("userId");
   const postId = searchParams.get("postId");
 
+  const userProfiles = await db.query.profiles.findFirst({
+    where: (profiles, {eq}) => eq(profiles.id, userId)
+  })
+
   const resOnePost = await db
     .select({
       post,
@@ -136,6 +140,7 @@ export async function GET(req: Request) {
     message: "SUCCESSFULLY FETCH REPLY FOR THIS POST",
     res,
     resOnePost,
+    userProfiles,
   });
 }
 
