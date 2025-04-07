@@ -61,7 +61,13 @@ const Posts = ({ post, userId }: postProps) => {
         <div>
 
             <div key={post.id} className="border-b border-gray-600/50 flex pt-3 px-4 cursor-pointer hover:bg-white/2" onClick={handlePostClick}>
-                <div className="bg-white/50 min-w-10 h-10 rounded-full p">  </div>
+                {
+                    post.profilePicture ? (
+                        <img src={post.profilePicture} className="bg-white/50 w-10 h-10 rounded-full p"/>
+                    ) : (
+                        <div className="bg-white/50 min-w-10 h-10 rounded-full p">  </div>
+                    )
+                }
                 <div className="ml-4 w-full">
                     <div className="flex justify-between">
                         <div className="flex items-center">

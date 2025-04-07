@@ -9,7 +9,7 @@ import { handleReplySubmit } from '../server-components/mutation'
 import { toast } from 'sonner'
 import DayJs from './DayJs'
 import ComposeReply from './compose-reply'
-import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 
 type postProps = {
@@ -19,56 +19,17 @@ type postProps = {
     postUsername: string
 }
 
-const ReplyButton = ({ post, userId, postId, postUsername, replyCount }: postProps) => {
+const ReplyButton = ({ post, userId, postId, postUsername, replyCount, userProfiles }: postProps) => {
     const [reply, setReply] = useState("")
     const [isOpen, setIsOpen] = useState(false)
 
-    // IMAGE AND VIDEO
-    const [file, setFile] = useState<File[]>([])
-    const fileInputRef = useRef<HTMLInputElement | null>(null)
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            setFile(Array.from(e.target.files))
-        }
-    }
-
-    // REPLY FORM DATA
-    const router = useRouter()
-    const [loading, setLoading] = useState(false)
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        try {
-            setLoading(true)
-
-            const formData = new FormData();
-            formData.append("text", reply);
-            file.forEach((f) => formData.append("files", f))
-
-            const response = await fetch(`http://localhost:3000/api/reply?postId=${postId}&profilesId=${userId}`, {
-                method: "POST",
-                body: formData,
-            })
-            const data = await response.json();
-
-            if (data.success) {
-                toast.success(data.message)
-                router.refresh()
-                console.log(data.message)
-                setReply("")
-                setIsOpen(false)
-                setLoading(false)
-            } else {
-                toast.error(data.message)
-                console.log(data.message)
-            }
-        } catch (error) {
-            console.log(error)
-        }
+    const handleReplySuccess = () => {
+        setIsOpen(false)
     }
 
     return (
         <div>
-            <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <Dialog open={isOpen} onOpenChange={setIsOpen} >
 
                 <DialogTrigger onClick={(e) => e.stopPropagation()} className="flex rounded-full bg-transparent  hover:bg-blue-400/10 hover:text-blue-400 p-2 my-1 transition duration-300 text-white/50 items-end cursor-pointer space-x-1 ">
                     <HiOutlineChatBubbleOvalLeft />
@@ -78,7 +39,7 @@ const ReplyButton = ({ post, userId, postId, postUsername, replyCount }: postPro
                 </DialogTrigger>
                 <DialogOverlay className="bg-blue-300/20" />
                 <DialogTitle></DialogTitle>
-                <DialogContent onClick={(e) => e.stopPropagation()} className="bg-black/100 border-transparent min-w-150">
+                <DialogContent onClick={(e) => e.stopPropagation()} className="bg-black/100 border-transparent min-w-150 px-4">
                     <div className="flex mt-6">
                         <div className="bg-white/50 min-w-10 h-10 rounded-full p"></div>
                         <div className="ml-2 w-full">

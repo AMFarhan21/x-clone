@@ -147,7 +147,8 @@ export async function GET(req: Request) {
       reply.updated_at,
       reply.imageUrl,
       profiles.username,
-      profiles.displayName
+      profiles.displayName,
+      profiles.profilePicture
     )
     .orderBy(desc(reply.created_at))
     .catch((error) => {

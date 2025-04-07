@@ -36,7 +36,7 @@ const PostStatus = async ({ params }: { params: Promise<{ username: string; id: 
       {replies.resOnePost ? <Posts key={replies.resOnePost[0].id} userProfiles={replies.userProfiles} post={replies.resOnePost[0]} userId={userId} /> : <div>This post not exists</div>}
       <ComposeReply userProfiles={replies.userProfiles} userId={userId} dataId={replies.resOnePost[0].id} />
 
-      
+
       {replies.res.map((reply) => (
         <Replies key={reply.id} userProfiles={replies.userProfiles} reply={reply} userId={userId} post={replies.resOnePost} username={username} />
       ))}

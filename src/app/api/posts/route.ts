@@ -11,6 +11,9 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const user = searchParams.get("user") || null;
+    const userProfiles = await db.query.profiles.findFirst({
+      where: (profiles, {eq}) => eq(profiles.id, user)
+    })
 
     const result = await db
       .select({
@@ -23,6 +26,7 @@ export async function GET(req: Request) {
         updated_at: post.updated_at,
         username: profiles.username,
         displayName: profiles.displayName,
+        profilePicture: profiles.profilePicture,
         likesCount: sql<number>`count(distinct ${likes.id})`.as("likesCount"),
         replyCount: sql<number>`count(distinct ${reply.id})`.as("replyCount"),
         rePostCount: sql<number>`count(distinct ${rePost.id})`.as("rePostCount"),
@@ -56,11 +60,12 @@ export async function GET(req: Request) {
         post.imageUrl,
         profiles.username,
         profiles.displayName,
-        post.created_at
+        post.created_at,
+        profiles.profilePicture
       )
       .orderBy(desc(post.created_at));
 
-    return NextResponse.json({ success: true, result, user });
+    return NextResponse.json({ success: true, result, user, userProfiles });
   } catch (error) {
     console.log("ERROR server-components/fetch-data -> getPosts: ", error);
     return NextResponse.json({

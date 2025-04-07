@@ -54,7 +54,7 @@ const LeftSidebar = async () => {
 
 
   return (
-    <section className="w-[27%] flex flex-col items-stretch h-screen space-y-4 sticky top-0">
+    <section className="w-[24%] flex flex-col items-stretch h-screen space-y-4 sticky top-0">
       <div className="flex flex-col h-full items-stretch mt-1 ml-2 pr-6">
         {NAVIGATION_ITEMS.map((item) => (
           <Link href={item.title === "Twitter" || item.title === "Home" ? '/' : item.title === "Profile" ? `/${username}` : `/${item.title.toLowerCase()}`} key={item.title}
