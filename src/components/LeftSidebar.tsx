@@ -10,6 +10,7 @@ import Link from "next/link";
 import { BsThreeDots } from "react-icons/bs";
 import { createClient } from '@/utils/supabase/server';
 import { signOut } from '@/lib/action';
+import { RiQuillPenAiLine } from 'react-icons/ri';
 
 const NAVIGATION_ITEMS = [
   {
@@ -69,6 +70,11 @@ const LeftSidebar = async () => {
         <button className="my-2 w-full bg-white text-black rounded-full p-4 font-bold hover:bg-white/90 transition duration-200 lg:flex hidden justify-around">
           Post
         </button>
+        <div className='lg:hidden flex justify-start pl-2 py-2'>
+          <button className="min-w-12 h-12 items-center justify-center bg-white text-black rounded-full hover:bg-white/90 transition duration-200">
+            <RiQuillPenAiLine className='text-2xl items-center justify-center m-auto' />
+          </button>
+        </div>
       </div>
 
       <form>

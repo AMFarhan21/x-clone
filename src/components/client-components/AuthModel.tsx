@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Dialog, DialogContent, DialogOverlay, DialogTitle } from '../ui/dialog'
+import { Dialog, DialogClose, DialogContent, DialogOverlay, DialogTitle } from '../ui/dialog'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { signin, signup } from '@/lib/action'
@@ -11,6 +11,7 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { db } from '@/lib/db'
 import { profiles } from '@/lib/db/schema'
+import { XIcon } from 'lucide-react'
 
 const AuthModel = () => {
 
@@ -32,6 +33,7 @@ const AuthModel = () => {
             } else {
                 setIsOpen(false)
                 toast.success("You have logged in")
+                router.refresh()
             }
         }
         checkAuth();
@@ -68,9 +70,13 @@ const AuthModel = () => {
 
             {/* SIGN UP DIALOG */}
             <Dialog open={signUp} onOpenChange={setSignUp}>
-                <DialogTitle></DialogTitle>
                 <DialogOverlay className="bg-blue-300/20" />
-                <DialogContent className='bg-black px-18 border border-transparent' onInteractOutside={(e) => e.preventDefault()}>
+                <DialogContent className='bg-black px-18 border border-transparent py-6' onInteractOutside={(e) => e.preventDefault()}>
+                    <DialogTitle>
+                        <DialogClose className='cursor-pointer absolute left-4 top-4'>
+                            <XIcon />
+                        </DialogClose>
+                    </DialogTitle>
                     <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj5Z6h2su_P2Dpy48AmTVcigVGKB5bsYuMZQ&s' className='w-8 mx-auto' />
                     <div className='font-bold text-3xl'>Create your account</div>
                     <form onSubmit={async (e) => {
@@ -90,7 +96,7 @@ const AuthModel = () => {
                             router.push("/")
                             // console.log(data.signedUp)
 
-                            
+
                         } else {
                             toast.error(data.message)
                         }
@@ -106,9 +112,15 @@ const AuthModel = () => {
 
             {/* SIGN IN DIALOG */}
             <Dialog open={signIn} onOpenChange={setSignIn}>
-                <DialogTitle></DialogTitle>
+
                 <DialogOverlay className='bg-blue-300/20' />
-                <DialogContent className='bg-black px-26 border border-transparent' onInteractOutside={(e) => e.preventDefault()}>
+
+                <DialogContent className='bg-black px-26 border border-transparent py-4' onInteractOutside={(e) => e.preventDefault()}>
+                    <DialogTitle>
+                        <DialogClose className='cursor-pointer absolute left-4 top-4'>
+                            <XIcon />
+                        </DialogClose>
+                    </DialogTitle>
                     <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj5Z6h2su_P2Dpy48AmTVcigVGKB5bsYuMZQ&s' className='w-8 mx-auto' />
                     <div className='font-bold text-3xl mb-4'>Sign in to X</div>
                     <form className='space-y-6'>

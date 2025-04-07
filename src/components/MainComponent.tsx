@@ -1,5 +1,5 @@
 
-import ComposeTweet from "./client-components/compose-tweet";
+import ComposeTweet from "./client-components/compose-post";
 import { createServiceRoleClient } from "@/utils/supabase/serverSecret";
 
 import Posts from "./client-components/posts";

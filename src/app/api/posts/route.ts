@@ -15,6 +15,10 @@ export async function GET(req: Request) {
       where: (profiles, {eq}) => eq(profiles.id, user)
     })
 
+    const userProfiles = await db.query.profiles.findFirst({
+      where: (profiles, {eq}) => eq(profiles.id, user)
+    })
+
     const result = await db
       .select({
         post,

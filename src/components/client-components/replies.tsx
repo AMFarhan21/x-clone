@@ -10,11 +10,8 @@ import { MdBookmarkBorder } from 'react-icons/md'
 import { FiShare } from 'react-icons/fi'
 import Repost from './rePost-button'
 import BookmarkButton from './bookmark-button'
-import { useRouter } from 'next/navigation'
 
 const Replies = ({reply, userId, post, username, userProfiles }) => {
-
-    const router = useRouter()
     const imageArray = reply.imageUrl ? JSON.parse(reply.imageUrl) : [];
 
 
@@ -24,7 +21,8 @@ const Replies = ({reply, userId, post, username, userProfiles }) => {
 
     return (
         <>
-            <div key={reply.id} onClick={() => handleReplyClick()} className="border-b border-gray-600/50 flex pt-3 px-4 cursor-pointer hover:bg-white/2">
+
+            <div key={reply.id} className="border-b border-gray-600/50 flex pt-3 px-4 cursor-pointer hover:bg-white/2">
                 {
                     reply.profilePicture ? (
                         <img src={reply.profilePicture} className="bg-white/50 object-cover w-10 h-10 rounded-full p" />

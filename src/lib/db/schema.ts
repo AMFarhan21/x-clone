@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex, date } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex, date, PrimaryKey } from "drizzle-orm/pg-core";
 
 
   export const profiles = pgTable("profiles", {
@@ -9,7 +9,7 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex, date 
     bio: text("bio"),
     location: text("location"),
     website: text("website"),
-    birthDate: date("birthDate"),
+    birthDate: text("birthDate"),
     category: text("category"),
     email: text("email"),
     profilePicture: text("profilePicture"),
