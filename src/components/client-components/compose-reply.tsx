@@ -15,11 +15,11 @@ type ComposeReplyProps = {
         profilePicture?: string
     }
     userId: string,
-    postId: string,
+    dataId: string,
     onReplySuccess: () => void
 }
 
-const ComposeReply = ({userProfiles, userId, postId, onReplySuccess}: ComposeReplyProps) => {
+const ComposeReply = ({userProfiles, userId, dataId, onReplySuccess}: ComposeReplyProps) => {
     const [reply, setReply] = useState("")
     const [hide, setHide] = useState(true)
 
@@ -45,7 +45,7 @@ const ComposeReply = ({userProfiles, userId, postId, onReplySuccess}: ComposeRep
             formData.append("text", reply);
             file.forEach((f) => formData.append("files", f))
 
-            const response = await fetch(`http://localhost:3000/api/reply?postId=${postId}&profilesId=${userId}`, {
+            const response = await fetch(`http://localhost:3000/api/reply?dataId=${dataId}&profilesId=${userId}`, {
                 method: "POST",
                 body: formData,
             })

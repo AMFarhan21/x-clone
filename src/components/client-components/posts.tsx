@@ -112,7 +112,7 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
 
                     <div className="flex justify-between items-center">
                         <div className="flex items-center text-white/50 text-[18px] ">
-                            <ReplyButton userProfiles={userProfiles} post={post} userId={userId} postId={post.id} postUsername={post.username} replyCount={post.replyCount} />
+                            <ReplyButton userProfiles={userProfiles} post={post} userId={userId} dataId={post.id} postUsername={post.username} replyCount={post.replyCount} />
                         </div>
                         <div className="flex items-center text-white/50 text-[18px]">
                             <Repost postId={post.id} userId={userId} isRePosted={post.isRePosted} rePostCount={post.rePostCount} replyId={null} />

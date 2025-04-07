@@ -44,7 +44,7 @@ const MainComponent = async () => {
       </div>
 
       {/* CREATE POST */}
-      {user && <ComposeTweet />}
+      {user && <ComposeTweet userProfiles={posts.userProfiles} />}
 
 
       {/* LIST OF POSTS */}

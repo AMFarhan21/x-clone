@@ -15,7 +15,7 @@ type postProps = {
     postUsername: string
 }
 
-const ReplyButton = ({ userProfiles, post, userId, postId, postUsername, replyCount }: postProps) => {
+const ReplyButton = ({ userProfiles, post, userId, dataId, postUsername, replyCount }: postProps) => {
     const [isOpen, setIsOpen] = useState(false)
 
     const handleReplySuccess = () => {
@@ -58,7 +58,7 @@ const ReplyButton = ({ userProfiles, post, userId, postId, postUsername, replyCo
                             </div>
                         </div>
                     </div>
-                    <ComposeReply userProfiles={userProfiles} userId={userId} postId={postId} onReplySuccess={handleReplySuccess} />
+                    <ComposeReply userProfiles={userProfiles} userId={userId} dataId={dataId} onReplySuccess={handleReplySuccess} />
                 </DialogContent>
             </Dialog>
         </div>

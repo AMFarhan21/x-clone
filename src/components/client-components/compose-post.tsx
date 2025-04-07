@@ -13,7 +13,7 @@ import { BiPoll } from 'react-icons/bi';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { useRouter } from 'next/navigation';
 
-const ComposeTweet = () => {
+const ComposeTweet = ({userProfiles}) => {
   
 
   
@@ -71,7 +71,13 @@ const ComposeTweet = () => {
     <div>
       <form onSubmit={handleSubmit}>
         <div className="text-sm font-bold flex h-3xl space-x-3 pt-5 pb-2 px-4 border-b border-gray-600/50">
-          <div className="min-w-10 h-10 bg-slate-400 rounded-full"></div>
+          {
+            userProfiles.profilePicture ? (
+              <img src={userProfiles.profilePicture} className="object-cover min-w-10 h-10 bg-slate-400 rounded-full" />
+            ) : (
+              <div className="min-w-10 h-10 bg-slate-400 rounded-full"></div>
+            )
+          }
           <div className="flex flex-col w-full pr-4">
             <div className="pb-4">
               <textarea

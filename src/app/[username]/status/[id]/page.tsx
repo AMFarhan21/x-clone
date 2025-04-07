@@ -5,7 +5,7 @@ import Replies from '@/components/client-components/replies';
 import { createClient } from '@/utils/supabase/server';
 import React from 'react'
 
-const PostStatus = async ({ params }: { params: Promise<{ username: string; postId: string }> }) => {
+const PostStatus = async ({ params }: { params: Promise<{ username: string; id: string }> }) => {
 
 
   const supabase = await createClient();
@@ -17,7 +17,7 @@ const PostStatus = async ({ params }: { params: Promise<{ username: string; post
   const { username, id } = await params
 
 
-  const response = await fetch(`http://localhost:3000/api/reply?userId=${userId}&postId=${postId}`)
+  const response = await fetch(`http://localhost:3000/api/reply?userId=${userId}&dataId=${id}`)
   const replies = await response.json();
 
   // if (replies.success) {
@@ -34,7 +34,7 @@ const PostStatus = async ({ params }: { params: Promise<{ username: string; post
     <div className="w-full xl:max-w-[48%] h-full min-h-screen flex-col border-l border-r border-gray-600/50">
       <BackNavigation user={null} />
       {replies.resOnePost ? <Posts key={replies.resOnePost[0].id} userProfiles={replies.userProfiles} post={replies.resOnePost[0]} userId={userId} /> : <div>This post not exists</div>}
-      <ComposeReply userProfiles={replies.userProfiles} userId={userId} postId={replies.resOnePost[0].id} />
+      <ComposeReply userProfiles={replies.userProfiles} userId={userId} dataId={replies.resOnePost[0].id} />
 
       
       {replies.res.map((reply) => (
