@@ -77,6 +77,8 @@ export async function GET(req: Request) {
       updated_at: reply.updated_at,
       username: profiles.username,
       displayName: profiles.displayName,
+      profilePicture: profiles.profilePicture,
+      backgroundPicture: profiles.backgroundPicture,
       replyLikesCount: sql<number>`count(${likes.replyId})`.as(
         "replyLikesCount"
       ),
@@ -116,7 +118,9 @@ export async function GET(req: Request) {
       reply.updated_at,
       reply.imageUrl,
       profiles.username,
-      profiles.displayName
+      profiles.displayName,
+      profiles.profilePicture,
+      profiles.backgroundPicture,
     )
     .orderBy(desc(reply.created_at))
     .catch((error) => {

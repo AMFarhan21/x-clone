@@ -152,7 +152,7 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex, date 
     id: uuid("id").defaultRandom().primaryKey(),
     text: text("text").notNull(),
     profilesId: uuid("profilesId").notNull().references(() => profiles.id, { onDelete: "cascade" }),
-    postId: uuid("postId").notNull().references(() => post.id, { onDelete: "cascade" }),
+    postId: uuid("postId").references(() => post.id, { onDelete: "cascade" }),
     replyId: uuid("replyId").references(():AnyPgColumn => reply.id, { onDelete: "set null" }),
     imageUrl: text("imageUrl"),
     created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),

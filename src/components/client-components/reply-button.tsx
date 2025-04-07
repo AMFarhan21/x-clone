@@ -8,12 +8,8 @@ import { useRef, useState } from 'react'
 import { handleReplySubmit } from '../server-components/mutation'
 import { toast } from 'sonner'
 import DayJs from './DayJs'
-import { RiCalendarScheduleLine, RiImage2Line } from 'react-icons/ri'
-import { useRouter } from 'next/navigation'
-import { MdOutlineGifBox } from 'react-icons/md'
-import { FaRegCircle } from 'react-icons/fa'
-import { BiPoll } from 'react-icons/bi'
-import { IoLocationOutline } from 'react-icons/io5'
+import ComposeReply from './compose-reply'
+import { useState } from 'react'
 
 
 type postProps = {
@@ -100,45 +96,7 @@ const ReplyButton = ({ post, userId, postId, postUsername, replyCount }: postPro
                             </div>
                         </div>
                     </div>
-                    <form onSubmit={handleSubmit}>
-                        <div className="text-sm font-bold flex h-3xl space-x-3 pt-4">
-                            <div className="min-w-10 h-10 bg-slate-400 rounded-full"></div>
-                            <div className="flex flex-col w-full">
-                                <div className="pb-4">
-                                    <textarea
-                                        value={reply}
-                                        onChange={(e) => setReply(e.target.value)}
-                                        typeof="text"
-                                        name="reply"
-                                        placeholder="Post your reply"
-                                        className="min-h-[40px] font-normal text-xl w-full text-wrap border border-transparent focus:outline-none resize-none pb-8 mt-1"
-                                    ></textarea>
-                                </div>
-
-                            </div>
-
-                        </div>
-                        <div className="flex justify-between w-full items-center">
-                            <div className="flex space-x-3">
-                                <div className='text-blue-400 text-[18px] cursor-pointer flex items-center' onClick={(e) => {
-                                    e.stopPropagation();
-                                    fileInputRef.current?.click()
-                                }}>
-                                    <RiImage2Line />
-                                    <input className='hidden' type='file' name='files' accept='image/*, video/*' ref={fileInputRef} onChange={handleFileChange} multiple></input>
-                                </div>
-                                <div className="text-blue-400 text-[18px] cursor-pointer"> <MdOutlineGifBox /> </div>
-                                <div className="text-blue-400 text-[18px] cursor-pointer"> <FaRegCircle /> </div>
-                                <div className="text-blue-400 text-[18px] cursor-pointer"> <BiPoll /> </div>
-                                <div className="text-blue-400 text-[18px] cursor-pointer"> <BsEmojiSmile/> </div>
-                                <div className="text-blue-400 text-[18px] cursor-pointer"> <RiCalendarScheduleLine /> </div>
-                                <div className="text-blue-400/50 text-[18px] cursor-pointer"> <IoLocationOutline /> </div>
-                            </div>
-                            <Button disabled={loading} type="submit" className={`rounded-full text-black font-bold ${reply ? "bg-white/100 hover:bg-white/90" : "bg-white/40 hover:bg-white/40"} `} >
-                                Reply
-                            </Button>
-                        </div>
-                    </form>
+                    <ComposeReply userProfiles={userProfiles} userId={userId} dataId={postId} onReplySuccess={handleReplySuccess} />
                 </DialogContent>
             </Dialog>
         </div>

@@ -23,6 +23,10 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
     const data = await response.json()
     // console.log(data.posts)
 
+    const imageArray = data.posts.flatMap((post) => {
+        return post.imageUrl ? JSON.parse(post.imageUrl) : [];
+    })
+
     return (
         <div className="w-full xl:max-w-[48%] h-full min-h-screen flex-col border-l border-r border-gray-600/50">
             <BackNavigation user={data.userProfiles} />
@@ -100,8 +104,8 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                     <div>
                         {data.posts.map((post) => (
                             <div key={post.id}>
-                                {post.isRePosted && <div className='text-sm text-white/50 font-semibold flex items-center gap-x-2 ml-10'><FaRetweet className='text-base' /> You reposted</div>}
-                                <Posts post={post} userId={userId} />
+                                {post.isRePosted && <div className='text-sm text-white/50 font-semibold flex items-center gap-x-2 ml-10 mb-[-10px] mt-1'><FaRetweet className='text-base' /> You reposted</div>}
+                                <Posts userProfiles={data.userProfiles} post={post} userId={userId} />
                             </div>
                         ))}
                     </div>
@@ -109,7 +113,10 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                 <TabsContent value='replies'>
                     <div>
                         {data.replies.map(reply => (
-                            <Replies key={reply.id} reply={reply} userId={userId} post={data.posts} username={username} />
+                            <div key={reply.id}>
+                                {reply.isReplyReposted && <div className='text-sm text-white/50 font-semibold flex items-center gap-x-2 ml-10 mb-[-10px] mt-1'><FaRetweet className='text-base' /> You reposted</div>}
+                                <Replies key={reply.id} userProfiles={data.userProfiles} reply={reply} userId={userId} post={data.posts} username={username} />
+                            </div>
                         ))}
                     </div>
                 </TabsContent>
@@ -119,8 +126,28 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                 <TabsContent value='article'>
                     article
                 </TabsContent>
-                <TabsContent value='media'>
-                    media
+                <TabsContent value='media' className='m-auto flex flex-col w-80 py-6 min-h-160'>
+
+                    {
+                        data.posts.imageUrl ? (
+                            <>
+                                <div className='text-3xl font-bold mb-1'>Lights, camera … attachments!</div>
+                                <div className='text-white/50 font-thin mb-6'>When you post photos or videos, they will show up here.</div>
+                            </>
+                        ) : (
+                            <>
+                                <div className='grid-cols-3 gap-x-1 flex'>
+                                    {imageArray.slice(0, 4).map((fileUrl: string, index: number) => (
+                                        <img src={fileUrl} key={index} className='w-50 h-50 object-cover' />
+                                    ))
+                                    }
+                                </div>
+
+                            </>
+                        )
+                    }
+
+
                 </TabsContent>
                 <TabsContent value='likes'>
                     likes

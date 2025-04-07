@@ -1,0 +1,1 @@
+ALTER TABLE "reply" ALTER COLUMN "postId" DROP NOT NULL;
