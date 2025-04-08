@@ -40,7 +40,7 @@ const ReplyButton = ({ userProfiles, post, userId, dataId, postUsername, replyCo
                             post.profilePicture ? (
                                 <img src={post.profilePicture} className="object-cover bg-white/50 w-10 h-10 rounded-full p" />
                             ) : (
-                                <div className="bg-white/50 min-w-10 h-10 rounded-full p"></div>
+                                <div className="bg-white/50 min-w-10 h-10 rounded-full p">HELLOWEDNFSJDNF</div>
                             )
                         }
                         <div className="ml-2 w-full">

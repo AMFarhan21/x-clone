@@ -10,6 +10,7 @@ import DayJs from "./DayJs";
 import DropdownButton from "./DropdownButton";
 import Repost from "./rePost-button";
 import BookmarkButton from "./bookmark-button";
+import Image from "next/image";
 
 export type postType = {
     id: string;
@@ -69,7 +70,7 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
 
             <div key={post.id} className="border-b border-gray-600/50 flex pt-3 px-4 cursor-pointer hover:bg-white/2" onClick={handlePostClick}>
                 {post.profilePicture ? (
-                    <img src={post.profilePicture} className="bg-white/50 w-10 h-10 rounded-full object-cover" onClick={(e) => {e.stopPropagation(); handlePostProfileClick()}} />
+                    <Image alt="profilePicture" src={post.profilePicture} width={300} height={300} loading="eager" className="bg-white/50 w-10 h-10 rounded-full object-cover" onClick={(e) => {e.stopPropagation(); handlePostProfileClick()}} />
                 ) : (
                     <div className="bg-white/50 min-w-10 h-10 rounded-full" onClick={(e) => {e.stopPropagation(); handlePostProfileClick()}}>  </div>
                 )}
@@ -96,14 +97,17 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
                                 const isVideo = fileUrl.endsWith(".mp4") || fileUrl.endsWith(".mov")
 
                                 return (
-                                    isVideo ?
+                                    isVideo ? (
                                         <video key={index} controls autoPlay loop playsInline className="w-full h-full object-cover">
                                             <source src={fileUrl} type="video/mp4" />
-                                        </video> :
-                                        <img src={fileUrl}
+                                        </video> 
+                                    ): (
+                                        <Image src={fileUrl}
                                             alt="Post Image"
+                                            width={300} height={300} loading="eager"
                                             key={index}
                                             className="w-full h-full object-cover" />
+                                    )
                                 )
                             })}
                         </div>)

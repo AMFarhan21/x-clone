@@ -11,6 +11,7 @@ import { FiShare } from 'react-icons/fi'
 import Repost from './rePost-button'
 import BookmarkButton from './bookmark-button'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 const Replies = ({reply, userId, post, username, userProfiles }) => {
     const imageArray = reply.imageUrl ? JSON.parse(reply.imageUrl) : [];
@@ -21,13 +22,18 @@ const Replies = ({reply, userId, post, username, userProfiles }) => {
         router.push(`/${reply.username}/status/${reply.id}`)
     }
 
+    const handleReplyProfile = () => {
+        router.push(`/${reply.username}`)
+    }
+
+    // console.log(post)
+
     return (
         <>
-
             <div key={reply.id} onClick={handleReplyClick} className="border-b border-gray-600/50 flex pt-3 px-4 cursor-pointer hover:bg-white/2">
                 {
                     reply.profilePicture ? (
-                        <img src={reply.profilePicture} className="bg-white/50 object-cover w-10 h-10 rounded-full p" />
+                        <Image alt='profilePicture' width={300} height={300} loading="eager" src={reply.profilePicture} className="bg-white/50 object-cover w-10 h-10 rounded-full p" onClick={(e) => {e.stopPropagation(); handleReplyProfile()}} />
                     ) : (
                         <div className="bg-white/50 min-w-10 h-10 rounded-full p">  </div>
                     )
@@ -35,8 +41,8 @@ const Replies = ({reply, userId, post, username, userProfiles }) => {
                 <div className="ml-4 w-full">
                     <div className="flex justify-between">
                         <div className="flex items-center">
-                            <div className="font-semibold">{reply.username ?? ""}</div>
-                            <div className="text-white/50 text-sm ml-1">@{reply.username}</div>
+                            <div className="font-semibold hover:border-b-2 border-white" onClick={(e) => {e.stopPropagation(); handleReplyProfile()}}>{reply.username ?? ""}</div>
+                            <div className="text-white/50 text-sm ml-1" onClick={(e) => {e.stopPropagation(); handleReplyProfile()}}>@{reply.username}</div>
                             <div className="text-white/50 text-sm"> <BsDot /> </div>
                             <div className="text-white/50 text-sm">
                                 {/* {dayjs(reply.profiles.createdAt).fromNow()} */}
@@ -48,20 +54,21 @@ const Replies = ({reply, userId, post, username, userProfiles }) => {
                             <div> <DropdownButton username={reply.username} data={reply} userId={userId} /> </div>
                         </div>
                     </div>
-                    <div className="pb leading-4.5 text-[15px] mt-1 mb-3"> {reply.text} </div>
+                    <div className="pb leading-4.5 text-[15px] mt-2"> {reply.text} </div>
                     {
                         imageArray.length > 0 && (<div className="grid gap-1 roundex-2xl overflow-hidden grid-cols-2">
                             {imageArray.slice(0, 4).map((fileUrl, index) => (
-                                <img src={fileUrl}
+                                <Image src={fileUrl}
                                     alt="Post Image"
                                     key={index}
+                                    width={300} height={300} loading="eager"
                                     className="w-full h-full object-cover" />
                             ))}
                         </div>)
                     }
                     <div className="flex justify-between items-center">
                         <div className="flex items-center text-white/50 text-[18px] ">
-                            <ReplyButton userProfiles={userProfiles} post={post} userId={userId} dataId={reply.id} postUsername={username} />
+                            <ReplyButton userProfiles={userProfiles} post={post} userId={userId} dataId={reply.id} postUsername={username} replyCount={reply.replyCount} />
                         </div>
                         <div className="flex items-center text-white/50 text-[18px]">
                             <Repost postId={null} userId={userId} isRePosted={reply.isReplyReposted} rePostCount={reply.replyRepostCount} replyId={reply.id} />

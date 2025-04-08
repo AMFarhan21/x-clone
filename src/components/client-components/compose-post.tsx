@@ -3,15 +3,15 @@
 import React, { useRef, useState } from 'react';
 import { Button } from '../ui/button';
 import { toast } from 'sonner';
-import { handlePostSubmit } from '../server-components/mutation';
-import { FaImage, FaRegCircle } from 'react-icons/fa';
-import { CiImageOn } from 'react-icons/ci';
-import { IoImageOutline, IoLocationOutline } from 'react-icons/io5';
+import { FaRegCircle } from 'react-icons/fa';
+import { IoLocationOutline } from 'react-icons/io5';
 import { RiCalendarScheduleLine, RiImage2Line } from 'react-icons/ri';
 import { MdOutlineGifBox } from 'react-icons/md';
 import { BiPoll } from 'react-icons/bi';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { useRouter } from 'next/navigation';
+import { Link } from 'lucide-react';
+import Image from 'next/image';
 
 const ComposeTweet = ({userProfiles}) => {
   
@@ -62,6 +62,7 @@ const ComposeTweet = ({userProfiles}) => {
       toast.error('An error occurred while creating the post.');
     }
   };
+  
 
   
   
@@ -73,7 +74,7 @@ const ComposeTweet = ({userProfiles}) => {
         <div className="text-sm font-bold flex h-3xl space-x-3 pt-5 pb-2 px-4 border-b border-gray-600/50">
           {
             userProfiles.profilePicture ? (
-              <img src={userProfiles.profilePicture} className="object-cover min-w-10 h-10 bg-slate-400 rounded-full" />
+              <Image onClick={() => router.push(`/${userProfiles.username}`)} src={userProfiles.profilePicture} alt='profilePicture' width={300} height={300} loading="eager" className="cursor-pointer object-cover w-10 h-10 bg-slate-400 rounded-full" />
             ) : (
               <div className="min-w-10 h-10 bg-slate-400 rounded-full"></div>
             )

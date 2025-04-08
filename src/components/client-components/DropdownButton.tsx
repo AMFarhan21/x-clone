@@ -15,31 +15,31 @@ const DropdownButton = ({ username, data, userId }: { username: string, data: an
                             <BsThreeDots />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-70 bg-black text-white font-bold hover:bg-black shadow-[0px_0px_8px_rgba(255,255,255,0.5)] border border-transparent">
-                            <DropdownMenuGroup className="space-y-3">
+                            <DropdownMenuGroup className="space-y-3 px-3">
                                 <DeleteButton userId={userId} dataId={data.id} />
                                 
-                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl hover:text-white cursor-pointer px-4 py-1 text-sm">
+                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl cursor-pointer px-4 py-1 text-sm">
                                     Pin to your profile
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl hover:text-white cursor-pointer px-4 py-1 text-sm">
+                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl cursor-pointer px-4 py-1 text-sm">
                                     Highlight on your profile
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl hover:text-white cursor-pointer px-4 py-1 text-sm">
+                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl cursor-pointer px-4 py-1 text-sm">
                                     Add/remove @{username} from Lists
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl hover:text-white cursor-pointer px-4 py-1 text-sm">
+                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl cursor-pointer px-4 py-1 text-sm">
                                     Change who can reply
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl hover:text-white cursor-pointer px-4 py-1 text-sm">
+                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl cursor-pointer px-4 py-1 text-sm">
                                     View data engagements
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl hover:text-white cursor-pointer px-4 py-1 text-sm">
+                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl cursor-pointer px-4 py-1 text-sm">
                                     Embed data
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl hover:text-white cursor-pointer px-4 py-1 text-sm">
+                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl cursor-pointer px-4 py-1 text-sm">
                                     View data analytics
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl hover:text-white cursor-pointer px-4 py-1 text-sm">
+                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl cursor-pointer px-4 py-1 mb-2 text-sm">
                                     Request Community Note
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>
@@ -50,30 +50,30 @@ const DropdownButton = ({ username, data, userId }: { username: string, data: an
                         <DropdownMenuTrigger asChild>
                             <BsThreeDots />
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56 bg-black text-white font-bold hover:bg-black shadow-[0px_0px_8px_rgba(255,255,255,0.5)] border border-transparent">
-                            <DropdownMenuGroup className="space-y-3 px-3">
-                                <DropdownMenuItem className="hover:!bg-black hover:!text-white cursor-pointer">
+                        <DropdownMenuContent className="w-80 text-sm bg-black text-white font-bold hover:bg-black shadow-[0px_0px_8px_rgba(255,255,255,0.5)] border border-transparent">
+                            <DropdownMenuGroup className="space-y-5 px-3">
+                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl hover:text-white cursor-pointer px-4 py-1 text-sm mt-2 ">
                                     Follow @{username}
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="hover:!bg-black hover:!text-white cursor-pointer">
+                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl hover:text-white cursor-pointer px-4 py-1 text-sm">
                                     Add/remove @{username} from Lists
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="hover:!bg-black hover:!text-white cursor-pointer">
+                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl hover:text-white cursor-pointer px-4 py-1 text-sm">
                                     Mute @{username}
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="hover:!bg-black hover:!text-white cursor-pointer">
+                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl hover:text-white cursor-pointer px-4 py-1 text-sm">
                                     Block @{username}
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="hover:!bg-black hover:!text-white cursor-pointer">
+                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl hover:text-white cursor-pointer px-4 py-1 text-sm">
                                     View data engagements
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="hover:!bg-black hover:!text-white cursor-pointer">
+                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl hover:text-white cursor-pointer px-4 py-1 text-sm">
                                     Embed data
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="hover:!bg-black hover:!text-white cursor-pointer">
+                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl hover:text-white cursor-pointer px-4 py-1 text-sm">
                                     Report data
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="hover:!bg-black hover:!text-white cursor-pointer">
+                                <DropdownMenuItem className="hover:bg-white/5 rounded-xl hover:text-white cursor-pointer px-4 py-1 text-sm mb-2 ">
                                     Request Community Note
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>

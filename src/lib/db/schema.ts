@@ -3,7 +3,7 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex, date,
 
 
   export const profiles = pgTable("profiles", {
-    id: uuid("id").defaultRandom().primaryKey().notNull(),//.references(() => authUsers.id, { onDelete: "cascade" }), 
+    id: uuid("id").defaultRandom().primaryKey().notNull(),
     username: text("username").unique(),
     displayName: text("displayName"),
     bio: text("bio"),
@@ -23,6 +23,12 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex, date,
     bookmark: many(bookmark),
     reply: many(reply),
   }))
+
+  export const follows = pgTable("follows", {
+    id: uuid("id").defaultRandom().primaryKey(),
+    profilesId: uuid("profilesId").references(() => profiles.id, { onDelete: "cascade" }),
+    following: uuid("following").references(() => profiles.id, { onDelete: "cascade"}),
+  });
 
   
   export const post = pgTable("post", {

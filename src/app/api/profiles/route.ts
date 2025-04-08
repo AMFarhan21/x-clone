@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import {
   bookmark,
+  follows,
   likes,
   post,
   profiles,
@@ -15,17 +16,129 @@ import { NextResponse } from "next/server";
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const userId = searchParams.get("userId");
-  const username = searchParams.get("username")
+  const username = searchParams.get("username");
 
-  const userProfiles = await db.query.profiles.findFirst({
-    where: (profiles, { eq }) => eq(profiles.id, userId),
+  const cekProfilesUsername = await db.query.profiles.findFirst({
+    where: (profiles, { eq }) => eq(profiles.username, username),
   });
+  const targetId = cekProfilesUsername?.id;
 
-  const getOneProfiles = await db.query.profiles.findFirst({
-    where: (profiles, {eq}) => eq(profiles.username, username)
-  })
+  const getoneprofile = await db
+    .select({
+      profiles,
+      id: profiles.id,
+      username: profiles.username,
+      displayName: profiles.displayName,
+      email: profiles.email,
+      created_at: profiles.created_at,
+      updated_at: profiles.updated_at,
+      profilePicture: profiles.profilePicture,
+      backgroundPicture: profiles.backgroundPicture,
+      bio: profiles.bio,
+      location: profiles.location,
+      website: profiles.website,
+      birthDate: profiles.birthDate,
+      category: profiles.category,
+      followingsCount:
+        sql<number>`count(distinct ${follows.id}) filter (where ${profiles.id} = ${follows.profilesId})`.as(
+          "followingsCount"
+        ),
+      followersCount:
+        sql<number>`count(distinct ${follows.id}) filter (where ${profiles.id} = ${follows.following})`.as(
+          "followersCount"
+        ),
+    })
+    .from(profiles)
+    .leftJoin(
+      follows,
+      or(
+        eq(profiles.id, follows.profilesId),
+        eq(profiles.id, follows.following)
+      )
+    )
+    .where(eq(profiles.id, targetId))
+    .groupBy(
+      profiles.id,
+      profiles.username,
+      profiles.displayName,
+      profiles.email,
+      profiles.created_at,
+      profiles.updated_at,
+      profiles.profilePicture,
+      profiles.backgroundPicture,
+      profiles.bio,
+      profiles.location,
+      profiles.website,
+      profiles.birthDate,
+      profiles.category
+    );
+  const getOneProfiles = getoneprofile[0];
 
-  const targetUserId = getOneProfiles ? getOneProfiles.id : userId
+  const userProfiles = await db
+    .select({
+      profiles,
+      id: profiles.id,
+      username: profiles.username,
+      displayName: profiles.displayName,
+      email: profiles.email,
+      created_at: profiles.created_at,
+      updated_at: profiles.updated_at,
+      profilePicture: profiles.profilePicture,
+      backgroundPicture: profiles.backgroundPicture,
+      bio: profiles.bio,
+      location: profiles.location,
+      website: profiles.website,
+      birthDate: profiles.birthDate,
+      category: profiles.category,
+      followingsCount:
+        sql<number>`count(distinct ${follows.id}) filter (where ${profiles.id} = ${follows.profilesId})`.as(
+          "followingsCount"
+        ),
+      followersCount:
+        sql<number>`count(distinct ${follows.id}) filter (where ${profiles.id} = ${follows.following})`.as(
+          "followersCount"
+        ),
+    })
+    .from(profiles)
+    .leftJoin(
+      follows,
+      or(
+        eq(follows.profilesId, profiles.id),
+        eq(follows.following, profiles.id)
+      )
+    )
+    .where(eq(profiles.id, userId))
+    .groupBy(
+      profiles.id,
+      profiles.username,
+      profiles.displayName,
+      profiles.email,
+      profiles.created_at,
+      profiles.updated_at,
+      profiles.profilePicture,
+      profiles.backgroundPicture,
+      profiles.bio,
+      profiles.location,
+      profiles.website,
+      profiles.birthDate,
+      profiles.category
+    );
+
+  const isFollowed = await db
+    .select({
+      isFollowed: exists(
+        db
+          .select()
+          .from(follows)
+          .where(
+            and(eq(follows.profilesId, userId), eq(follows.following, targetId))
+          )
+      ),
+    })
+    .from(profiles)
+    .leftJoin(follows, eq(follows.profilesId, profiles.id));
+
+  const targetUserId = targetId ? targetId : userId;
 
   const posts = await db
     .select({
@@ -44,27 +157,34 @@ export async function GET(req: Request) {
       location: profiles.location,
       website: profiles.website,
       profiles_created_at: profiles.created_at,
-      likesCount: sql<number>`count(${likes.id})`.as("likesCount"),
+      likesCount: sql<number>`count(distinct ${likes.id})`.as("likesCount"),
       replyCount: sql<number>`count(distinct ${reply.id})`.as("replyCount"),
       rePostCount: sql<number>`count(distinct ${rePost.id})`.as("rePostCount"),
       isLiked: exists(
         db
           .select()
           .from(likes)
-          .where(and(eq(likes.postId, post.id), eq(likes.profilesId, targetUserId)))
+          .where(
+            and(eq(likes.postId, post.id), eq(likes.profilesId, targetUserId))
+          )
       ).as("isLiked"),
       isRePosted: exists(
         db
           .select()
           .from(rePost)
-          .where(and(eq(rePost.postId, post.id), eq(rePost.profilesId, targetUserId)))
+          .where(
+            and(eq(rePost.postId, post.id), eq(rePost.profilesId, targetUserId))
+          )
       ).as("isRePosted"),
       isBookmarked: exists(
         db
           .select()
           .from(bookmark)
           .where(
-            and(eq(bookmark.postId, post.id), eq(bookmark.profilesId, targetUserId))
+            and(
+              eq(bookmark.postId, post.id),
+              eq(bookmark.profilesId, targetUserId)
+            )
           )
       ).as("isBookmarked"),
     })
@@ -73,7 +193,9 @@ export async function GET(req: Request) {
     .leftJoin(reply, eq(post.id, reply.postId))
     .leftJoin(rePost, eq(post.id, rePost.postId))
     .leftJoin(bookmark, eq(post.id, bookmark.postId))
-    .where(or(eq(profiles.id, targetUserId), eq(rePost.profilesId, targetUserId)))
+    .where(
+      or(eq(profiles.id, targetUserId), eq(rePost.profilesId, targetUserId))
+    )
     .innerJoin(profiles, eq(post.profilesId, profiles.id))
     .groupBy(
       post.id,
@@ -119,14 +241,19 @@ export async function GET(req: Request) {
         db
           .select()
           .from(likes)
-          .where(and(eq(likes.replyId, reply.id), eq(likes.profilesId, targetUserId)))
+          .where(
+            and(eq(likes.replyId, reply.id), eq(likes.profilesId, targetUserId))
+          )
       ).as("isReplyLiked"),
       isReplyReposted: exists(
         db
           .select()
           .from(rePost)
           .where(
-            and(eq(rePost.replyId, reply.id), eq(rePost.profilesId, targetUserId))
+            and(
+              eq(rePost.replyId, reply.id),
+              eq(rePost.profilesId, targetUserId)
+            )
           )
       ).as("isReplyReposted"),
       isReplyBookmarked: exists(
@@ -134,7 +261,10 @@ export async function GET(req: Request) {
           .select()
           .from(bookmark)
           .where(
-            and(eq(bookmark.replyId, reply.id), eq(bookmark.profilesId, targetUserId))
+            and(
+              eq(bookmark.replyId, reply.id),
+              eq(bookmark.profilesId, targetUserId)
+            )
           )
       ).as("isReplyBookmarked"),
     })
@@ -142,7 +272,12 @@ export async function GET(req: Request) {
     .leftJoin(likes, eq(likes.replyId, reply.id))
     .leftJoin(rePost, eq(rePost.replyId, reply.id))
     .leftJoin(bookmark, eq(bookmark.replyId, reply.id))
-    .where(or(eq(reply.profilesId, targetUserId), eq(rePost.profilesId, targetUserId)))    
+    .where(
+      or(
+        eq(reply.profilesId, targetUserId),
+        eq(rePost.profilesId, targetUserId)
+      )
+    )
     .innerJoin(profiles, eq(profiles.id, reply.profilesId))
     .groupBy(
       reply.id,
@@ -156,7 +291,7 @@ export async function GET(req: Request) {
       profiles.username,
       profiles.displayName,
       profiles.profilePicture,
-      profiles.backgroundPicture,
+      profiles.backgroundPicture
     )
     .orderBy(desc(reply.created_at))
     .catch((error) => {
@@ -164,11 +299,16 @@ export async function GET(req: Request) {
       return NextResponse.json({ success: false, message: error });
     });
 
+  // console.log(getOneProfiles)
 
-    
-    // console.log(getOneProfiles)
-
-  return NextResponse.json({ userId, userProfiles, getOneProfiles, posts, replies });
+  return NextResponse.json({
+    userId,
+    userProfiles,
+    isFollowed,
+    posts,
+    replies,
+    getOneProfiles,
+  });
 }
 
 export async function POST(req: Request) {

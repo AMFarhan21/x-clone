@@ -9,6 +9,7 @@ import { MdOutlineGifBox } from 'react-icons/md'
 import { RiCalendarScheduleLine, RiImage2Line } from 'react-icons/ri'
 import { toast } from 'sonner'
 import { Button } from '../ui/button'
+import Image from 'next/image'
 
 type ComposeReplyProps = {
     userProfiles?: {
@@ -75,7 +76,7 @@ const ComposeReply = ({userProfiles, userId, dataId, onReplySuccess}: ComposeRep
                 <div className={`text-sm font-bold flex h-3xl space-x-3 pt-4 px-4 ${hide ? "border-b border-white/20" : ""} `}>
                     {
                         userProfiles?.profilePicture ? (
-                            <img src={userProfiles?.profilePicture} className="object-cover w-10 h-10 bg-slate-400 rounded-full" />
+                            <Image src={userProfiles?.profilePicture} alt="profilePicture" width={300} height={300} loading="eager" className="object-cover w-10 h-10 bg-slate-400 rounded-full" />
                         ) : (
                             <div className="min-w-10 h-10 bg-slate-400 rounded-full"></div>
                         )

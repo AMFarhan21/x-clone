@@ -1,6 +1,6 @@
 {
-  "id": "506914f6-f17e-437f-9593-065249afaea7",
-  "prevId": "fefaaf2b-88ce-4b65-9cad-7f6c701fe7d4",
+  "id": "b85ebfe2-79e8-4426-a56c-fa0074e78aa9",
+  "prevId": "506914f6-f17e-437f-9593-065249afaea7",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -133,12 +133,6 @@
           "type": "uuid",
           "primaryKey": false,
           "notNull": false
-        },
-        "followers": {
-          "name": "followers",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
@@ -162,19 +156,6 @@
           "tableTo": "profiles",
           "columnsFrom": [
             "following"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "follows_followers_profiles_id_fk": {
-          "name": "follows_followers_profiles_id_fk",
-          "tableFrom": "follows",
-          "tableTo": "profiles",
-          "columnsFrom": [
-            "followers"
           ],
           "columnsTo": [
             "id"

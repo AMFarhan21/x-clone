@@ -11,6 +11,10 @@ import { BsThreeDots } from "react-icons/bs";
 import { createClient } from '@/utils/supabase/server';
 import { signOut } from '@/lib/action';
 import { RiQuillPenAiLine } from 'react-icons/ri';
+import { db } from '@/lib/db';
+import { profiles } from '../../drizzle/schema';
+import Image from 'next/image';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger, } from './ui/dropdown-menu';
 
 const NAVIGATION_ITEMS = [
   {
@@ -54,6 +58,11 @@ const LeftSidebar = async () => {
   const username = data.user?.user_metadata.username
 
 
+  const userProfiles = await db.query.profiles.findFirst({
+    where: (profiles, { eq }) => eq(profiles.id, data.user?.id)
+  })
+
+
   return (
     <section className="w-[24%] flex flex-col items-stretch h-screen space-y-4 sticky top-0">
       <div className="flex flex-col h-full items-stretch mt-1 ml-2 pr-6">
@@ -77,25 +86,38 @@ const LeftSidebar = async () => {
         </div>
       </div>
 
-      <form>
-        <button formAction={signOut} className='cursor-pointer font-bold hover:bg-gray-400 p-2 rounded-full'>Sign Out</button>
-      </form>
 
-      <button className="flex items-center justify-between space-x-4 bg-transparent text-black rounded-full p-4 font-bold hover:bg-white/10 transition duration-200 w-full  pr-3">
-        <div className="flex items-center space-x-2">
-          <div className="rounded-full bg-white w-9 h-9">
 
-          </div>
-          <div className="text-left">
-            <div className="text-sm text-white font-semibold">Club of coders</div>
-            <div className="text-sm text-white/60 font-normal">@clubofcoders</div>
-          </div>
-        </div>
-        <div className="text-white">
-          <BsThreeDots />
-        </div>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button className="flex items-center justify-between space-x-4 bg-transparent text-black rounded-full p-4 font-bold hover:bg-white/10 transition duration-200 w-full  pr-3">
+            <div className="flex items-center space-x-2">
+              <Image src={userProfiles?.profilePicture} alt='profilePicture' width={300} height={300} className="object-cover rounded-full bg-white w-9 h-9" />
+              <div className="text-left">
+                <div className="text-sm text-white font-semibold">Club of coders</div>
+                <div className="text-sm text-white/60 font-normal">@clubofcoders</div>
+              </div>
+            </div>
+            <div className="text-white">
+              <BsThreeDots />
+            </div>
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-70 bg-black rounded-2xl text-white font-bold hover:bg-black shadow-[0px_0px_8px_rgba(255,255,255,0.5)] border border-transparent">
+          <DropdownMenuGroup className="">
+            <DropdownMenuItem className="hover:bg-white/10 rounded-xl cursor-pointer px-4 py-3 mt-1 text-sm">
+              Add an existing account
+            </DropdownMenuItem>
+            <DropdownMenuItem className="hover:bg-white/10 rounded-xl cursor-pointer px-4 py-3 mb-1 text-sm">
+              <form>
+                <button formAction={signOut}>Log out <span>@{data.user?.user_metadata.username}</span></button>
+              </form>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
-      </button>
+
     </section>
   )
 }

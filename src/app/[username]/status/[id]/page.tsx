@@ -38,7 +38,7 @@ const PostStatus = async ({ params }: { params: Promise<{ username: string; id: 
 
       
       {replies.res.map((reply) => (
-        <Replies key={reply.id} userProfiles={replies.userProfiles} reply={reply} userId={userId} post={replies.resOnePost} username={username} />
+        <Replies key={reply.id} userProfiles={replies.userProfiles} reply={reply} userId={userId} post={replies.resOnePost[0]} username={username} />
       ))}
 
     </div>
