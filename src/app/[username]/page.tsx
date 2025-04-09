@@ -114,7 +114,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
 
 
 
-                                    <FollowButton userId={userId} targetUserId={data.getOneProfiles.id} isFollowed={data.isFollowed[0].isFollowed} />
+                                    <FollowButton userId={userId} targetUsername={data.getOneProfiles.username} targetUserId={data.getOneProfiles.id} isFollowed={data.isFollowed[0].isFollowed} />
 
                                 </div>
                                 <div className='mx-4 mb-5 space-y-2'>

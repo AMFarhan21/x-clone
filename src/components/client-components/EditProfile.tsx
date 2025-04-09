@@ -94,7 +94,7 @@ const EditProfile = ({ userId, userProfiles }) => {
                 </button>
             </DialogTrigger>
             <form id="form-editProfile" onSubmit={updateProfileDetails}>
-                <DialogOverlay className="bg-blue-300/20" />
+                <DialogOverlay className="bg-red-600" />
                 <DialogContent className='bg-black border border-transparent min-w-[600px] max-h-[650px] overflow-y-auto rounded-2xl pb-16'>
                     <DialogHeader>
                         <DialogTitle className='pl-3 py-2 font-semibold text-xl gap-x-4 flex items-center sticky top-0 bg-black/60'>

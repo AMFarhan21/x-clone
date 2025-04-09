@@ -1,5 +1,5 @@
 'use client'
 
 export default function ErrorPage() {
-  return <p>Sorry, something went wrong</p>
+  return <p className="m-auto">HUHUHU THERE IS SOMETHING WRONG WITH MEEEEEE T^T :(</p>
 }
