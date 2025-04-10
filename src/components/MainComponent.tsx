@@ -35,7 +35,7 @@ const MainComponent = async () => {
 
 
   // console.log(posts)
-
+  
   return (
     <main className="w-full xl:max-w-[48%] h-full min-h-screen flex-col border-l border-r border-gray-600/50">
       <div className="flex items-center">

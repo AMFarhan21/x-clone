@@ -1,3 +1,4 @@
+import followingPage from "@/app/[username]/following/page";
 import { relations } from "drizzle-orm";
 import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex, date, PrimaryKey } from "drizzle-orm/pg-core";
 
@@ -22,6 +23,7 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex, date,
     likes: many(likes),
     bookmark: many(bookmark),
     reply: many(reply),
+    follows: many(follows)
   }))
 
   export const follows = pgTable("follows", {
@@ -29,6 +31,16 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex, date,
     profilesId: uuid("profilesId").references(() => profiles.id, { onDelete: "cascade" }),
     following: uuid("following").references(() => profiles.id, { onDelete: "cascade"}),
   });
+  export const followsRelations = relations(follows, ({one}) => ({
+    followers: one(profiles, {
+      fields: [follows.profilesId],
+      references: [profiles.id]
+    }),
+    following: one(profiles, {
+      fields: [follows.following],
+      references: [profiles.id]
+    })
+  }))
 
   
   export const post = pgTable("post", {

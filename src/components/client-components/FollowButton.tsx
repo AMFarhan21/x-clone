@@ -11,7 +11,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 
 
 
-const FollowButton = ({ targetUsername, targetUserId, userId, isFollowed }) => {
+const FollowButton = ({ targetUsername, targetUserId, userId, isFollowed, userLogin }) => {
     const router = useRouter()
     const [follow, setFollow] = useState(isFollowed)
     const [isHover, setIsHover] = useState(false)
@@ -30,6 +30,7 @@ const FollowButton = ({ targetUsername, targetUserId, userId, isFollowed }) => {
             toast.success(data.message)
             // router.refresh()
             // setFollow(data.follow)
+            // console.log(userLogin)
         } else {
             console.log(data.message)
             toast.error(data.message)
@@ -39,12 +40,7 @@ const FollowButton = ({ targetUsername, targetUserId, userId, isFollowed }) => {
 
     return (
 
-        <div className='flex ml-auto mr-4 mt-3 gap-x-2'>
-            <button className='bg-black border border-white/50 rounded-full cursor-pointer max-h-9 hover:bg-white/7 transition duration-200 '><BsThreeDots className="text-white text-[27px] p-1 w-9 " /></button>
-            <button className='bg-black border border-white/50 rounded-full cursor-pointer max-h-9 hover:bg-white/7 transition duration-200 '><FaRegCircle className="text-white text-[27px] p-1 w-9 " /></button>
-            <button className='bg-black border border-white/50 rounded-full cursor-pointer max-h-9 hover:bg-white/7 transition duration-200 '><HiMiniMagnifyingGlass className="text-white text-[27px] p-1 w-9 " /></button>
-            <button className='bg-black border border-white/50 rounded-full cursor-pointer max-h-9 hover:bg-white/7 transition duration-200 '><FaRegEnvelope className="text-white text-[27px] p-1 w-9 " /></button>
-            <button className='bg-black border border-white/50 rounded-full cursor-pointer max-h-9 hover:bg-white/7 transition duration-200 '><LuBellPlus className="text-white text-[27px] p-1 w-9 " /></button>
+        <div>
             {
                 follow ? (
 
@@ -52,7 +48,11 @@ const FollowButton = ({ targetUsername, targetUserId, userId, isFollowed }) => {
                         <AlertDialogTrigger
                             onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}
                             className='w-26 h-9 items-center rounded-full border border-white/50 bg-black text-white font-bold cursor-pointer pb-0.5 hover:border-red-600/40 hover:text-red-600 hover:bg-red-600/10'>
-                            <button >
+                            <button onClick={(e) => {
+                                e.stopPropagation()
+                                e.nativeEvent.preventDefault()
+                                handleFollow()
+                            }}>
                                 {
                                     isHover ? "Unfollow" : "Following"
                                 }
@@ -66,13 +66,25 @@ const FollowButton = ({ targetUsername, targetUserId, userId, isFollowed }) => {
                                     Their posts will no longer show up in your For You timeline. You can still view their profile, unless their posts are protected.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
-                            <AlertDialogAction onClick={handleFollow} className="bg-white text-black font-bold hover:bg-white/80 rounded-full">Unfollow</AlertDialogAction>
-                            <AlertDialogCancel className="bg-black text-white font-bold hover:text-white hover:bg-white/10 rounded-full mt-[-20px]">Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={(e) => {
+                                e.stopPropagation()
+                                e.nativeEvent.preventDefault()
+                                handleFollow()
+                            }} className="bg-white text-black font-bold hover:bg-white/80 rounded-full h-11">Unfollow</AlertDialogAction>
+                            <AlertDialogCancel onClick={(e) => {
+                                e.stopPropagation()
+                                e.nativeEvent.preventDefault()
+                                handleFollow()
+                            }} className="bg-black text-white font-bold hover:text-white hover:bg-white/10 rounded-full mt-[-20px] h-11">Cancel</AlertDialogCancel>
                         </AlertDialogContent>
                     </AlertDialog>
 
                 ) : (
-                    <button onClick={handleFollow} className='w-20 h-9 items-center rounded-full border border-white/50 bg-white text-black font-bold cursor-pointer'> Follow </button>
+                    <button onClick={(e) => {
+                        e.stopPropagation()
+                        e.nativeEvent.preventDefault()
+                        handleFollow()
+                    }} className='w-20 h-9 items-center rounded-full border border-white/50 bg-white text-black font-bold cursor-pointer'> Follow </button>
                 )
             }
         </div>

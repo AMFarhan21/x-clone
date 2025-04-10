@@ -70,7 +70,7 @@ const Replies = ({reply, userId, post, username, userProfiles }) => {
                         <div className="flex items-center text-white/50 text-[18px] ">
                             <ReplyButton userProfiles={userProfiles} post={post} userId={userId} dataId={reply.id} postUsername={username} replyCount={reply.replyCount} />
                         </div>
-                        <div className="flex items-center text-white/50 text-[18px]">
+                        <div className="flex items-center text-white/50 text-[18px]" onClick={(e) => {e.stopPropagation(); e.nativeEvent.preventDefault()}}>
                             <Repost postId={null} userId={userId} isRePosted={reply.isReplyReposted} rePostCount={reply.replyRepostCount} replyId={reply.id} />
                         </div>
                         <div className="flex items-center text-white/50 text-[18px]">

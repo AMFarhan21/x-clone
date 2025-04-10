@@ -7,6 +7,7 @@ import { DotIcon, XIcon } from 'lucide-react'
 import { IoIosArrowForward } from "react-icons/io";
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 const EditProfile = ({ userId, userProfiles }) => {
 
@@ -88,7 +89,7 @@ const EditProfile = ({ userId, userProfiles }) => {
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
 
             <DialogTrigger asChild >
-                <button className='ml-auto mr-4 mt-3 w-30 h-9 items-center rounded-full border border-white/50 bg-black font-bold cursor-pointer'
+                <button className='ml-auto mr-4 mt-3 w-30 h-9 py-auto items-center rounded-full border border-white/50 bg-black font-bold cursor-pointer'
                     onClick={() => setOpenDialog(true)}>
                     Edit profile
                 </button>
@@ -114,9 +115,9 @@ const EditProfile = ({ userId, userProfiles }) => {
                             <label className='block w-full h-[27vh] bg-gray-600 cursor-pointer mt-[-8px]'>
                                 {
                                     previewCoverImage ? (
-                                        <img src={previewCoverImage} alt='Preview Cover Image' className='w-full h-full object-cover' />
+                                        <Image width={500} height={500} loading="eager" src={previewCoverImage} alt='Preview Cover Image' className='w-full h-full object-cover' />
                                     ) : (
-                                        <img src={userProfiles.backgroundPicture} alt='Preview Cover Image' className='w-full h-full object-cover' />
+                                        <Image width={500} height={500} loading="eager" src={userProfiles.backgroundPicture} alt='Preview Cover Image' className='w-full h-full object-cover' />
                                     )
                                 }
                                 <input onChange={(e) => {
@@ -135,11 +136,11 @@ const EditProfile = ({ userId, userProfiles }) => {
                                 {
                                     previewProfileImage ? (
                                         <div>
-                                            <img src={previewProfileImage} alt="Preview Profile Image" className='block w-28 h-28 rounded-full border-3 border-black cursor-pointer object-cover object-top' />
+                                            <Image width={300} height={300} src={previewProfileImage} alt="Preview Profile Image" className='block w-28 h-28 rounded-full border-3 border-black cursor-pointer object-cover' />
                                         </div>
                                     ) : (
                                         <div>
-                                            <img src={userProfiles.profilePicture} alt="Preview Profile Image" className='block w-28 h-28 rounded-full border-3 border-black cursor-pointer object-cover object-top' />
+                                            <Image width={300} height={300} src={userProfiles.profilePicture} alt="Preview Profile Image" className='block w-28 h-28 rounded-full border-3 border-black cursor-pointer object-cover' />
                                         </div>
                                     )
                                 }

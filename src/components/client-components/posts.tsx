@@ -11,6 +11,7 @@ import DropdownButton from "./DropdownButton";
 import Repost from "./rePost-button";
 import BookmarkButton from "./bookmark-button";
 import Image from "next/image";
+import Link from "next/link";
 
 export type postType = {
     id: string;
@@ -44,31 +45,27 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
     }
 
     const handlePostClick = () => {
-        router.refresh()
 
         const select = window.getSelection();
         if (select && select.toString().length > 0) {
             return;
         }
-        router.push(`/${post.username}/status/${post.id}`)
         // const imageArray = JSON.parse(post.imageUrl);
     }
 
     const handlePostProfileClick = () => {
         router.push(`/${post.username}`)
-        router.refresh()
     }
 
 
     const imageArray = post.imageUrl ? JSON.parse(post.imageUrl) : [];
-    // console.log(imageArray)
 
 
 
     return (
         <div>
-
-            <div key={post.id} className="border-b border-gray-600/50 flex pt-3 px-4 cursor-pointer hover:bg-white/2" onClick={handlePostClick}>
+            <Link key={post.id} href={`/${post.username}/status/${post.id}`} onClick={handlePostClick}>
+            <div className="border-b border-gray-600/50 flex pt-3 px-4 cursor-pointer hover:bg-white/2">
                 {post.profilePicture ? (
                     <Image alt="profilePicture" src={post.profilePicture} width={300} height={300} loading="eager" className="bg-white/50 w-10 h-10 rounded-full object-cover" onClick={(e) => {e.stopPropagation(); handlePostProfileClick()}} />
                 ) : (
@@ -104,7 +101,7 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
                                     ): (
                                         <Image src={fileUrl}
                                             alt="Post Image"
-                                            width={300} height={300} loading="eager"
+                                            width={500} height={500} loading="eager"
                                             key={index}
                                             className="w-full h-full object-cover" />
                                     )
@@ -115,7 +112,7 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
 
 
                     <div className="flex justify-between items-center">
-                        <div className="flex items-center text-white/50 text-[18px] ">
+                        <div className="flex items-center text-white/50 text-[18px] " onClick={(e) => {e.stopPropagation(); e.nativeEvent.preventDefault()}}>
                             <ReplyButton userProfiles={userProfiles} post={post} userId={userId} dataId={post.id} postUsername={post.username} replyCount={post.replyCount} />
                         </div>
                         <div className="flex items-center text-white/50 text-[18px]">
@@ -134,6 +131,7 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
                     </div>
                 </div>
             </div>
+            </Link>
         </div >
     )
 }

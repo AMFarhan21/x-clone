@@ -4,6 +4,25 @@ import { randomUUID } from "crypto";
 import { and, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
+// export async function GET(req: Request) {
+
+//   const {searchParams} = new URL(req.url)
+//   const username = await searchParams.get("username")
+
+//   const getOneProfiles = await db.query.profiles.findFirst({
+//     where: (profiles, { eq }) => eq(profiles.username, username),
+//   });
+
+//   const userId = getOneProfiles?.id;
+
+//   const getFollowers = await db.query.follows.findMany({
+//     where: (follows, { eq }) => eq(follows.following, userId),
+//     with: {
+//       followers: true,
+//     },
+//   });
+// }
+
 export async function POST(req: Request) {
   const { targetUserId, userId } = await req.json();
 

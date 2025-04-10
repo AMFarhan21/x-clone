@@ -11,8 +11,12 @@ import { createClient } from '@/utils/supabase/server'
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
+import { BsThreeDots } from 'react-icons/bs';
+import { FaRegCircle, FaRegEnvelope } from 'react-icons/fa';
 import { FaRetweet } from 'react-icons/fa6';
+import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
 import { IoLocationOutline } from 'react-icons/io5';
+import { LuBellPlus } from 'react-icons/lu';
 import { MdCalendarMonth } from 'react-icons/md';
 import { RiLinkM, RiVerifiedBadgeFill } from 'react-icons/ri';
 
@@ -25,14 +29,11 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
 
     // targetUserId
     const { username } = await params
-    
+
 
     const response = await fetch(`http://localhost:3000/api/profiles?userId=${userId}&username=${username}`)
     const data = await response.json()
-    // console.log(data.isFollowed[0].isFollowed)
-    // console.log(data.userProfiles[0].username)
-    // console.log(user.user?.user_metadata.username)
-    console.log(data.getOneProfiles.username)
+    // console.log(data.getOneProfiles.username)
 
 
     const imageArray = data.posts.flatMap((post) => {
@@ -41,154 +42,128 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
 
     return (
         <div className="w-full xl:max-w-[48%] h-full min-h-screen flex-col border-l border-r border-gray-600/50">
-            {
-                user.user?.user_metadata.username === username ? (
-                    <>
-                        <BackNavigation user={data.userProfiles[0].username} />
-                        <div>
+            <>
+                <BackNavigation user={username} />
+                <div>
+                    {
+                        data.getOneProfiles.backgroundPicture ? (
+                            <Image alt='backgroundPicture' src={data.getOneProfiles.backgroundPicture} width={500} height={500} className='w-full h-[27vh] bg-gray-600 cursor-pointer object-cover' />
+                        ) : (
+                            <div className='w-full h-[27vh] bg-gray-600 cursor-pointer'></div>
+                        )
+                    }
+                    <div>
+                        <div className='flex'>
+
                             {
-                                data.userProfiles[0].backgroundPicture ? (
-                                    <Image alt='backgroundPicture' src={data.userProfiles[0].backgroundPicture} width={500} height={500} loading='eager' className='w-full h-[27vh] bg-gray-600 cursor-pointer object-cover' />
+                                data.getOneProfiles.profilePicture ? (
+                                    <Image alt='profilePicture' src={data.getOneProfiles.profilePicture} width={300} height={300} loading="eager" className='w-36 h-36 bg-gray-600 rounded-full mx-6 mb-5 mt-[-70px] border-3 border-black cursor-pointer object-cover' />
                                 ) : (
-                                    <div className='w-full h-[27vh] bg-gray-600 cursor-pointer'></div>
+                                    <div className='w-33 h-33 bg-gray-600 rounded-full mx-6 mb-7 mt-[-70px] border-3 border-black cursor-pointer'></div>
                                 )
                             }
-                            <div>
-                                <div className='flex'>
 
-                                    {
-                                        data.userProfiles[0].profilePicture ? (
-                                            <Image alt='profilePicture' src={data.userProfiles[0].profilePicture}  width={300} height={300} loading="eager" className='w-33 h-33 bg-gray-600 rounded-full mx-6 mb-7 mt-[-70px] border-3 border-black cursor-pointer object-cover' />
-                                        ) : (
-                                            <div className='w-33 h-33 bg-gray-600 rounded-full mx-6 mb-7 mt-[-70px] border-3 border-black cursor-pointer'></div>
-                                        )
-                                    }
 
+                            {
+                                user.user?.user_metadata.username === data.getOneProfiles.username ? (
                                     <EditProfile userId={userId} userProfiles={data.userProfiles[0]} />
-                                </div>
-                                <div className='mx-4 mb-5 space-y-2'>
-                                    <div>
-                                        <div className='flex space-x-4 items-center'>
-                                            <div className='font-bold text-xl'> {data.userProfiles[0].displayName ? data.userProfiles[0].displayName : data.userProfiles[0].username} </div>
-                                            <Button className='h-6 rounded-full border border-white/50 bg-black font-bold cursor-pointer my-auto'><RiVerifiedBadgeFill className='text-blue-400' />Get verified</Button>
-                                        </div>
-                                        <div className='text-white/50 text-base font-light'> @{data.userProfiles[0].username} </div>
-                                    </div>
-                                    <div>
-                                        {data.userProfiles[0].bio}
-                                    </div>
-                                    <div className='flex space-x-4 text-white/50 text-base font-light items-center flex-wrap'>
-                                        {data.userProfiles[0].location && <div className='flex items-center gap-x-1'><IoLocationOutline className='text-[17px]' /> <div>{data.userProfiles[0].location} </div></div>}
-                                        {data.userProfiles[0].website && <div className='flex items-center gap-x-1'><RiLinkM className='text-white/50 text-[17px]' /> <div className='text-blue-400'> <Link href={data.userProfiles[0].website.slice(0, 3) === "htt" || data.userProfiles[0].website.slice(0, 3) === "www" ? data.userProfiles[0].website : `https://www.${data.userProfiles[0].website}`}>{data.userProfiles[0].website}</Link> </div></div>}
-                                        <div className='flex gap-x-1 items-center'><MdCalendarMonth className='text-[17px] font-light' /> Joined <DayJs date={data.userProfiles[0].created_at} profilesCreated={data.userProfiles[0].created_at} /> </div>
-                                    </div>
-                                    <div className='flex space-x-5'>
-                                        <div className='text-white/50 text-base font-light'><span className='font-bold text-white'>{data.userProfiles[0].followingsCount} </span>Following</div>
-                                        <div className='text-white/50 text-base font-light'><span className='font-bold text-white'>{data.userProfiles[0].followersCount} </span>Followers</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </>
-                ) : (
-                    <>
-                        <BackNavigation user={data.getOneProfiles.username} />
-                        <div>
-                            {
-                                data.getOneProfiles.backgroundPicture ? (
-                                    <Image alt='backgroundPicture' src={data.getOneProfiles.backgroundPicture} width={500} height={500} className='w-full h-[27vh] bg-gray-600 cursor-pointer object-cover' />
                                 ) : (
-                                    <div className='w-full h-[27vh] bg-gray-600 cursor-pointer'></div>
+                                    <div className='flex ml-auto mr-4 mt-3 gap-x-2'>
+                                        <button className='bg-black border border-white/50 rounded-full cursor-pointer max-h-9 hover:bg-white/7 transition duration-200 '><BsThreeDots className="text-white text-[27px] p-1 w-9 " /></button>
+                                        <button className='bg-black border border-white/50 rounded-full cursor-pointer max-h-9 hover:bg-white/7 transition duration-200 '><FaRegCircle className="text-white text-[27px] p-1 w-9 " /></button>
+                                        <button className='bg-black border border-white/50 rounded-full cursor-pointer max-h-9 hover:bg-white/7 transition duration-200 '><HiMiniMagnifyingGlass className="text-white text-[27px] p-1 w-9 " /></button>
+                                        <button className='bg-black border border-white/50 rounded-full cursor-pointer max-h-9 hover:bg-white/7 transition duration-200 '><FaRegEnvelope className="text-white text-[27px] p-1 w-9 " /></button>
+                                        <button className='bg-black border border-white/50 rounded-full cursor-pointer max-h-9 hover:bg-white/7 transition duration-200 '><LuBellPlus className="text-white text-[27px] p-1 w-9 " /></button>
+                                        <FollowButton userLogin={user} userId={userId} targetUsername={data.getOneProfiles.username} targetUserId={data.getOneProfiles.id} isFollowed={data.isFollowed[0].isFollowed} />
+                                        </div>
+
                                 )
                             }
+
+                        </div>
+                        <div className='mx-4 mb-5 space-y-2'>
                             <div>
-                                <div className='flex'>
-
+                                <div className='flex space-x-4 items-center'>
+                                    <div className='font-bold text-xl'> {data.getOneProfiles.displayName ? data.getOneProfiles.displayName : data.getOneProfiles.username} </div>
                                     {
-                                        data.getOneProfiles.profilePicture ? (
-                                            <Image alt='profilePicture' src={data.getOneProfiles.profilePicture} width={300} height={300} loading="eager" className='w-36 h-36 bg-gray-600 rounded-full mx-6 mb-5 mt-[-70px] border-3 border-black cursor-pointer object-cover' />
-                                        ) : (
-                                            <div className='w-33 h-33 bg-gray-600 rounded-full mx-6 mb-7 mt-[-70px] border-3 border-black cursor-pointer'></div>
-                                        )
+                                        user.user?.user_metadata.username === data.getOneProfiles.username && <Button className='rounded-full border border-white/50 bg-black font-bold cursor-pointer'><RiVerifiedBadgeFill className='text-blue-400' />Get verified</Button>
                                     }
-
-
-
-                                    <FollowButton userId={userId} targetUsername={data.getOneProfiles.username} targetUserId={data.getOneProfiles.id} isFollowed={data.isFollowed[0].isFollowed} />
-
                                 </div>
-                                <div className='mx-4 mb-5 space-y-2'>
-                                    <div>
-                                        <div className='flex space-x-4 items-center'>
-                                            <div className='font-bold text-xl'> {data.getOneProfiles.displayName ? data.getOneProfiles.displayName : data.getOneProfiles.username} </div>
-                                            {
-                                                user.user?.user_metadata.username === username && <Button className='h-6 rounded-full border border-white/50 bg-black font-bold cursor-pointer my-auto'><RiVerifiedBadgeFill className='text-blue-400' />Get verified</Button>
-                                            }
-                                        </div>
-                                        <div className='text-white/50 text-base font-light'> @{data.getOneProfiles.username} </div>
-                                    </div>
-                                    <div>
-                                        {data.getOneProfiles.bio}
-                                    </div>
-                                    <div className='flex space-x-4 text-white/50 text-base font-light items-center flex-wrap'>
-                                        {data.getOneProfiles.location && <div className='flex items-center gap-x-1'><IoLocationOutline className='text-[17px]' /> <div>{data.getOneProfiles.location} </div></div>}
-                                        {data.getOneProfiles.website && <div className='flex items-center gap-x-1'><RiLinkM className='text-white/50 text-[17px]' /> <div className='text-blue-400'> <Link href={data.getOneProfiles.website.slice(0, 3) === "htt" || data.getOneProfiles.website.slice(0, 3) === "www" ? data.getOneProfiles.website : `https://www.${data.getOneProfiles.website}`}>{data.getOneProfiles.website}</Link> </div></div>}
-                                        <div className='flex gap-x-1 items-center'><MdCalendarMonth className='text-[17px] font-light' /> Joined <DayJs date={data.getOneProfiles.created_at} profilesCreated={data.getOneProfiles.created_at} /> </div>
-                                    </div>
-                                    <div className='flex space-x-5'>
-                                        <div className='text-white/50 text-base font-light'><span className='font-bold text-white'>{data.getOneProfiles.followingsCount}</span> Following</div>
-                                        <div className='text-white/50 text-base font-light'><span className='font-bold text-white'>{data.getOneProfiles.followersCount}</span> Followers</div>
-                                    </div>
-                                </div>
+                                <div className='text-white/50 text-base font-light'> @{data.getOneProfiles.username} </div>
+                            </div>
+                            <div>
+                                {data.getOneProfiles.bio}
+                            </div>
+                            <div className='flex space-x-4 text-white/50 text-base font-light items-center flex-wrap'>
+                                {data.getOneProfiles.location && <div className='flex items-center gap-x-1'><IoLocationOutline className='text-[17px]' /> <div>{data.getOneProfiles.location} </div></div>}
+                                {data.getOneProfiles.website && <div className='flex items-center gap-x-1'><RiLinkM className='text-white/50 text-[17px]' /> <div className='text-blue-400'> <Link href={data.getOneProfiles.website.slice(0, 3) === "htt" || data.getOneProfiles.website.slice(0, 3) === "www" ? data.getOneProfiles.website : `https://www.${data.getOneProfiles.website}`}>{data.getOneProfiles.website}</Link> </div></div>}
+                                <div className='flex gap-x-1 items-center'><MdCalendarMonth className='text-[17px] font-light' /> Joined <DayJs date={data.getOneProfiles.created_at} profilesCreated={data.getOneProfiles.created_at} /> </div>
+                            </div>
+                            <div className='flex space-x-5'>
+                                <Link href={`/${username}/following`}><div className='text-white/50 text-base font-light hover:border-b border-white/80'><span className='font-bold text-white'>{data.getOneProfiles.followingsCount}</span> Following</div></Link>
+                                <Link href={`/${username}/followers`}><div className='text-white/50 text-base font-light hover:border-b border-white/80'><span className='font-bold text-white'>{data.getOneProfiles.followersCount}</span> Followers</div></Link>
                             </div>
                         </div>
-                    </>
-                )
-            }
+                    </div>
+                </div>
+            </>
+
 
 
 
             <Tabs defaultValue="posts">
                 <TabsList className="grid grid-cols-6 bg-black/0 text-white/50 font-semibold items-center w-full border-b border-white/15 text-sm">
                     <TabsTrigger
-                        className='hover:bg-white/10 py-3 focus:text-white relative after:content-[""]
-                        after:absolute after:bottom-0 after:left-[15%] after:w-[70%] after:h-[3px] after:bg-blue-400 after:rounded-full after:scale-x-0
-                        data-[state=active]:after:scale-x-100 after:transition-transform after:origin-center'
+                        className='hover:bg-white/10 py-3 focus:text-white text-white/50 relative
+                       after:content-[""] after:absolute after:bottom-0 after:left-[15%]
+                       after:w-[70%] after:h-[3px] after:bg-blue-400 after:rounded-full
+                       after:scale-x-0 after:transition-transform after:origin-center
+                       data-[state=active]:text-white data-[state=active]:after:scale-x-100'
                         value="posts">
                         Posts
                     </TabsTrigger>
                     <TabsTrigger
-                        className='hover:bg-white/10 py-3 focus:text-white relative after:content-[""]
-                        after:absolute after:bottom-0 after:left-[15%] after:w-[70%] after:h-[3px] after:bg-blue-400 after:rounded-full after:scale-x-0
-                        data-[state=active]:after:scale-x-100 after:transition-transform after:origin-center '
+                        className='hover:bg-white/10 py-3 focus:text-white text-white/50 relative
+                       after:content-[""] after:absolute after:bottom-0 after:left-[15%]
+                       after:w-[70%] after:h-[3px] after:bg-blue-400 after:rounded-full
+                       after:scale-x-0 after:transition-transform after:origin-center
+                       data-[state=active]:text-white data-[state=active]:after:scale-x-100'
                         value="replies">
                         Replies
                     </TabsTrigger>
                     <TabsTrigger
-                        className='hover:bg-white/10 py-3 focus:text-white relative after:content-[""]
-                        after:absolute after:bottom-0 after:left-[15%] after:w-[70%] after:h-[3px] after:bg-blue-400 after:rounded-full after:scale-x-0
-                        data-[state=active]:after:scale-x-100 after:transition-transform after:origin-center '
+                        className='hover:bg-white/10 py-3 focus:text-white text-white/50 relative
+                       after:content-[""] after:absolute after:bottom-0 after:left-[15%]
+                       after:w-[70%] after:h-[3px] after:bg-blue-400 after:rounded-full
+                       after:scale-x-0 after:transition-transform after:origin-center
+                       data-[state=active]:text-white data-[state=active]:after:scale-x-100'
                         value="highlights">
                         Highlights
                     </TabsTrigger>
                     <TabsTrigger
-                        className='hover:bg-white/10 py-3 focus:text-white relative after:content-[""]
-                        after:absolute after:bottom-0 after:left-[15%] after:w-[70%] after:h-[3px] after:bg-blue-400 after:rounded-full after:scale-x-0
-                        data-[state=active]:after:scale-x-100 after:transition-transform after:origin-center '
+                        className='hover:bg-white/10 py-3 focus:text-white text-white/50 relative
+                       after:content-[""] after:absolute after:bottom-0 after:left-[15%]
+                       after:w-[70%] after:h-[3px] after:bg-blue-400 after:rounded-full
+                       after:scale-x-0 after:transition-transform after:origin-center
+                       data-[state=active]:text-white data-[state=active]:after:scale-x-100'
                         value="article">
                         Article
                     </TabsTrigger>
                     <TabsTrigger
-                        className='hover:bg-white/10 py-3 focus:text-white relative after:content-[""]
-                        after:absolute after:bottom-0 after:left-[15%] after:w-[70%] after:h-[3px] after:bg-blue-400 after:rounded-full after:scale-x-0
-                        data-[state=active]:after:scale-x-100 after:transition-transform after:origin-center '
+                        className='hover:bg-white/10 py-3 focus:text-white text-white/50 relative
+                       after:content-[""] after:absolute after:bottom-0 after:left-[15%]
+                       after:w-[70%] after:h-[3px] after:bg-blue-400 after:rounded-full
+                       after:scale-x-0 after:transition-transform after:origin-center
+                       data-[state=active]:text-white data-[state=active]:after:scale-x-100'
                         value="media">
                         Media
                     </TabsTrigger>
                     <TabsTrigger
-                        className='hover:bg-white/10 py-3 focus:text-white relative after:content-[""]
-                        after:absolute after:bottom-0 after:left-[15%] after:w-[70%] after:h-[3px] after:bg-blue-400 after:rounded-full after:scale-x-0
-                        data-[state=active]:after:scale-x-100 after:transition-transform after:origin-center '
+                        className='hover:bg-white/10 py-3 focus:text-white text-white/50 relative
+                       after:content-[""] after:absolute after:bottom-0 after:left-[15%]
+                       after:w-[70%] after:h-[3px] after:bg-blue-400 after:rounded-full
+                       after:scale-x-0 after:transition-transform after:origin-center
+                       data-[state=active]:text-white data-[state=active]:after:scale-x-100'
                         value="likes">
                         Likes
                     </TabsTrigger>

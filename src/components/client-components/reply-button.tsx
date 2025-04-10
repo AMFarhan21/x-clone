@@ -26,7 +26,7 @@ const ReplyButton = ({ userProfiles, post, userId, dataId, postUsername, replyCo
         <div>
             <Dialog open={isOpen} onOpenChange={setIsOpen} >
 
-                <DialogTrigger onClick={(e) => e.stopPropagation()} className="flex rounded-full bg-transparent  hover:bg-blue-400/10 hover:text-blue-400 p-2 my-1 transition duration-300 text-white/50 items-end cursor-pointer space-x-1 ">
+                <DialogTrigger className="flex rounded-full bg-transparent  hover:bg-blue-400/10 hover:text-blue-400 p-2 my-1 transition duration-300 text-white/50 items-end cursor-pointer space-x-1 ">
                     <HiOutlineChatBubbleOvalLeft />
                     <div className="mt-[3px] text-xs">
                         {replyCount}
@@ -34,13 +34,13 @@ const ReplyButton = ({ userProfiles, post, userId, dataId, postUsername, replyCo
                 </DialogTrigger>
                 <DialogOverlay className="bg-blue-300/20" />
                 <DialogTitle></DialogTitle>
-                <DialogContent onClick={(e) => e.stopPropagation()} className="bg-black/100 border-transparent min-w-150">
+                <DialogContent className="bg-black/100 border-transparent min-w-150">
                     <div className="flex mt-6 p-4">
                         {
                             post.profilePicture ? (
                                 <img src={post.profilePicture} className="object-cover bg-white/50 w-10 h-10 rounded-full p" />
                             ) : (
-                                <div className="bg-white/50 min-w-10 h-10 rounded-full p">HELLOWEDNFSJDNF</div>
+                                <div className="bg-white/50 min-w-10 h-10 rounded-full p"></div>
                             )
                         }
                         <div className="ml-2 w-full">
