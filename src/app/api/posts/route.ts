@@ -12,7 +12,7 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const user = searchParams.get("user") || null;
     const userProfiles = await db.query.profiles.findFirst({
-      where: (profiles, {eq}) => eq(profiles.id, user)
+      where: (profiles, {eq}) => eq(profiles.id, user as string)
     })
 
     const result = await db
@@ -34,19 +34,19 @@ export async function GET(req: Request) {
           db
             .select()
             .from(likes)
-            .where(and(eq(likes.postId, post.id), eq(likes.profilesId, user)))
+            .where(and(eq(likes.postId, post.id), eq(likes.profilesId, user as string)))
         ).as("isLiked"),
         isRePosted: exists(
           db
             .select()
             .from(rePost)
-            .where(and(eq(rePost.postId, post.id), eq(rePost.profilesId, user)))
+            .where(and(eq(rePost.postId, post.id), eq(rePost.profilesId, user as string)))
         ).as("isRePosted"),
         isBookmarked: exists(
           db
           .select()
           .from(bookmark)
-          .where(and(eq(bookmark.postId, post.id), eq(bookmark.profilesId, user)))
+          .where(and(eq(bookmark.postId, post.id), eq(bookmark.profilesId, user as string)))
         ).as("isBookmarked")
       })
       .from(post)
@@ -104,7 +104,7 @@ export async function POST(req: Request) {
       if (error) {
         console.log("ERROR on uploadFileUrl: ", error);
       }
-      return supabase.storage.from("x-clone-bucket").getPublicUrl(data.path)
+      return supabase.storage.from("x-clone-bucket").getPublicUrl(data?.path as string)
         .data.publicUrl;
     })
   );

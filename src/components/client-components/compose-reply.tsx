@@ -10,14 +10,15 @@ import { RiCalendarScheduleLine, RiImage2Line } from 'react-icons/ri'
 import { toast } from 'sonner'
 import { Button } from '../ui/button'
 import Image from 'next/image'
+import { Post, Reply } from '@/types'
 
 type ComposeReplyProps = {
     userProfiles?: {
         profilePicture?: string
     }
-    userId: string,
-    dataId: string,
-    onReplySuccess: () => void
+    userId?: string,
+    dataId?: string,
+    onReplySuccess?: () => void | null,
 }
 
 const ComposeReply = ({userProfiles, userId, dataId, onReplySuccess}: ComposeReplyProps) => {

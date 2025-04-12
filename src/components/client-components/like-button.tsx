@@ -2,14 +2,13 @@
 import React, { useState } from 'react'
 import { IoHeart, IoHeartOutline } from 'react-icons/io5'
 import { toast } from 'sonner'
-import { postType } from './posts'
 import { useRouter } from 'next/navigation'
 
 type likeButtonProps = {
     postId: string | null;
     likesCount: number;
     isLiked: boolean;
-    userId: string;
+    userId?: string;
     replyId: string | null,
 }
 

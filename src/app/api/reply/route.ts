@@ -16,8 +16,8 @@ import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const userId = searchParams.get("userId");
-  const dataId = searchParams.get("dataId");
+  const userId = searchParams.get("userId") as string;
+  const dataId = searchParams.get("dataId") as string;
 
   const userProfiles = await db.query.profiles.findFirst({
     where: (profiles, { eq }) => eq(profiles.id, userId),
@@ -320,8 +320,8 @@ export async function POST(req: Request) {
   }
 
   const { searchParams } = new URL(req.url);
-  const profilesId = searchParams.get("profilesId");
-  const dataId = searchParams.get("dataId");
+  const profilesId = searchParams.get("profilesId") as string;
+  const dataId = searchParams.get("dataId") as string;
 
   const idFromPost = await db.query.post.findFirst({
     where: (post, { eq }) => eq(post.id, dataId),

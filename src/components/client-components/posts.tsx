@@ -12,27 +12,12 @@ import Repost from "./rePost-button";
 import BookmarkButton from "./bookmark-button";
 import Image from "next/image";
 import Link from "next/link";
-
-export type postType = {
-    id: string;
-    text: string;
-    profilesId: string;
-    created_at: string;
-    username: string;
-    displayName?: string | null;
-    likesCount: number;
-    imageUrl: string;
-    replyCount: number;
-    rePostCount: number;
-    isLiked: boolean;
-    isRePosted: boolean;
-    isBookmarked: boolean;
-    profilePicture: any;
-};
+import { Post, Profiles } from "@/types";
 
 type postProps = {
-    post: postType;
-    userId: string;
+    post: Post;
+    userId?: string;
+    userProfiles: Profiles;
 }
 
 const Posts = ({ post, userId, userProfiles }: postProps) => {
@@ -82,7 +67,7 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
                         <div className="flex space-x-2 items-center">
                             <div>Grok</div>
                             <div>
-                                <DropdownButton username={post.username} data={post} userId={userId} />
+                                <DropdownButton<Post> username={post.username} data={post} userId={userId} />
                             </div>
                         </div>
                     </div>
@@ -125,7 +110,7 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
                             <button onClick={handleClick} className="flex rounded-full bg-transparent hover:bg-blue-400/10 hover:text-blue-400 p-2 my-1 text-white/35 items-end cursor-pointer space-x-1"> <IoStatsChart /><div className="mt-[3px] text-xs">1</div></button>
                         </div>
                         <div className="flex text-white/50 items-center space-x-0 text-[18px]">
-                            <BookmarkButton postId={post.id} userId={userId} replyId={null} isBookmarked={post.isBookmarked} />
+                            <BookmarkButton postId={post.id} userId={userId as string} replyId={null} isBookmarked={post.isBookmarked} />
                             <button className="rounded-full bg-transparent hover:bg-blue-400/10 hover:text-blue-400 p-2 my-1 text-white/50 cursor-pointer" onClick={handleClick}> <FiShare /> </button>
                         </div>
                     </div>

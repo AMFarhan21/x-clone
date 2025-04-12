@@ -6,8 +6,8 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const { searchParams } = new URL(req.url);
-  const replyId = searchParams.get("replyId");
-  const profilesId = searchParams.get("profilesId");
+  const replyId = searchParams.get("replyId") as string;
+  const profilesId = searchParams.get("profilesId") as string;
 
   await db
     .insert(likes)
@@ -29,8 +29,8 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   const { searchParams } = new URL(req.url);
-  const replyId = searchParams.get("replyId");
-  const profilesId = searchParams.get("profilesId");
+  const replyId = searchParams.get("replyId") as string;
+  const profilesId = searchParams.get("profilesId") as string;
 
   await db
     .delete(likes)

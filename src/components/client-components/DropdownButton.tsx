@@ -1,11 +1,19 @@
 import { BsThreeDots } from "react-icons/bs";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "../ui/dropdown-menu";
-
-
-import React from 'react'
 import DeleteButton from "./DeleteButton";
 
-const DropdownButton = ({ username, data, userId }: { username: string, data: any, userId: string }) => {
+type postOrReply = {
+    profilesId: string,
+    id: string
+}
+
+type DropdownButtonProps<T> = {
+    username: string;
+    userId?: string;
+    data: T;
+}
+
+const DropdownButton = <T extends postOrReply>({ username, data, userId }: DropdownButtonProps<T>) => {
     return (
         <div>
             {

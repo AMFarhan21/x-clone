@@ -8,8 +8,14 @@ import { IoIosArrowForward } from "react-icons/io";
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { Profiles } from '@/types'
 
-const EditProfile = ({ userId, userProfiles }) => {
+type editProps = {
+    userId: string,
+    userProfiles: Profiles,
+}
+
+const EditProfile = ({ userId, userProfiles }: editProps) => {
 
     const [name, setName] = useState(userProfiles.displayName ? userProfiles.displayName : userProfiles.username)
     const [bio, setBio] = useState(userProfiles.bio ? userProfiles.bio : "")

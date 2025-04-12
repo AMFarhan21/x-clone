@@ -2,17 +2,19 @@
 import { BsDot } from 'react-icons/bs'
 import { Dialog, DialogContent, DialogOverlay, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { HiOutlineChatBubbleOvalLeft } from 'react-icons/hi2'
-import { postType } from './posts'
 import DayJs from './DayJs'
 import ComposeReply from './compose-reply'
 import { useState } from 'react'
+import { Post, Profiles, Reply } from '@/types'
 
 
 type postProps = {
-    post: postType
-    userId: string
-    postId: string
-    postUsername: string
+    post: Post,
+    userId?: string,
+    postUsername: string,
+    userProfiles: Profiles,
+    replyCount: number,
+    dataId: string,
 }
 
 const ReplyButton = ({ userProfiles, post, userId, dataId, postUsername, replyCount }: postProps) => {

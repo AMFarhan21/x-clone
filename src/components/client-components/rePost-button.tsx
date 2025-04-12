@@ -4,7 +4,15 @@ import React, { useState } from 'react'
 import { FaRetweet } from 'react-icons/fa6'
 import { toast } from 'sonner'
 
-const Repost = ({postId, userId, isRePosted, rePostCount, replyId}) => {
+type RepostProps = {
+    postId?: string | null,
+    userId?: string,
+    isRePosted: boolean,
+    rePostCount: number,
+    replyId?: string | null,
+}
+
+const Repost = ({postId, userId, isRePosted, rePostCount, replyId}: RepostProps) => {
 
     const [reposted, setReposted] = useState(isRePosted)
     const [count, setCount] = useState(Number(rePostCount))

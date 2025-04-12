@@ -8,6 +8,7 @@ import { db } from '@/lib/db';
 import Image from 'next/image';
 import FollowButton from '@/components/client-components/FollowButton';
 import { createClient } from '@/utils/supabase/server';
+import { Profiles, UserLogin } from '@/types';
 
 
 const followingPage = async ({ params }: { params: Promise<{ username: string }> }) => {
@@ -30,7 +31,7 @@ const followingPage = async ({ params }: { params: Promise<{ username: string }>
 
 
   const getFollowings = await db.query.follows.findMany({
-    where: (follows, { eq }) => eq(follows.profilesId, getOneProfiles?.id),
+    where: (follows, { eq }) => eq(follows.profilesId, getOneProfiles?.id as string),
     with: {
       following: true,
     }
@@ -38,7 +39,7 @@ const followingPage = async ({ params }: { params: Promise<{ username: string }>
 
 
   const userLoginFollowingList = await db.query.follows.findMany({
-    where: (follows, {eq}) => eq(follows.profilesId, user.user?.id)
+    where: (follows, {eq}) => eq(follows.profilesId, user.user?.id as string)
   })
 
   const userLoginFollowingListIds = userLoginFollowingList.map(following => following.following)
@@ -88,13 +89,13 @@ const followingPage = async ({ params }: { params: Promise<{ username: string }>
         </TabsList>
         <TabsContent value='following' className='m-auto min-w-80 py-1 min-h-160'>
           {
-            getFollowings.map(getFollowing => {
+            getFollowings.map((getFollowing) => {
               const isMe = getFollowing.following?.username === user.user?.user_metadata.username
-              const isUserLoginFollowing = userLoginFollowingListIds.includes(getFollowing.following?.id) 
+              const isUserLoginFollowing = userLoginFollowingListIds.includes(getFollowing.following?.id as string)
 
               return (
                 <Link key={getFollowing.following?.id} href={`/${getFollowing.following?.username}`} className='flex mb-5 min-w-153 px-4'>
-                  <Image alt="profilePicture" src={getFollowing.following?.profilePicture} width={300} height={300} className="object-cover w-10 h-10 bg-white/40 rounded-full" />
+                  <Image alt="profilePicture" src={getFollowing.following?.profilePicture as string} width={300} height={300} className="object-cover w-10 h-10 bg-white/40 rounded-full" />
                   <div className='w-full'>
                     <div className='flex justify-between mb-1 w-full'>
                       <div className='ml-2 leading-5 w-full'>
@@ -104,7 +105,7 @@ const followingPage = async ({ params }: { params: Promise<{ username: string }>
                       </div>
                       {
                         !isMe && (
-                          <FollowButton  userLogin={user.user?.user_metadata} userId={user.user?.id} targetUsername={getFollowing.following?.username} targetUserId={getFollowing.following?.id} isFollowed={isUserLoginFollowing}  />
+                          <FollowButton  userLogin={user.user?.user_metadata as UserLogin} userId={user.user?.id} targetUsername={getFollowing.following?.username as string} targetUserId={getFollowing.following?.id as string} isFollowed={isUserLoginFollowing}  />
                         )
                       }
 

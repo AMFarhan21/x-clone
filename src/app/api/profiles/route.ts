@@ -15,13 +15,13 @@ import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const userId = searchParams.get("userId");
-  const username = searchParams.get("username");
+  const userId = searchParams.get("userId") as string;
+  const username = searchParams.get("username") as string;
 
   const cekProfilesUsername = await db.query.profiles.findFirst({
     where: (profiles, { eq }) => eq(profiles.username, username),
   });
-  const targetId = cekProfilesUsername?.id;
+  const targetId = cekProfilesUsername?.id as string;
 
   const getoneprofile = await db
     .select({
@@ -326,16 +326,15 @@ export async function POST(req: Request) {
   const profileImageData = formData.get("profileImage");
 
   const coverImage = coverImageData instanceof File ? coverImageData : null;
-  const profileImage =
-    profileImageData instanceof File ? profileImageData : null;
+  const profileImage = profileImageData instanceof File ? profileImageData : null;
 
   const supabase = await createClient();
 
   const coverImageURL = async () => {
-    const coverImageName = `profiles-cover/${randomUUID()}-${coverImage.name}`;
+    const coverImageName = `profiles-cover/${randomUUID()}-${coverImage?.name}`;
     const { data, error } = await supabase.storage
       .from("x-clone-bucket")
-      .upload(coverImageName, coverImage);
+      .upload(coverImageName, coverImage as File);
     if (error) {
       console.log("ERROR INSERTING COVER IMAGE TO STORAGE: ", error);
       return null;
@@ -347,11 +346,11 @@ export async function POST(req: Request) {
 
   const profileImageURL = async () => {
     const profileImageName = `profiles-image/${randomUUID()}-${
-      profileImage.name
+      profileImage?.name
     }`;
     const { data, error } = await supabase.storage
       .from("x-clone-bucket")
-      .upload(profileImageName, profileImage);
+      .upload(profileImageName, profileImage as File);
     if (error) {
       console.log("ERROR INSERTING PROFILE IMAGE TO STORAGE: ", error);
       return null;

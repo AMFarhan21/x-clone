@@ -13,6 +13,7 @@ import { BsThreeDots } from 'react-icons/bs';
 import { FaRegCircle, FaRegEnvelope } from 'react-icons/fa';
 import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
 import { LuBellPlus } from 'react-icons/lu';
+import { Follows, Profiles, UserLogin } from '@/types';
 
 
 const followersPage = async ({ params }: { params: Promise<{ username: string }> }) => {
@@ -32,7 +33,7 @@ const followersPage = async ({ params }: { params: Promise<{ username: string }>
 
   const userId = getOneProfiles?.id
   const getFollowers = await db.query.follows.findMany({
-    where: (follows, { eq }) => eq(follows.following, userId),
+    where: (follows, { eq }) => eq(follows.following, userId as string),
     with: {
       followers: true
     }
@@ -40,7 +41,7 @@ const followersPage = async ({ params }: { params: Promise<{ username: string }>
 
 
   const userLoginFollowingList = await db.query.follows.findMany({
-    where: (follows, { eq }) => eq(follows.profilesId, user.user?.id)
+    where: (follows, { eq }) => eq(follows.profilesId, user.user?.id as string)
   })
 
   const userLoginFollowingListIds = userLoginFollowingList.map(following => following.following)
@@ -91,12 +92,12 @@ const followersPage = async ({ params }: { params: Promise<{ username: string }>
           {
             getFollowers.map((getFollower) => {
               const isMe = user.user?.id === getFollower.followers?.id
-              const isUserLoginFollowing = userLoginFollowingListIds.includes(getFollower.followers?.id)
+              const isUserLoginFollowing = userLoginFollowingListIds.includes(getFollower.followers?.id as string)
 
               return (
 
                 <Link key={getFollower.followers?.id} href={`/${getFollower.followers?.username}`} className='flex mb-5 min-w-153 px-4'>
-                  <Image alt='profilePicture' src={getFollower.followers?.profilePicture} width={300} height={300} className="object-cover w-10 h-10 bg-white/40 rounded-full" />
+                  <Image alt='profilePicture' src={getFollower.followers?.profilePicture as string} width={300} height={300} className="object-cover w-10 h-10 bg-white/40 rounded-full" />
                   <div className='w-full'>
                     <div className='flex justify-between mb-1 overflow-hidden w-full'>
                       <div className='ml-2 leading-5 w-full'>
@@ -106,7 +107,7 @@ const followersPage = async ({ params }: { params: Promise<{ username: string }>
                       </div>
                       {
                         !isMe && (
-                          <FollowButton userLogin={user.user?.user_metadata} userId={user.user?.id} targetUsername={getFollower.followers?.username} targetUserId={getFollower.followers?.id} isFollowed={isUserLoginFollowing} />
+                          <FollowButton userLogin={user.user?.user_metadata as UserLogin} userId={user.user?.id} targetUsername={getFollower.followers?.username as string} targetUserId={getFollower.followers?.id as string} isFollowed={isUserLoginFollowing} />
                         )
                       }
                     </div>

@@ -7,6 +7,7 @@ import Replies from '@/components/client-components/replies';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { db } from '@/lib/db';
+import { Post, Profiles, Reply, UserLogin } from '@/types';
 import { createClient } from '@/utils/supabase/server'
 import Image from 'next/image';
 import Link from 'next/link';
@@ -24,6 +25,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
     const supabase = await createClient();
     const { data: user, error } = await supabase.auth.getUser();
     if (error) { console.log(error) }
+    console.log(user.user?.identities)
 
     const userId = user.user?.id
 
@@ -36,7 +38,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
     // console.log(data.getOneProfiles.username)
 
 
-    const imageArray = data.posts.flatMap((post) => {
+    const imageArray = data.posts.flatMap((post: Post) => {
         return post.imageUrl ? JSON.parse(post.imageUrl) : [];
     })
 
@@ -74,7 +76,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                                         <button className='bg-black border border-white/50 rounded-full cursor-pointer max-h-9 hover:bg-white/7 transition duration-200 '><HiMiniMagnifyingGlass className="text-white text-[27px] p-1 w-9 " /></button>
                                         <button className='bg-black border border-white/50 rounded-full cursor-pointer max-h-9 hover:bg-white/7 transition duration-200 '><FaRegEnvelope className="text-white text-[27px] p-1 w-9 " /></button>
                                         <button className='bg-black border border-white/50 rounded-full cursor-pointer max-h-9 hover:bg-white/7 transition duration-200 '><LuBellPlus className="text-white text-[27px] p-1 w-9 " /></button>
-                                        <FollowButton userLogin={user} userId={userId} targetUsername={data.getOneProfiles.username} targetUserId={data.getOneProfiles.id} isFollowed={data.isFollowed[0].isFollowed} />
+                                        <FollowButton userLogin={user.user as UserLogin} userId={userId} targetUsername={data.getOneProfiles.username} targetUserId={data.getOneProfiles.id} isFollowed={data.isFollowed[0].isFollowed} />
                                         </div>
 
                                 )
@@ -170,7 +172,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                 </TabsList>
                 <TabsContent value="posts" className='min-h-160'>
                     <div>
-                        {data.posts.map((post) => (
+                        {data.posts.map((post: Post) => (
                             <div key={post.id}>
                                 {post.isRePosted && <div className='text-sm text-white/50 font-semibold flex items-center gap-x-2 ml-10 mt-[8px] mb-[-9px]'><FaRetweet className='text-base' /> You reposted</div>}
                                 <Posts userProfiles={data.userProfiles} post={post} userId={userId} />
@@ -180,7 +182,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                 </TabsContent>
                 <TabsContent value='replies' className='min-h-160'>
                     <div>
-                        {data.replies.map(reply => (
+                        {data.replies.map((reply: Reply) => (
                             <div key={reply.id}>
                                 {reply.isReplyReposted && <div className='text-sm text-white/50 font-semibold flex items-center gap-x-2 ml-10 mt-[8px] mb-[-9px]'><FaRetweet className='text-base' /> You reposted</div>}
                                 <Replies userProfiles={data.userProfiles} reply={reply} userId={userId} post={data.posts} username={username} />

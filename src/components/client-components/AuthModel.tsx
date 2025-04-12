@@ -9,8 +9,6 @@ import { createClient } from '@/utils/supabase/client'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
-import { db } from '@/lib/db'
-import { profiles } from '@/lib/db/schema'
 import { XIcon } from 'lucide-react'
 
 const AuthModel = () => {

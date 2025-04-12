@@ -12,8 +12,13 @@ import { BsEmojiSmile } from 'react-icons/bs';
 import { useRouter } from 'next/navigation';
 import { Link } from 'lucide-react';
 import Image from 'next/image';
+import { Profiles } from '@/types';
 
-const ComposeTweet = ({userProfiles}) => {
+type composeTweetProps = {
+  userProfiles: Profiles,
+}
+
+const ComposeTweet = ({userProfiles}: composeTweetProps) => {
   
 
   

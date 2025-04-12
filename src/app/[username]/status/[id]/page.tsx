@@ -2,6 +2,7 @@ import BackNavigation from '@/components/client-components/BackNavigation';
 import ComposeReply from '@/components/client-components/compose-reply';
 import Posts from '@/components/client-components/posts';
 import Replies from '@/components/client-components/replies';
+import { Post, Reply } from '@/types';
 import { createClient } from '@/utils/supabase/server';
 import React from 'react'
 
@@ -20,14 +21,6 @@ const PostStatus = async ({ params }: { params: Promise<{ username: string; id: 
   const response = await fetch(`http://localhost:3000/api/reply?userId=${userId}&dataId=${id}`)
   const replies = await response.json();
 
-  // if (replies.success) {
-  //   console.log(replies.resOnePost[0])
-  // } else {
-  //   console.log(replies.message)
-  // }
-
-  // console.log(replies.userProfiles.profilePicture)
-
 
   return (
 
@@ -37,7 +30,7 @@ const PostStatus = async ({ params }: { params: Promise<{ username: string; id: 
       <ComposeReply userProfiles={replies.userProfiles} userId={userId} dataId={replies.resOnePost[0].id} />
 
       
-      {replies.res.map((reply) => (
+      {replies.res.map((reply: Reply) => (
         <Replies key={reply.id} userProfiles={replies.userProfiles} reply={reply} userId={userId} post={replies.resOnePost[0]} username={username} />
       ))}
 

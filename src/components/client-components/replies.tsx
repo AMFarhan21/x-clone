@@ -4,16 +4,23 @@ import DayJs from './DayJs'
 import DropdownButton from './DropdownButton'
 import ReplyButton from './reply-button'
 import LikeButton from './like-button'
-import { FaRetweet } from 'react-icons/fa6'
 import { IoStatsChart } from 'react-icons/io5'
-import { MdBookmarkBorder } from 'react-icons/md'
 import { FiShare } from 'react-icons/fi'
 import Repost from './rePost-button'
 import BookmarkButton from './bookmark-button'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { Post, Profiles, Reply } from '@/types'
 
-const Replies = ({reply, userId, post, username, userProfiles }) => {
+type replyProps = {
+    reply: Reply;
+    userId?: string;
+    post: Post;
+    username: string;
+    userProfiles: Profiles;
+}
+
+const Replies = ({reply, userId, post, username, userProfiles }: replyProps) => {
     const imageArray = reply.imageUrl ? JSON.parse(reply.imageUrl) : [];
     const router = useRouter()
 
@@ -51,13 +58,13 @@ const Replies = ({reply, userId, post, username, userProfiles }) => {
                         </div>
                         <div className="flex space-x-2 items-center">
                             <div>grok</div>
-                            <div> <DropdownButton username={reply.username} data={reply} userId={userId} /> </div>
+                            <div> <DropdownButton<Reply> username={reply.username} data={reply} userId={userId} /> </div>
                         </div>
                     </div>
                     <div className="pb leading-4.5 text-[15px] mt-2"> {reply.text} </div>
                     {
                         imageArray.length > 0 && (<div className="grid gap-1 roundex-2xl overflow-hidden grid-cols-2">
-                            {imageArray.slice(0, 4).map((fileUrl, index) => (
+                            {imageArray.slice(0, 4).map((fileUrl:string, index: number) => (
                                 <Image src={fileUrl}
                                     alt="Post Image"
                                     key={index}

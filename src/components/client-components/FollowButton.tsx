@@ -8,10 +8,17 @@ import { FaRegCircle, FaRegEnvelope } from "react-icons/fa"
 import { HiMiniMagnifyingGlass } from "react-icons/hi2"
 import { toast } from "sonner"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
+import { Profiles, UserLogin } from "@/types";
 
+type FollowButtonProps = {
+    targetUsername: string,
+    targetUserId: string,
+    userId?: string,
+    isFollowed: boolean,
+    userLogin: UserLogin,
+}
 
-
-const FollowButton = ({ targetUsername, targetUserId, userId, isFollowed, userLogin }) => {
+const FollowButton = ({ targetUsername, targetUserId, userId, isFollowed, userLogin }: FollowButtonProps) => {
     const router = useRouter()
     const [follow, setFollow] = useState(isFollowed)
     const [isHover, setIsHover] = useState(false)

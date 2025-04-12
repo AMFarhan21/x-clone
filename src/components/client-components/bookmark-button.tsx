@@ -4,7 +4,14 @@ import React, { useState } from 'react'
 import { MdBookmark, MdBookmarkBorder } from 'react-icons/md'
 import { toast } from 'sonner'
 
-const BookmarkButton = ({ postId, userId, replyId, isBookmarked }) => {
+type bookmarkProps = {
+    postId?: string | null,
+    userId?: string,
+    replyId?: string | null,
+    isBookmarked: boolean,
+}
+
+const BookmarkButton = ({ postId, userId, replyId, isBookmarked }: bookmarkProps) => {
 
     const [bookmarked, setBookmarked] = useState(isBookmarked)
 
