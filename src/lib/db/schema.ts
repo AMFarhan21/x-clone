@@ -1,6 +1,5 @@
-import followingPage from "@/app/[username]/following/page";
 import { relations } from "drizzle-orm";
-import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex, date, PrimaryKey } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex, date, PrimaryKey, boolean } from "drizzle-orm/pg-core";
 
 
   export const profiles = pgTable("profiles", {
@@ -15,6 +14,7 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex, date,
     email: text("email"),
     profilePicture: text("profilePicture"),
     backgroundPicture: text("backgroundPicture"),
+    verified: boolean("verified").default(false),
     created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
     updated_at: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   });
@@ -168,7 +168,7 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex, date,
   
   export const reply = pgTable("reply", {
     id: uuid("id").defaultRandom().primaryKey(),
-    text: text("text").notNull(),
+    text: text("text"),
     profilesId: uuid("profilesId").notNull().references(() => profiles.id, { onDelete: "cascade" }),
     postId: uuid("postId").references(() => post.id, { onDelete: "cascade" }),
     replyId: uuid("replyId").references(():AnyPgColumn => reply.id, { onDelete: "set null" }),

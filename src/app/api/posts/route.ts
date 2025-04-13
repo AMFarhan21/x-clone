@@ -85,14 +85,14 @@ export async function POST(req: Request) {
   if (userError) {
     return NextResponse.json("Please login first", userError);
   }
-  console.log("USER :", userData);
+  // console.log("USER :", userData);
 
   const formData = await req.formData();
   const text = formData.get("text") as string;
   const files = formData.getAll("files") as File[];
 
-  if (!text) {
-    return NextResponse.json({ success: false, message: "Type something" });
+  if (!text && !files) {
+    return NextResponse.json({ success: false, message: "Type or input something" });
   }
 
   const uploadFileUrl = await Promise.all(

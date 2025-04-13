@@ -6,6 +6,7 @@ import DayJs from './DayJs'
 import ComposeReply from './compose-reply'
 import { useState } from 'react'
 import { Post, Profiles, Reply } from '@/types'
+import Image from 'next/image'
 
 
 type postProps = {
@@ -40,7 +41,7 @@ const ReplyButton = ({ userProfiles, post, userId, dataId, postUsername, replyCo
                     <div className="flex mt-6 p-4">
                         {
                             post.profilePicture ? (
-                                <img src={post.profilePicture} className="object-cover bg-white/50 w-10 h-10 rounded-full p" />
+                                <Image alt="profilePicture" src={post.profilePicture} width={300} height={300} className="object-cover bg-white/50 w-10 h-10 rounded-full p" />
                             ) : (
                                 <div className="bg-white/50 min-w-10 h-10 rounded-full p"></div>
                             )

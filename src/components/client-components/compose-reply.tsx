@@ -10,7 +10,6 @@ import { RiCalendarScheduleLine, RiImage2Line } from 'react-icons/ri'
 import { toast } from 'sonner'
 import { Button } from '../ui/button'
 import Image from 'next/image'
-import { Post, Reply } from '@/types'
 
 type ComposeReplyProps = {
     userProfiles?: {
@@ -21,17 +20,22 @@ type ComposeReplyProps = {
     onReplySuccess?: () => void | null,
 }
 
-const ComposeReply = ({userProfiles, userId, dataId, onReplySuccess}: ComposeReplyProps) => {
+const ComposeReply = ({ userProfiles, userId, dataId, onReplySuccess }: ComposeReplyProps) => {
     const [reply, setReply] = useState("")
     const [hide, setHide] = useState(true)
+    const [previewImage, setPreviewImage] = useState<string[]>([])
 
-    
+
     // IMAGE AND VIDEO
     const [file, setFile] = useState<File[]>([])
     const fileInputRef = useRef<HTMLInputElement | null>(null)
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            setFile(Array.from(e.target.files))
+            const filesInput = Array.from(e.target.files);
+            setFile(filesInput)
+
+            const previewImageUrl = filesInput.map(file => URL.createObjectURL(file))
+            setPreviewImage(previewImageUrl)
         }
     }
 
@@ -86,7 +90,7 @@ const ComposeReply = ({userProfiles, userId, dataId, onReplySuccess}: ComposeRep
                         <div className="">
                             <textarea
                                 value={reply}
-                                onChange={(e) => {setReply(e.target.value) ; setHide(false)}}
+                                onChange={(e) => { setReply(e.target.value); setHide(false) }}
                                 onClick={() => setHide(false)}
                                 typeof="text"
                                 name="reply"
@@ -94,8 +98,23 @@ const ComposeReply = ({userProfiles, userId, dataId, onReplySuccess}: ComposeRep
                                 className="min-h-[40px] font-normal text-xl w-full text-wrap border border-transparent focus:outline-none resize-none  mt-1"
                             ></textarea>
                         </div>
+                        {
+                            previewImage.length > 0 && <div className={`grid rounded-xl overflow-hidden gap-[2px] w-full h-75
+                                ${previewImage.length === 1 && "grid-cols-1"}
+                                ${previewImage.length === 2 && "grid-cols-2"}
+                                ${previewImage.length === 3 && "grid-cols-2 grid-rows-2"}
+                                ${previewImage.length === 4 && "grid-cols-2 grid-rows-2"}
+                            `}>
+                                {
+                                    previewImage.map((image, i) => (
+                                        <Image key={i} alt='image' src={image} width={300} height={300} className={`object-cover w-full h-full ${previewImage.length === 3 && i === 0 && "row-span-2"}`} />
+                                    ))
+                                }
 
+                            </div>
+                        }
                     </div>
+
 
                 </div>
                 <div className="flex justify-between w-full items-center px-4 pb-2 pt-8 border-b border-white/20" hidden={hide}>
@@ -114,7 +133,7 @@ const ComposeReply = ({userProfiles, userId, dataId, onReplySuccess}: ComposeRep
                         <div className="text-blue-400 text-[18px] cursor-pointer"> <RiCalendarScheduleLine /> </div>
                         <div className="text-blue-400/50 text-[18px] cursor-pointer"> <IoLocationOutline /> </div>
                     </div>
-                    <Button disabled={loading} type="submit" className={`rounded-full text-black font-bold ${reply ? "bg-white/100 hover:bg-white/90" : "bg-white/40 hover:bg-white/40"} `} >
+                    <Button disabled={loading || (reply.length === 0 && previewImage.length === 0)} type="submit" className="rounded-full text-black font-bold bg-white hover:bg-white/80">
                         Reply
                     </Button>
                 </div>

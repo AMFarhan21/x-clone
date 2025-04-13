@@ -13,4 +13,5 @@ export type Post = {
   isRePosted: boolean;
   isBookmarked: boolean;
   profilePicture: any;
+  
 };

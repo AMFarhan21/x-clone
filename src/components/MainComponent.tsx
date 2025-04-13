@@ -1,25 +1,7 @@
-
-import ComposeTweet from "./client-components/compose-post";
-import { createServiceRoleClient } from "@/utils/supabase/serverSecret";
-
 import Posts from "./client-components/posts";
 import { createClient } from "@/utils/supabase/server";
-import AutoRefresh from "./client-components/AutoRefresh";
-
-
-export interface Post {
-  id: string;
-  text: string;
-  imageUrl: string;
-  profilesId: string;
-  created_at: string;
-  updated_at: string;
-  username: string;
-  full_name: string;
-  likesCount: number;
-  isLiked: boolean;
-}
-
+import ComposePost from "./client-components/compose-post";
+import { Post } from "@/types";
 
 const MainComponent = async () => {
 
@@ -44,7 +26,7 @@ const MainComponent = async () => {
       </div>
 
       {/* CREATE POST */}
-      {user && <ComposeTweet userProfiles={posts.userProfiles} />}
+      {user && <ComposePost userProfiles={posts.userProfiles} />}
 
 
       {/* LIST OF POSTS */}

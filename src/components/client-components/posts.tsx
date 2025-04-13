@@ -30,13 +30,14 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
     }
 
     const handlePostClick = () => {
-
         const select = window.getSelection();
         if (select && select.toString().length > 0) {
             return;
         }
+        router.push(`/${post.username}/status/${post.id}`)
         // const imageArray = JSON.parse(post.imageUrl);
     }
+
 
     const handlePostProfileClick = () => {
         router.push(`/${post.username}`)
@@ -48,9 +49,7 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
 
 
     return (
-        <div>
-            <Link key={post.id} href={`/${post.username}/status/${post.id}`} onClick={handlePostClick}>
-            <div className="border-b border-gray-600/50 flex pt-3 px-4 cursor-pointer hover:bg-white/2">
+            <div key={post.id} onClick={handlePostClick} className="border-b border-gray-600/50 flex pt-3 px-4 cursor-pointer hover:bg-white/2">
                 {post.profilePicture ? (
                     <Image alt="profilePicture" src={post.profilePicture} width={300} height={300} loading="eager" className="bg-white/50 w-10 h-10 rounded-full object-cover" onClick={(e) => {e.stopPropagation(); handlePostProfileClick()}} />
                 ) : (
@@ -74,7 +73,7 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
                     <div className="pb leading-4.5 text-[15px] mt-2"> {post.text} </div>
 
                     {
-                        imageArray.length > 0 && (<div className="grid gap-1 roundex-2xl overflow-hidden grid-cols-2 mt-4 rounded-2xl">
+                        imageArray.length > 0 && (<div className={`grid gap-[2px] roundex-2xl overflow-hidden ${imageArray.length === 1 ? "grid-cols-1" : "grid-cols-2"} ${imageArray.length === 2 && "grid-cols-2 h-75 w-full"} ${imageArray.length === 3 && "grid-cols-2 grid-rows-2"} mt-4 rounded-2xl`}>
                             {imageArray.slice(0, 4).map((fileUrl : string, index : number) => {
                                 const isVideo = fileUrl.endsWith(".mp4") || fileUrl.endsWith(".mov")
 
@@ -88,7 +87,7 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
                                             alt="Post Image"
                                             width={500} height={500} loading="eager"
                                             key={index}
-                                            className="w-full h-full object-cover" />
+                                            className={`w-full h-full object-cover ${imageArray.length === 3 && index === 0 && "row-span-2"}`} />
                                     )
                                 )
                             })}
@@ -116,8 +115,6 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
                     </div>
                 </div>
             </div>
-            </Link>
-        </div >
     )
 }
 
