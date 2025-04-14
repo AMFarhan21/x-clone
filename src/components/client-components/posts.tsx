@@ -96,7 +96,7 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
 
 
                     <div className="flex justify-between items-center">
-                        <div className="flex items-center text-white/50 text-[18px] " onClick={(e) => {e.stopPropagation(); e.nativeEvent.preventDefault()}}>
+                        <div className="flex items-center text-white/50 text-[18px] " onClick={(e) => {e.stopPropagation()}}>
                             <ReplyButton userProfiles={userProfiles} post={post} userId={userId} dataId={post.id} postUsername={post.username} replyCount={post.replyCount} />
                         </div>
                         <div className="flex items-center text-white/50 text-[18px]">

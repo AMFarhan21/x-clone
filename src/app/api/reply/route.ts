@@ -12,6 +12,7 @@ import {
 import { createClient } from "@/utils/supabase/server";
 import { randomUUID } from "crypto";
 import { and, desc, eq, exists, like, sql } from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
@@ -30,6 +31,8 @@ export async function GET(req: Request) {
   const idFromReply = await db.query.reply.findFirst({
     where: (reply, { eq }) => eq(reply.id, dataId),
   });
+
+  const nestedReply = alias(reply, "nestedReply")
 
   if (idFromPost) {
     const resOnePost = await db
@@ -110,6 +113,7 @@ export async function GET(req: Request) {
         replyRepostCount: sql<number>`count(distinct ${rePost.replyId})`.as(
           "replyRepostCount"
         ),
+        replyCount: sql<number>`count(distinct ${nestedReply.id})`.as('replyCount'),
         isReplyLiked: exists(
           db
             .select()
@@ -143,6 +147,7 @@ export async function GET(req: Request) {
       .leftJoin(likes, eq(likes.replyId, reply.id))
       .leftJoin(rePost, eq(rePost.replyId, reply.id))
       .leftJoin(bookmark, eq(bookmark.replyId, reply.id))
+      .leftJoin(nestedReply, eq(nestedReply.replyId, reply.id))
       .innerJoin(profiles, eq(profiles.id, reply.profilesId))
       .groupBy(
         reply.id,
@@ -184,7 +189,7 @@ export async function GET(req: Request) {
         displayName: profiles.displayName,
         profilePicture: profiles.profilePicture,
         likesCount: sql<number>`count(distinct ${likes.id})`.as("likesCount"),
-        replyCount: sql<number>`count(distinct ${reply.id})`.as("replyCount"),
+        replyCount: sql<number>`count(distinct ${nestedReply.id})`.as("replyCount"),
         rePostCount: sql<number>`count(distinct ${rePost.id})`.as(
           "rePostCount"
         ),
@@ -214,6 +219,7 @@ export async function GET(req: Request) {
       .from(reply)
       .leftJoin(likes, eq(reply.id, likes.replyId))
       .leftJoin(rePost, eq(reply.id, rePost.replyId))
+      .leftJoin(nestedReply, eq(nestedReply.replyId, reply.id))
       .where(eq(reply.id, dataId))
       .innerJoin(profiles, eq(profiles.id, reply.profilesId))
       .groupBy(
@@ -247,6 +253,7 @@ export async function GET(req: Request) {
         replyRepostCount: sql<number>`count(distinct ${rePost.replyId})`.as(
           "replyRepostCount"
         ),
+        replyCOunt: sql<number>`count(distinct ${nestedReply.id})`.as("replyCount"),
         isReplyLiked: exists(
           db
             .select()
@@ -280,6 +287,7 @@ export async function GET(req: Request) {
       .leftJoin(likes, eq(likes.replyId, reply.id))
       .leftJoin(rePost, eq(rePost.replyId, reply.id))
       .leftJoin(bookmark, eq(bookmark.replyId, reply.id))
+      .leftJoin(nestedReply, eq(nestedReply.replyId, reply.id))
       .innerJoin(profiles, eq(profiles.id, reply.profilesId))
       .groupBy(
         reply.id,

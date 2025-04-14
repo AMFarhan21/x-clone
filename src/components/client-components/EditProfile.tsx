@@ -11,7 +11,7 @@ import Image from 'next/image'
 import { Profiles } from '@/types'
 
 type editProps = {
-    userId: string,
+    userId?: string,
     userProfiles: Profiles,
 }
 
@@ -48,7 +48,7 @@ const EditProfile = ({ userId, userProfiles }: editProps) => {
         formData.append('birthMonth', birthMonth);
         formData.append('birthDay', birthDay);
         formData.append('birthYear', birthYear);
-        formData.append('userId', userId)
+        formData.append('userId', userId as string)
         if (coverImage) {
             formData.append('coverImage', coverImage)
         };
@@ -101,7 +101,7 @@ const EditProfile = ({ userId, userProfiles }: editProps) => {
                 </button>
             </DialogTrigger>
             <form id="form-editProfile" onSubmit={updateProfileDetails}>
-                <DialogOverlay className="bg-red-600" />
+                <DialogOverlay className="bg-blue-300/20" />
                 <DialogContent className='bg-black border border-transparent min-w-[600px] max-h-[650px] overflow-y-auto rounded-2xl pb-16'>
                     <DialogHeader>
                         <DialogTitle className='pl-3 py-2 font-semibold text-xl gap-x-4 flex items-center sticky top-0 bg-black/60'>

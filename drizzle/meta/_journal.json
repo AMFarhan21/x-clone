@@ -127,6 +127,13 @@
       "when": 1744449014203,
       "tag": "0017_curious_blindfold",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1744589911790,
+      "tag": "0018_long_scarlet_spider",
+      "breakpoints": true
     }
   ]
 }

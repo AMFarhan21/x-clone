@@ -10,6 +10,7 @@ import { RiCalendarScheduleLine, RiImage2Line } from 'react-icons/ri'
 import { toast } from 'sonner'
 import { Button } from '../ui/button'
 import Image from 'next/image'
+import { XIcon } from 'lucide-react'
 
 type ComposeReplyProps = {
     userProfiles?: {
@@ -107,7 +108,10 @@ const ComposeReply = ({ userProfiles, userId, dataId, onReplySuccess }: ComposeR
                             `}>
                                 {
                                     previewImage.map((image, i) => (
-                                        <Image key={i} alt='image' src={image} width={300} height={300} className={`object-cover w-full h-full ${previewImage.length === 3 && i === 0 && "row-span-2"}`} />
+                                       <div  key={i} className='relative w-full h-full'>
+                                         <Image alt='image' src={image} width={300} height={300} className={`object-cover w-full h-full ${previewImage.length === 3 && i === 0 && "row-span-2"}`} />
+                                         <button className='bg-black rounded-full text-white absolute top-2 right-2 p-1' onClick={() => setPreviewImage(prev => prev.filter((img, index) => index !== i))}><XIcon /></button>
+                                       </div>
                                     ))
                                 }
 

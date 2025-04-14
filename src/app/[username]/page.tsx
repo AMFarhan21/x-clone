@@ -4,6 +4,7 @@ import EditProfile from '@/components/client-components/EditProfile';
 import FollowButton from '@/components/client-components/FollowButton';
 import Posts from '@/components/client-components/posts';
 import Replies from '@/components/client-components/replies';
+import VerifiedButton from '@/components/client-components/verifiedButton';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { db } from '@/lib/db';
@@ -87,9 +88,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                             <div>
                                 <div className='flex space-x-4 items-center'>
                                     <div className='font-bold text-xl'> {data.getOneProfiles.displayName ? data.getOneProfiles.displayName : data.getOneProfiles.username} </div>
-                                    {
-                                        user.user?.user_metadata.username === data.getOneProfiles.username && <Button className='rounded-full border border-white/50 bg-black font-bold cursor-pointer'><RiVerifiedBadgeFill className='text-blue-400' />Get verified</Button>
-                                    }
+                                    <VerifiedButton userProfiles={user.user?.user_metadata as Profiles} data={data.getOneProfiles} />
                                 </div>
                                 <div className='text-white/50 text-base font-light'> @{data.getOneProfiles.username} </div>
                             </div>

@@ -10,7 +10,7 @@ import Image from 'next/image'
 
 
 type postProps = {
-    post: Post,
+    post: Post | Reply,
     userId?: string,
     postUsername: string,
     userProfiles: Profiles,
@@ -51,11 +51,12 @@ const ReplyButton = ({ userProfiles, post, userId, dataId, postUsername, replyCo
                                 <div className="flex items-center">
                                     <div className="font-semibold">{post.username ?? ""}</div>
                                     <div className="text-white/50 text-sm ml-1">@{post.username}</div>
-                                    <div className="text-white/50 text-sm"> <BsDot /> </div>
+                                    <div className="text-white/50 text-sm"> <BsDot /></div>
                                     <div className="text-white/50 text-sm"> <DayJs date={post.created_at} profilesCreated={null} /> </div>
                                 </div>
                             </div>
                             <div className="text-[15px] line-clamp-12"> {post.text} </div>
+                            {/* <div className="text-[15px] line-clamp-12"> {post.imageUrl} </div> */}
                             <div className="flex mt-4">
                                 <div className="mr-1 text-gray-500">Replying to</div><div className="text-blue-400">@{post.username}</div>
                             </div>

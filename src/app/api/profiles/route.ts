@@ -11,6 +11,7 @@ import {
 import { createClient } from "@/utils/supabase/server";
 import { randomUUID } from "crypto";
 import { and, desc, eq, exists, or, sql } from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
@@ -22,6 +23,8 @@ export async function GET(req: Request) {
     where: (profiles, { eq }) => eq(profiles.username, username),
   });
   const targetId = cekProfilesUsername?.id as string;
+
+  const nestedReply = alias(reply, "nestedReply")
 
   const getoneprofile = await db
     .select({
@@ -237,6 +240,7 @@ export async function GET(req: Request) {
       replyRepostCount: sql<number>`count(distinct ${rePost.replyId})`.as(
         "replyRepostCount"
       ),
+      replyCount: sql<number>`count(distinct ${nestedReply.id})`.as("replyCount"),
       isReplyLiked: exists(
         db
           .select()
@@ -272,6 +276,7 @@ export async function GET(req: Request) {
     .leftJoin(likes, eq(likes.replyId, reply.id))
     .leftJoin(rePost, eq(rePost.replyId, reply.id))
     .leftJoin(bookmark, eq(bookmark.replyId, reply.id))
+    .leftJoin(nestedReply, eq(nestedReply.replyId, reply.id))
     .where(
       or(
         eq(reply.profilesId, targetUserId),
