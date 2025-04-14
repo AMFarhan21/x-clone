@@ -62,12 +62,12 @@ const Replies = ({ reply, userId, post, username, userProfiles }: replyProps) =>
                 </div>
                 <div className="pb leading-4.5 text-[15px] mt-2"> {reply.text} </div>
                 {
-                    imageArray.length > 0 && (<div className="grid gap-1 roundex-2xl overflow-hidden grid-cols-2">
+                    imageArray.length > 0 && (<div className={`grid gap-[2px] roundex-2xl overflow-hidden ${imageArray.length === 1 ? "grid-cols-1" : "grid-cols-2"} ${imageArray.length === 2 && "grid-cols-2 h-75 w-full"} ${imageArray.length === 3 && "grid-cols-2 grid-rows-2"} mt-4 rounded-2xl`}>
                         {imageArray.slice(0, 4).map((fileUrl: string, index: number) => (
                             <Image src={fileUrl}
                                 alt="Post Image"
                                 key={index}
-                                width={300} height={300} loading="eager"
+                                width={500} height={500} loading="eager"
                                 className="w-full h-full object-cover" />
                         ))}
                     </div>)

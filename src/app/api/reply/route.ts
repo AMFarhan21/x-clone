@@ -323,7 +323,7 @@ export async function POST(req: Request) {
   const text = formData.get("text") as string;
   const files = formData.getAll("files") as File[];
 
-  if (!text) {
+  if (!text && !files) {
     return NextResponse.json({ success: false, message: "Type something" });
   }
 

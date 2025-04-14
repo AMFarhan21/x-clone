@@ -65,6 +65,8 @@ const ComposeReply = ({ userProfiles, userId, dataId, onReplySuccess }: ComposeR
                 setReply("")
                 setLoading(false)
                 onReplySuccess?.()
+                setPreviewImage([])
+                setFile([])
             } else {
                 toast.error(data.message)
                 console.log(data.message)
@@ -110,7 +112,11 @@ const ComposeReply = ({ userProfiles, userId, dataId, onReplySuccess }: ComposeR
                                     previewImage.map((image, i) => (
                                        <div  key={i} className='relative w-full h-full'>
                                          <Image alt='image' src={image} width={300} height={300} className={`object-cover w-full h-full ${previewImage.length === 3 && i === 0 && "row-span-2"}`} />
-                                         <button className='bg-black rounded-full text-white absolute top-2 right-2 p-1' onClick={() => setPreviewImage(prev => prev.filter((img, index) => index !== i))}><XIcon /></button>
+                                         <button className='bg-black rounded-full text-white absolute top-2 right-2 p-1' onClick={(e) => {
+                                            e.preventDefault()
+                                            setPreviewImage(prev => prev.filter((img, index) => index !== i));
+                                            setFile(prev => prev.filter((img, index) => index !== i));
+                                         }}><XIcon /></button>
                                        </div>
                                     ))
                                 }
