@@ -134,6 +134,13 @@
       "when": 1744589911790,
       "tag": "0018_long_scarlet_spider",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1744621974863,
+      "tag": "0019_broken_mesmero",
+      "breakpoints": true
     }
   ]
 }
