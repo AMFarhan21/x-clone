@@ -53,6 +53,7 @@ const LeftSidebar = async () => {
   const { data, error } = await supabase.auth.getUser();
   if (error) {
     console.log(error)
+    return;
   }
 
   const username = data.user?.user_metadata.username

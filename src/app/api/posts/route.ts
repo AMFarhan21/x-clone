@@ -1,5 +1,3 @@
-"use server";
-
 import { db } from "@/lib/db";
 import { bookmark, likes, post, profiles, reply, rePost } from "@/lib/db/schema";
 import { createClient } from "@/utils/supabase/server";
@@ -11,6 +9,8 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const user = searchParams.get("user") || null;
+
+
     const userProfiles = await db.query.profiles.findFirst({
       where: (profiles, {eq}) => eq(profiles.id, user as string)
     })
@@ -67,10 +67,10 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ success: true, result, user, userProfiles });
   } catch (error) {
-    console.log("ERROR server-components/fetch-data -> getPosts: ", error);
+    console.log("GET post api ERROR: ", error);
     return NextResponse.json({
       success: false,
-      message: "ERROR server-components/fetch-data -> getPosts",
+      message: "GET post api ERROR",
       error,
     });
   }
@@ -120,9 +120,6 @@ export async function POST(req: Request) {
       })
       .returning();
 
-    // console.log("revalidating the path")
-    // res.revalidate("/")
-    // console.log("revalidating triggered")
     return NextResponse.json({ success: true, res });
   } catch (error) {
     console.log("ERROR INSERTING POST: ", error);
