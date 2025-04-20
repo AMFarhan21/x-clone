@@ -74,6 +74,6 @@ export async function signOut() {
     console.log("ERROR TO LOG/SIGN OUT", error);
   }
 
-  revalidatePath("/")
+  revalidatePath("/", 'layout')
   redirect("/")
 }

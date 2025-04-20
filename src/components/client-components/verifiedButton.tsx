@@ -8,19 +8,245 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogOverlay, D
 import { AlertDialogHeader } from '../ui/alert-dialog'
 import { XIcon } from 'lucide-react'
 import { IoCheckmark, IoCheckmarkCircleSharp, IoCheckmarkSharp } from 'react-icons/io5'
-import { GoChecklist } from 'react-icons/go'
-import { FaRegCircleCheck } from 'react-icons/fa6'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
+import { Input } from '../ui/input'
+import { Label } from '../ui/label'
+import { features } from 'process'
 
 type verifiedButtonProps = {
     userProfiles: Profiles,
     data: Profiles,
 }
 
+const PLANS = {
+    annual: {
+        premium: {
+            name: "Premium",
+            price: 'IDR 104,167',
+            total: 'IDR 1,250,000',
+            billing: '/ month',
+            discount: 'SAVE 13%',
+            features: [
+                {
+                    category: 'Everything in Basic, and',
+                    items: [
+                        'Half Ads for You and Following',
+                        'Larger reply boost',
+                        'Get paid to post',
+                        'Checkmark',
+                        'Grok with increased limits',
+                        'X pro, Analytics, Media Studio',
+                        'Creator Subscription'
+                    ]
+                }
+            ]
+        },
+        premiumPlus: {
+            name: 'Premium+',
+            price: 'IDR 538,333',
+            total: 'IDR 6,460,000',
+            billing: '/ month',
+            discount: 'SAVE 17%',
+            features: [
+                {
+                    category: "Everything in Basic, and",
+                    items: [
+                        'Fully ad-free',
+                        'Largest reply boost',
+                        'Write Articles',
+                        'Radar'
+                    ]
+                },
+                {
+                    category: "Everything in Premium, and",
+                    items: [
+                        'Highest usage limits',
+                        'Unlock DeepSearch & Think',
+                        'Early access to new features'
+                    ]
+                }
+            ]
+        }
+    },
+    monthly: {
+        premium: {
+            name: "Premium",
+            price: "IDR 120,000",
+            biling: '/ month',
+            features: [
+                {
+                    category: 'Everything in Basic, and',
+                    items: [
+                        'Half Ads for You and Following',
+                        'Larger reply boost',
+                        'Get paid to post',
+                        'Checkmark',
+                        'Grok with increased limits',
+                        'X pro, Analytics, Media Studio',
+                        'Creator Subscription'
+                    ]
+                }
+            ]
+        },
+        premiumPlus: {
+            name: "Premium+",
+            price: 'IDR 654,000',
+            billing: '/ month',
+            features: [
+                {
+                    category: "Everything in Basic, and",
+                    items: [
+                        'Fully ad-free',
+                        'Largest reply boost',
+                        'Write Articles',
+                        'Radar'
+                    ]
+                },
+                {
+                    category: "Everything in Premium, and",
+                    items: [
+                        'Highest usage limits',
+                        'Unlock DeepSearch & Think',
+                        'Early access to new features'
+                    ]
+                }
+            ]
+        }
+    }
+}
+
+
+const FEATURE_COMPARISON = [
+    {
+        category: 'Enhanced Experience',
+        items: [
+            { name: 'Ads', premium: 'Half in For You & Following', premiumPlus: 'Fully ad-free' },
+            { name: 'Reply boost', premium: 'Larger', premiumPlus: 'Largest' },
+            { name: 'Radar', premium: '', premiumPlus: <IoCheckmark /> },
+            { name: 'Edit post', premium: <IoCheckmark />, premiumPlus: <IoCheckmark /> },
+            { name: 'Longer posts', premium: <IoCheckmark />, premiumPlus: <IoCheckmark /> },
+            { name: 'Background video playback', premium: <IoCheckmark />, premiumPlus: <IoCheckmark /> },
+            { name: 'Download videos', premium: <IoCheckmark />, premiumPlus: <IoCheckmark /> }
+        ]
+    },
+    {
+        category: 'Grok AI',
+        items: [
+            { name: 'Use limits', premium: 'Higher', premiumPlus: 'Highest' },
+            { name: 'Unlock DeepSearch & Think', premium: '', premiumPlus: <IoCheckmark /> },
+            { name: 'Early access to new features', premium: '', premiumPlus: <IoCheckmark /> }
+        ]
+    },
+    {
+        category: 'Creator Hub',
+        items: [
+            { name: 'Write Articles', premium: '', premiumPlus: <IoCheckmark /> },
+            { name: 'Get paid to post', premium: <IoCheckmark />, premiumPlus: <IoCheckmark /> },
+            { name: 'X Pro', premium: <IoCheckmark />, premiumPlus: <IoCheckmark /> },
+            { name: 'Media Studio', premium: <IoCheckmark />, premiumPlus: <IoCheckmark /> },
+            { name: 'Analytics', premium: <IoCheckmark />, premiumPlus: <IoCheckmark /> }
+        ]
+    },
+    {
+        category: 'Verification & Security',
+        items: [
+            { name: 'Checkmark', premium: <IoCheckmark />, premiumPlus: <IoCheckmark /> },
+            { name: 'Optional ID verification', premium: <IoCheckmark />, premiumPlus: <IoCheckmark /> },
+            { name: 'Encrypted direct messages', premium: <IoCheckmark />, premiumPlus: <IoCheckmark /> }
+        ]
+    },
+    {
+        category: 'Customization',
+        items: [
+            { name: 'Highlights tab', premium: <IoCheckmark />, premiumPlus: <IoCheckmark /> },
+            { name: 'Bookmark folders', premium: <IoCheckmark />, premiumPlus: <IoCheckmark /> },
+            { name: 'App icons', premium: <IoCheckmark />, premiumPlus: <IoCheckmark /> },
+            { name: 'Customize navigation', premium: <IoCheckmark />, premiumPlus: <IoCheckmark /> }
+        ]
+    }
+]
+
+
+const PlanCard = ({ plan, isSelected, onClick }: { plan: any, isSelected: boolean, onClick: () => void }) => {
+    return (
+        <div onClick={onClick} className={`bg-slate-400/23 w-85 h-110 ${isSelected ? "border-2 border-blue-400" : ""} rounded-2xl m-auto p-6 text-white cursor-pointer`}>
+            <div className='flex justify-between items-center'>
+                {
+                    isSelected ? (
+                        <IoCheckmarkSharp className='text-xl bg-blue-400 rounded-full p-1' />
+                    ) : (
+                        <div className='w-5 h-5 rounded-full bg-black border'></div>
+                    )
+                }
+            </div>
+            <div className='flex justify-between mt-2'>
+                <div className='text-4xl front-bold mt-2'>
+                    {plan.price}<span className='text-lg font-light'>{plan.billing}</span>
+                </div>
+                {
+                    plan.discount && (
+                        <div className='bg-green-800/10 text-green-200 rounded-full px-2 text-xs h-4 font-bold'>
+                            {plan.discount}
+                        </div>
+                    )
+                }
+            </div>
+            {
+                plan.features.map((featuresGroup: any, index: number) => (
+                    <ul key={index} className='space-y-1 mt-4'>
+                        <div className='font-semibold text-base'>{featuresGroup.category}</div>
+                        {featuresGroup.items.map((item: string, itemIndex: number) => (
+                            <li key={itemIndex} className='flex items-center text-base text-white/80'>
+                                <IoCheckmark /><span className='ml-2'>{item}</span>
+                            </li>
+                        ))}
+                    </ul>
+                ))
+            }
+        </div>
+    )
+}
+
+
+const FeatureComparisonTable = () => {
+    return (
+        <div className='m-auto w-[1000px] text-white text-lg mt-[80px]'>
+            <div className='text-2xl font-bold'>Compare tiers & features</div>
+            {
+                FEATURE_COMPARISON.map((section, sectionIndex) => (
+                    <div key={sectionIndex}>
+                        <div className='grid grid-cols-3 font-semibold mt-8 border-b-1 border-white/15 py-1.5'>
+                            <div> {section.category} </div>
+                            <div> Premium </div>
+                            <div> Premium+ </div>
+                        </div>
+                        {
+                            section.items.map((item, itemIndex) => (
+                                <div key={itemIndex} className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
+                                    <div className='text-white/85'> {item.name} </div>
+                                    <div> {item.premium} </div>
+                                    <div> {item.premiumPlus} </div>
+                                </div>
+                            ))
+                        }
+                    </div>
+                ))
+            }
+        </div>
+    )
+}
+
+
+
 const VerifiedButton = ({ userProfiles, data }: verifiedButtonProps) => {
 
-    const [isPressed1, setIsPressed1] = useState(true)
-    const [isPressed2, setIsPressed2] = useState(false)
-    
+    const [selectedPlan, setSelectedPlan] = useState<'premium' | 'premiumPlus'>('premium')
+    const [billingCycle, setBillingCycle] = useState<'annual' | 'monthly'>('annual')
+
+    const plans = PLANS[billingCycle];
+    const selectedPlanData = plans[selectedPlan]
+
 
     return (
 
@@ -39,233 +265,53 @@ const VerifiedButton = ({ userProfiles, data }: verifiedButtonProps) => {
                         Enjoy an enhanced experience, exclusive creator tools, top-tier verification and security. <br></br>
                         (For organizations, <span className='font-bold text-white border-b-3 border-white'>sign up here</span>)
                     </DialogDescription>
-                    <DialogDescription>
-                        <div className='w-55 h-8 bg-slate-400/25 items-center m-auto rounded-full p-[2px] mb-6 mt-4'>
-                            <div className='bg-black w-35 h-7 items-center rounded-full text-white px-2 pt-[3px]'>
-                                Annual <span className='font-bold bg-green-400/20 text-green-200 rounded-xl w-15 text-xs h-4 px-2'> Best Value</span>
-                            </div>
-                        </div>
-                        <div className='flex w-178 m-auto'>
-                            <div onClick={() => { setIsPressed1(true); setIsPressed2(false) }} className={`bg-slate-400/23 w-85 h-110 ${isPressed1 && "border-2 border-blue-400"} rounded-2xl m-auto p-6 text-white`}>
-                                <div className='flex justify-between items-center'>
-                                    <div className='text-xl font-semibold'>Premium</div>
-                                    {
-                                        isPressed1 ? (
-                                            <div> <IoCheckmarkSharp className='text-xl bg-blue-400 rounded-full p-1' /> </div>
-                                        ) : (
-                                            <div className='w-5 h-5 rounded-full bg-black border'> </div>
-                                        )
-                                    }
-                                </div>
-                                <div className='text-4xl font-bold mt-2'>IDR 104,167<span className='text-lg font-light'>  / month</span></div>
-                                <div className='flex justify-between mt-2'>
-                                    <div className='w-40 text-base leading-5 text-white/60'>IDR 1,250,000 billed anually</div>
-                                    <div className='bg-green-800/10 text-green-200 rounded-full px-2 text-xs h-4 font-bold'>SAVE 13%</div>
-                                </div>
 
-                                <ul className='space-y-1 mt-4 '>
-                                    <div className='font-semibold text-base'>Everything in Basic, and</div>
-                                    <li className='flex items-center text-base text-white/80'><IoCheckmark /> <span className='ml-2'>  Half Ads for You and Following</span></li>
-                                    <li className='flex items-center text-base text-white/80'><IoCheckmark /> <span className='ml-2'>  Larger reply boost</span></li>
-                                    <li className='flex items-center text-base text-white/80'><IoCheckmark /> <span className='ml-2'>  Get paid to post</span></li>
-                                    <li className='flex items-center text-base text-white/80'><IoCheckmark /> <span className='ml-2'>  Checkmark</span></li>
-                                    <li className='flex items-center text-base text-white/80'><IoCheckmark /> <span className='ml-2'>  Grok with increased limits</span></li>
-                                    <li className='flex items-center text-base text-white/80'><IoCheckmark /> <span className='ml-2'>  X pro, Analytics, Media Studio</span></li>
-                                    <li className='flex items-center text-base text-white/80'><IoCheckmark /> <span className='ml-2'>  Creator Subscription</span></li>
-                                </ul>
-                            </div>
-                            <div onClick={() => { setIsPressed2(true); setIsPressed1(false) }} className={`bg-slate-400/23 w-85 h-110 ${isPressed2 && "border-2 border-blue-400"} rounded-2xl m-auto p-6 text-white`}>
-                                <div className='flex justify-between items-center'>
-                                    <div className='text-xl font-semibold'>Premium+</div>
-                                    {
-                                        isPressed2 ? (
-                                            <div> <IoCheckmarkSharp className='text-xl bg-blue-400 rounded-full p-1' /> </div>
-                                        ) : (
-                                            <div className='w-5 h-5 rounded-full bg-black border'> </div>
-                                        )
-                                    }
-                                </div>
-                                <div className='text-4xl font-bold mt-2'>IDR 538,333<span className='text-lg font-light'>  / month</span></div>
-                                <div className='flex justify-between mt-2'>
-                                    <div className='w-40 text-base leading-5 text-white/60'>IDR 6,460,000 billed anually</div>
-                                    <div className='bg-green-800/10 text-green-200 rounded-full px-2 text-xs h-4 font-bold'>SAVE 17%</div>
-                                </div>
+                    <div>
+                        <Tabs defaultValue="annual" className="w-[712px] m-auto">
+                            <TabsList className="grid w-75 py-2 m-auto rounded-full grid-cols-2 bg-white/15">
+                                <TabsTrigger value="annual" className='cursor-pointer' onClick={() => setBillingCycle('annual')}>
+                                    Annual <span className='font-bold bg-green-400/20 text-green-200 rounded-xl w-15 text-xs h-4 px-2'> Best Value</span>
+                                </TabsTrigger>
+                                <TabsTrigger value="monthly" className='cursor-pointer' onClick={() => setBillingCycle('monthly')}>
+                                    Monthly
+                                </TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="annual" className='flex'>
 
-                                <ul className='space-y-1 mt-4'>
-                                    <div className='font-semibold  text-base'>Everything in Basic, and</div>
-                                    <li className='flex items-center text-base text-white/80'><IoCheckmark /> <span className='ml-2'>  Fully ad-free</span></li>
-                                    <li className='flex items-center text-base text-white/80'><IoCheckmark /> <span className='ml-2'>  Largest reply boost</span></li>
-                                    <li className='flex items-center text-base text-white/80'><IoCheckmark /> <span className='ml-2'>  Write Articles</span></li>
-                                    <li className='flex items-center text-base text-white/80'><IoCheckmark /> <span className='ml-2'>  Radar</span></li>
-                                    <div className='font-semibold text-base'>Everything in Basic, and</div>
-                                    <li className='flex items-center text-base text-white/80'><IoCheckmark /> <span className='ml-2'>  Highest usage limits</span></li>
-                                    <li className='flex items-center text-base text-white/80'><IoCheckmark /> <span className='ml-2'>  Unlock DeepSearch & Think</span></li>
-                                    <li className='flex items-center text-base text-white/80'><IoCheckmark /> <span className='ml-2'>  Early access to new features</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </DialogDescription>
-                    <DialogDescription className='m-auto w-[1000px] text-white text-lg mt-[80px]'>
-                        <div className='text-2xl font-bold'>Compare tiers & features</div>
+                                <PlanCard plan={PLANS.annual.premium} isSelected={selectedPlan === 'premium' && billingCycle === 'annual'} onClick={() => setSelectedPlan('premium')} />
+                                <PlanCard plan={PLANS.annual.premiumPlus} isSelected={selectedPlan === 'premiumPlus' && billingCycle === 'annual'} onClick={() => setSelectedPlan('premiumPlus')} />
 
-                        {/* Enhanced Experience */}
-                        <div className='grid grid-cols-3 font-semibold mt-8 border-b-1 border-white/15 py-1.5'>
-                            <div>Enhanced Experience</div>
-                            <div>Premium</div>
-                            <div>Premium+</div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Ads</div>
-                            <div className=''>Half in For You & Following</div>
-                            <div className=''>Fully ad-free</div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Reply boost</div>
-                            <div className=''>Larger</div>
-                            <div className=''>Largest</div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Radar</div>
-                            <div className=''></div>
-                            <div className=''><IoCheckmark /></div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Edit post</div>
-                            <div className=''><IoCheckmark /></div>
-                            <div className=''><IoCheckmark /></div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Longer posts</div>
-                            <div className=''><IoCheckmark /></div>
-                            <div className=''><IoCheckmark /></div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Background video playback</div>
-                            <div className=''><IoCheckmark /></div>
-                            <div className=''><IoCheckmark /></div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Downlaod videos</div>
-                            <div className=''><IoCheckmark /></div>
-                            <div className=''><IoCheckmark /></div>
-                        </div>
+                            </TabsContent>
+                            <TabsContent value="monthly" className='flex' >
 
-                        {/* Grok Ai */}
-                        <div className='grid grid-cols-3 font-semibold mt-8 border-b-1 border-white/15 py-1.5'>
-                            <div>Grok AI</div>
-                            <div>Premium</div>
-                            <div>Premium+</div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Use limits</div>
-                            <div className=''>Higher</div>
-                            <div className=''>Highest</div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Unlock DeepSearch & Think</div>
-                            <div className=''></div>
-                            <div className=''><IoCheckmark /></div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Early access to new features</div>
-                            <div className=''></div>
-                            <div className=''><IoCheckmark /></div>
-                        </div>
+                                <PlanCard plan={PLANS.monthly.premium} isSelected={selectedPlan === 'premium' && billingCycle === 'monthly'} onClick={() => setSelectedPlan('premium')} />
+                                <PlanCard plan={PLANS.monthly.premiumPlus} isSelected={selectedPlan === 'premiumPlus' && billingCycle === 'monthly'} onClick={() => setSelectedPlan('premiumPlus')} />
 
-                        {/* Creator Hub */}
-                        <div className='grid grid-cols-3 font-semibold mt-8 border-b-1 border-white/15 py-1.5'>
-                            <div>Creator Hub</div>
-                            <div>Premium</div>
-                            <div>Premium+</div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Write Articles</div>
-                            <div className=''></div>
-                            <div className=''><IoCheckmark /></div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Get paid to post</div>
-                            <div className=''><IoCheckmark /></div>
-                            <div className=''><IoCheckmark /></div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>X Pro</div>
-                            <div className=''><IoCheckmark /></div>
-                            <div className=''><IoCheckmark /></div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Media Studio</div>
-                            <div className=''><IoCheckmark /></div>
-                            <div className=''><IoCheckmark /></div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Analytics</div>
-                            <div className=''><IoCheckmark /></div>
-                            <div className=''><IoCheckmark /></div>
-                        </div>
+                            </TabsContent>
+                        </Tabs>
+                    </div>
 
-                        {/* Verification & Security */}
-                        <div className='grid grid-cols-3 font-semibold mt-8 border-b-1 border-white/15 py-1.5'>
-                            <div>Verification & Security</div>
-                            <div>Premium</div>
-                            <div>Premium+</div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Checkmark</div>
-                            <div className=''><IoCheckmark /></div>
-                            <div className=''><IoCheckmark /></div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Optional ID verification</div>
-                            <div className=''><IoCheckmark /></div>
-                            <div className=''><IoCheckmark /></div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Encrypted direct messages</div>
-                            <div className=''><IoCheckmark /></div>
-                            <div className=''><IoCheckmark /></div>
-                        </div>
-
-
-                        {/* Customization */}
-                        <div className='grid grid-cols-3 font-semibold mt-8 border-b-1 border-white/15 py-1.5'>
-                            <div>Customization</div>
-                            <div>Premium</div>
-                            <div>Premium+</div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Highlights tab</div>
-                            <div className=''><IoCheckmark /></div>
-                            <div className=''><IoCheckmark /></div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Bookmark folders</div>
-                            <div className=''><IoCheckmark /></div>
-                            <div className=''><IoCheckmark /></div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>App icons</div>
-                            <div className=''><IoCheckmark /></div>
-                            <div className=''><IoCheckmark /></div>
-                        </div>
-                        <div className='grid grid-cols-3 text-white border-b-1 border-white/15 py-1.5 font-light text-base'>
-                            <div className='text-white/85'>Customize navigation</div>
-                            <div className=''><IoCheckmark /></div>
-                            <div className=''><IoCheckmark /></div>
-                        </div>
-
-                    </DialogDescription>
-
+                    <FeatureComparisonTable />
                 </AlertDialogHeader>
                 <AlertDialogHeader className='bg-black border-t-1 border-white/30 sticky bottom-0 min-w-full h-40'>
                     <div className='flex m-auto w-196'>
                         <div className='w-235 mt-3'>
-                            <div className='text-xl font-semibold'>Premium{isPressed2 && "+"} </div>
-                            <div className='text-4xl font-bold mt-3'> {isPressed1 ? "IDR 1,250,000" : "IDR 6,460,000"} <span className='text-lg font-light'> / year</span></div>
-                            <div className='text-white/80'>Billed annually</div>
+                            <div className='text-xl font-semibold'> {selectedPlanData.name} </div>
+                            <div className='text-4xl font-bold mt-3'>
+                                <span>IDR </span>
+                                {
+                                    selectedPlan === 'premium' ? (
+                                        billingCycle === 'annual' ? "1.250,000" : "120,000"
+                                    ) : (
+                                        billingCycle === 'annual' ? "6,460,000" : "654,000"
+                                    )
+                                }
+
+                                <span className='text-lg font-light'> /  {billingCycle === "annual" ? "year" : "month"} </span></div>
+                            <div className='text-white/80'>Billed  {billingCycle === "annual" ? "annually" : "monthly"} </div>
                         </div>
                         <div>
-                            <Button className='bg-blue-400 text-white w-full font-bold rounded-full mt-4 py-4.5'>Subscribe & Pay</Button>
+                            <Button className='bg-blue-400 text-white w-full font-bold rounded-full mt-4 py-4.5 hover:bg-blue-400/80 active:bg-blue-400/80'>Subscribe & Pay</Button>
                             <div className='border border-white/30 text-[13px] text-white/80 p-2 my-3 rounded-lg leading-4'>
                                 By subscribing, you agree to our <span className='border-b font-bold'>Purchaser Terms of Service</span>. Subscriptions auto-renew until canceled. <span className='border-b font-bold'>Cancel anytime</span>,  at least 24 hours prior to renewal to avoid additional charges. Manage your subscription through the platform you subscribed on.
                             </div>

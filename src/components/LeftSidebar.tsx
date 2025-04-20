@@ -93,10 +93,10 @@ const LeftSidebar = async () => {
         <DropdownMenuTrigger asChild>
           <button className="flex items-center justify-between space-x-4 bg-transparent text-black rounded-full p-4 font-bold hover:bg-white/10 transition duration-200 w-full  pr-3">
             <div className="flex items-center space-x-2">
-              <Image src={userProfiles?.profilePicture} alt='profilePicture' width={300} height={300} className="object-cover rounded-full bg-white w-9 h-9" />
+              <Image src={userProfiles?.profilePicture as string} alt='profilePicture' width={300} height={300} className="object-cover rounded-full bg-white w-10 h-10" />
               <div className="text-left">
-                <div className="text-sm text-white font-semibold">Club of coders</div>
-                <div className="text-sm text-white/60 font-normal">@clubofcoders</div>
+                <div className="text-sm text-white font-semibold"> {userProfiles?.displayName ? userProfiles.displayName : userProfiles?.username} </div>
+                <div className="text-sm text-white/60 font-normal">@{userProfiles?.username}</div>
               </div>
             </div>
             <div className="text-white">
