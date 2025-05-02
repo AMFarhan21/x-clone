@@ -8,20 +8,15 @@ const MainComponent = async () => {
 
   const supabase = await createClient();
   const { data: userData, error } = await supabase.auth.getUser();
-  const user = userData.user?.id
+  const userId = userData.user?.id
+  // console.log(userData.user)
 
-  console.log("MAIN COMPONENT ERRRRROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOR:", error)
+  // console.log("MAIN COMPONENT ERRRRROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOR:", error)
 
 
-  const response = await fetch(`http://localhost:3000/api/posts?user=${user}`)
-  if(!response.ok) return <div>TOLOL</div>
+  const response = await fetch(`http://localhost:3000/api/posts?userId=${userId}`)
   const posts = await response.json()
-  // console.log(posts.userProfiles)
 
-
-
-  // console.log(posts)
-  
   return (
     <main className="w-full xl:max-w-[48%] h-full min-h-screen flex-col border-l border-r border-gray-600/50">
       <AuthModel />
@@ -31,14 +26,14 @@ const MainComponent = async () => {
       </div>
 
       {/* CREATE POST */}
-      {user && <ComposePost userProfiles={posts.userProfiles} />}
+      {userId && <ComposePost userProfiles={posts.userProfiles} />}
 
 
       {/* LIST OF POSTS */}
       <div className="flex flex-col">
         {
-          user ? posts.result.map((post: Post) => (
-            <Posts key={post.id} post={post} userId={user || ""} userProfiles={posts.userProfiles} />
+          userId ? posts.result.map((post: Post) => (
+            <Posts key={post.id} post={post} userId={userId || ""} userProfiles={posts.userProfiles} />
           )) : <div></div>
         }
       </div>

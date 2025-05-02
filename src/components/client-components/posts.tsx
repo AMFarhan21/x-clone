@@ -11,7 +11,6 @@ import DropdownButton from "./DropdownButton";
 import Repost from "./rePost-button";
 import BookmarkButton from "./bookmark-button";
 import Image from "next/image";
-import Link from "next/link";
 import { Post, Profiles } from "@/types";
 
 type postProps = {

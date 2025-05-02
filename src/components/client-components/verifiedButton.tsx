@@ -268,11 +268,11 @@ const VerifiedButton = ({ userProfiles, data }: verifiedButtonProps) => {
 
                     <div>
                         <Tabs defaultValue="annual" className="w-[712px] m-auto">
-                            <TabsList className="grid w-75 py-2 m-auto rounded-full grid-cols-2 bg-white/15">
-                                <TabsTrigger value="annual" className='cursor-pointer' onClick={() => setBillingCycle('annual')}>
-                                    Annual <span className='font-bold bg-green-400/20 text-green-200 rounded-xl w-15 text-xs h-4 px-2'> Best Value</span>
+                            <TabsList className="flex w-60 p-[2px] m-auto rounded-full bg-slate-400/20 justify-between">
+                                <TabsTrigger value="annual" className={`w-40 cursor-pointer ${billingCycle === 'annual' && 'bg-black'} rounded-full m-auto px-2 py-1`} onClick={() => setBillingCycle('annual')}>
+                                    Annual <span className='font-bold bg-green-400/20 text-green-200 rounded-xl w-20 text-xs h-4 px-2'> Best Value</span>
                                 </TabsTrigger>
-                                <TabsTrigger value="monthly" className='cursor-pointer' onClick={() => setBillingCycle('monthly')}>
+                                <TabsTrigger value="monthly" className={`w-20 cursor-pointer ${billingCycle === 'monthly' && 'bg-black'} rounded-full m-auto px-2 py-1`} onClick={() => setBillingCycle('monthly')}>
                                     Monthly
                                 </TabsTrigger>
                             </TabsList>

@@ -4,6 +4,8 @@ type userMetadata = {
     phone_verified: boolean,
     sub: string
     username: string
+    name: string,
+    picture: string
   }
 
 type identities = {

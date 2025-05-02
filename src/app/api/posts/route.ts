@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    const user = searchParams.get("user") || null;
+    const user = searchParams.get("userId") || null;
 
 
     const userProfiles = await db.query.profiles.findFirst({
@@ -67,7 +67,10 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ success: true, result, user, userProfiles });
   } catch (error) {
-    console.log("GET post api ERROR: ", error);
+    console.log(
+      "GET post api ERROR: "
+      , error
+    );
     return NextResponse.json({
       success: false,
       message: "GET post api ERROR",
