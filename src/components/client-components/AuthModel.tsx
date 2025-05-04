@@ -35,7 +35,7 @@ const AuthModel = () => {
             } else {
                 updateGoogleSignUp(user as UserLogin)
 
-                
+
                 setIsOpen(false)
                 toast.success("You have logged in")
                 router.refresh()
@@ -120,6 +120,7 @@ const AuthModel = () => {
                             toast.success(data.message)
                             router.refresh()
                             router.push("/")
+                            // window.location.href = "/"
                             // console.log(data.signedUp)
 
 
@@ -129,7 +130,7 @@ const AuthModel = () => {
                     }}>
                         <Input type='text' onChange={(e) => {
                             let value = e.target.value
-                            if(value.length > 24) {
+                            if (value.length > 24) {
                                 setError("Your username must be less than 24 characters")
                                 return
                             }
@@ -159,7 +160,10 @@ const AuthModel = () => {
                     <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj5Z6h2su_P2Dpy48AmTVcigVGKB5bsYuMZQ&s' className='w-8 mx-auto' />
                     <div className='font-bold text-3xl mb-4'>Sign in to X</div>
                     <form className='space-y-6'>
-                        <Button className='rounded-full py-5 bg-white text-black w-full border-transparent hover:bg-white/90'> <FcGoogle /> Sign up with Google</Button>
+                        <Button onClick={signUpWithGoogle} className='rounded-full py-5 font-normal bg-white text-black w-full border border-transparent hover:bg-white/90'>
+                            <FcGoogle />
+                            Sign up with Google
+                        </Button>
                         <Button className='rounded-full py-5 bg-white text-black w-full hover:bg-white/90'> <FaApple /> Sign up with Apple</Button>
                         <div className='flex items-center'><hr className='border-gray-600 w-full' /> <span className='px-4 text-[18px]'> or </span> <hr className='border-gray-600 w-full' /></div>
                         <Input type='email' onChange={(e) => setEmail(e.target.value)} name='email' placeholder="Email" className='my-4 py-7 placeholder:text-[17px] border border-white/40' />

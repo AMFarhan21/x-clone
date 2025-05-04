@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 import AuthModel from "@/components/client-components/AuthModel";
 import LeftSidebar from "@/components/LeftSidebar";
 import RightSection from "@/components/RightSection";
+import AuthListener from "@/components/client-components/AuthListener";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
 
           <div className="max-w-screen-xl w-full h-full flex relative">
             <AuthModel />
+            <AuthListener />
             <LeftSidebar />
 
             <Toaster />

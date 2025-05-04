@@ -26,7 +26,8 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
     const supabase = await createClient();
     const { data: user, error } = await supabase.auth.getUser();
     if (error) { console.log(error) }
-    console.log(user.user?.identities)
+    // console.log(user.user)
+
 
     const userId = user.user?.id
 
@@ -68,7 +69,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
 
 
                             {
-                                user.user?.user_metadata.username === data.getOneProfiles.username ? (
+                                user.user?.id === data.getOneProfiles.id ? (
                                     <EditProfile userId={userId} userProfiles={data.userProfiles[0]} />
                                 ) : (
                                     <div className='flex ml-auto mr-4 mt-3 gap-x-2'>

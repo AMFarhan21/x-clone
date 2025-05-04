@@ -9,11 +9,12 @@ import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
 import { BsThreeDots } from "react-icons/bs";
 import { createClient } from '@/utils/supabase/server';
-import { signOut } from '@/lib/action';
 import { RiQuillPenAiLine } from 'react-icons/ri';
 import { db } from '@/lib/db';
 import Image from 'next/image';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger, } from './ui/dropdown-menu';
+import LogoutButton from './client-components/LogoutButton';
+import { Profiles } from '@/types';
 
 const NAVIGATION_ITEMS = [
   {
@@ -109,9 +110,7 @@ const LeftSidebar = async () => {
               Add an existing account
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:bg-white/10 rounded-xl cursor-pointer px-4 py-3 mb-1 text-sm">
-              <form>
-                <button formAction={signOut}>Log out <span>@{userProfiles?.username}</span></button>
-              </form>
+              <LogoutButton userProfiles={userProfiles} />
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
