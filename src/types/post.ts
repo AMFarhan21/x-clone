@@ -12,6 +12,6 @@ export type Post = {
   isLiked: boolean;
   isRePosted: boolean;
   isBookmarked: boolean;
-  profilePicture: any;
+  profilePicture: string;
   
 };

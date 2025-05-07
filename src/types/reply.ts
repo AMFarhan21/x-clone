@@ -13,6 +13,6 @@ export type Reply = {
   isReplyLiked: boolean;
   isReplyReposted: boolean;
   isReplyBookmarked: boolean;
-  profilePicture: any;
+  profilePicture: string;
   postId: string;
 };
