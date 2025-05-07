@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation"
 import React from "react"
 import { useState } from "react"
 import { toast } from "sonner"
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogOverlay, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
 import { UserLogin } from "@/types";
 
 type FollowButtonProps = {
@@ -11,11 +11,11 @@ type FollowButtonProps = {
     targetUserId: string,
     userId?: string,
     isFollowed: boolean,
-    userLogin: UserLogin,
+    userLogin?: UserLogin,
 }
 
-const FollowButton = ({ targetUsername, targetUserId, userId, isFollowed, userLogin }: FollowButtonProps) => {
-    const router = useRouter()
+const FollowButton = ({ targetUsername, targetUserId, userId, isFollowed }: FollowButtonProps) => {
+    // const router = useRouter()
     const [follow, setFollow] = useState(isFollowed)
     const [isHover, setIsHover] = useState(false)
 

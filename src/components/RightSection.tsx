@@ -29,7 +29,7 @@ function RightSection() {
 
             {/* TRENDING */}
             <div className="border border-white/20 p-4 rounded-2xl">
-                <div className="text-xl font-bold">What's happening</div>
+                <div className="text-xl font-bold">What&apos;s happening</div>
                 <div className="flex space-x-2 py-3 cursor-pointer">
                     <div className="w-20 h-20 rounded-2xl bg-white/30"></div>
                     <div>

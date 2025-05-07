@@ -8,6 +8,9 @@ const MainComponent = async () => {
 
   const supabase = await createClient();
   const { data: userData, error } = await supabase.auth.getUser();
+  if (error) {
+    console.log(error)
+  }
   const userId = userData.user?.id
   // console.log(userData.user)
 

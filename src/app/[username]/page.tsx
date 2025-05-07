@@ -38,9 +38,9 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
     // console.log(data.getOneProfiles.username)
 
 
-    const imageArray = data.posts.flatMap((post: Post) => {
-        return post.imageUrl ? JSON.parse(post.imageUrl) : [];
-    })
+    // const imageArray = data.posts.flatMap((post: Post) => {
+    //     return post.imageUrl ? JSON.parse(post.imageUrl) : [];
+    // })
 
     return (
         <div className="w-full xl:max-w-[48%] h-full min-h-screen flex-col border-l border-r border-gray-600/50">

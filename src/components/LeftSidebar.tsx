@@ -55,7 +55,7 @@ const LeftSidebar = async () => {
     return;
   }
 
-  const username = data.user?.user_metadata.username
+  // const username = data.user?.user_metadata.username
 
 
   const userProfiles = await db.query.profiles.findFirst({

@@ -12,13 +12,13 @@ import Image from 'next/image'
 type postProps = {
     post: Post | Reply,
     userId?: string,
-    postUsername: string,
+    postUsername?: string,
     userProfiles: Profiles,
     replyCount: number,
     dataId: string,
 }
 
-const ReplyButton = ({ userProfiles, post, userId, dataId, postUsername, replyCount }: postProps) => {
+const ReplyButton = ({ userProfiles, post, userId, dataId, replyCount }: postProps) => {
     const [isOpen, setIsOpen] = useState(false)
 
     const handleReplySuccess = () => {

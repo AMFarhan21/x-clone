@@ -26,7 +26,7 @@ export const handlePostSubmit = async (formData: FormData) => {
   if (userError) return { success: false, message: "User not authenticated" };
 
   // FILES STORAGE MANAGEMENT
-  let uploadedFiles: string[] = []
+  const uploadedFiles: string[] = []
   for(const file of files) {
     const {data, error} = await supabase.storage.from("x-clone-bucket").upload(`post-files/${randomUUID()}-${file.name}`, file);
     if(error) {
@@ -79,11 +79,11 @@ export const handleReplySubmit = async (
 
   // const replyId = reply.id ?? null
 
-  const res = await db.insert(reply).values({
-    text: replyForm.toString(),
-    profilesId: userId,
-    postId,
-  });
+  // const res = await db.insert(reply).values({
+  //   text: replyForm.toString(),
+  //   profilesId: userId,
+  //   postId,
+  // });
   revalidatePath(`/${postUsername}/status/${postId}`);
   return { success: true, message: "Replies created successfully" };
 };

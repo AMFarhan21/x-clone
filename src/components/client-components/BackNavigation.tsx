@@ -1,8 +1,9 @@
 'use client'
+import { Profiles } from '@/types';
 import { useRouter } from 'next/navigation';
 import { IoArrowBack } from 'react-icons/io5'
 
-const BackNavigation = ({ user }: any) => {
+const BackNavigation = ({ user }) => {
     const router = useRouter();
     return (
         <div className='flex items-center space-x-4 text-xl px-2 py-2 sticky top-0 bg-black/80'>

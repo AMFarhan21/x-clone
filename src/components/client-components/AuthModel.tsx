@@ -129,7 +129,7 @@ const AuthModel = () => {
                         }
                     }}>
                         <Input type='text' onChange={(e) => {
-                            let value = e.target.value
+                            const value = e.target.value
                             if (value.length > 24) {
                                 setError("Your username must be less than 24 characters")
                                 return
@@ -173,7 +173,7 @@ const AuthModel = () => {
 
 
                     <Button className='rounded-full py-5 border border-gray-400 bg-black text-white w-full font-bold hover:bg-white/90'>Forgot password?</Button>
-                    <div className='text-gray-500 mt-8 mb-14'> Don't have an account? <Link href={'/'} className='text-blue-400'>Sign up</Link> </div>
+                    <div className='text-gray-500 mt-8 mb-14'> Don&apos;t have an account? <Link href={'/'} className='text-blue-400'>Sign up</Link> </div>
                 </DialogContent>
             </Dialog>
 

@@ -4,7 +4,7 @@ import { Profiles } from '@/types'
 import React, { useState } from 'react'
 import { Button } from '../ui/button'
 import { RiVerifiedBadgeFill } from 'react-icons/ri'
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogOverlay, DialogTitle, DialogTrigger } from '../ui/dialog'
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { AlertDialogHeader } from '../ui/alert-dialog'
 import { XIcon } from 'lucide-react'
 import { IoCheckmark, IoCheckmarkSharp } from 'react-icons/io5'
@@ -164,7 +164,7 @@ const FEATURE_COMPARISON = [
 ]
 
 
-const PlanCard = ({ plan, isSelected, onClick }: { plan: any, isSelected: boolean, onClick: () => void }) => {
+const PlanCard = ({ plan, isSelected, onClick }: { isSelected: boolean, onClick: () => void }) => {
     return (
         <div onClick={onClick} className={`bg-slate-400/23 w-85 h-110 ${isSelected ? "border-2 border-blue-400" : ""} rounded-2xl m-auto p-6 text-white cursor-pointer`}>
             <div className='flex justify-between items-center'>
@@ -189,7 +189,7 @@ const PlanCard = ({ plan, isSelected, onClick }: { plan: any, isSelected: boolea
                 }
             </div>
             {
-                plan.features.map((featuresGroup: any, index: number) => (
+                plan.features.map((featuresGroup, index: number) => (
                     <ul key={index} className='space-y-1 mt-4'>
                         <div className='font-semibold text-base'>{featuresGroup.category}</div>
                         {featuresGroup.items.map((item: string, itemIndex: number) => (

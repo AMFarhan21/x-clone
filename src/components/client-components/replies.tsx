@@ -15,12 +15,12 @@ import { Post, Profiles, Reply } from '@/types'
 type replyProps = {
     reply: Reply;
     userId?: string;
-    post: Post;
+    post?: Post;
     username: string;
     userProfiles: Profiles;
 }
 
-const Replies = ({ reply, userId, post, username, userProfiles }: replyProps) => {
+const Replies = ({ reply, userId, username, userProfiles }: replyProps) => {
     const imageArray = reply.imageUrl ? JSON.parse(reply.imageUrl) : [];
     const router = useRouter()
 

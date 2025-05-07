@@ -23,7 +23,7 @@ import { pgTable, uuid, text, timestamp, unique, AnyPgColumn, uniqueIndex, boole
     created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
     updated_at: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   });
-  export const profilesRelations = relations(profiles, ({one, many}) => ({
+  export const profilesRelations = relations(profiles, ({many}) => ({
     post: many(post),
     likes: many(likes),
     bookmark: many(bookmark),

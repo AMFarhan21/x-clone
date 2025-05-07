@@ -9,7 +9,7 @@ import { db } from "./db";
 import { UserLogin } from "@/types";
 
 const uniqueUsername = async(base: string) => {
-  let usernameBase = base.trim().toLowerCase().replace(/\s+/g, "_").slice(0, 24);
+  const usernameBase = base.trim().toLowerCase().replace(/\s+/g, "_").slice(0, 24);
   let suffix = 0
   let uniqueUsername = usernameBase
 
@@ -17,8 +17,8 @@ const uniqueUsername = async(base: string) => {
     const {data, error} = await db.select().from(profiles).where(eq(profiles.username, uniqueUsername))
     if(!data || data.length === 0 || error) break
     suffix++
-    let suffixStr = suffix.toString()
-    let trimBase = usernameBase.slice(0, 24 - suffixStr.length)
+    const suffixStr = suffix.toString()
+    const trimBase = usernameBase.slice(0, 24 - suffixStr.length)
     uniqueUsername = `${trimBase}${suffix}`
   }
 
@@ -32,8 +32,8 @@ export async function signup(formData: FormData) {
   const username = formData.get("username") as string;
   const password = formData.get("password") as string;
 
-  let usernameBase = await uniqueUsername(username)
-  let displayNameBase = username
+  const usernameBase = await uniqueUsername(username)
+  const displayNameBase = username
 
   const { data: signedUp, error: signUpError } = await supabase.auth.signUp({
     email: email.trim(),
@@ -102,8 +102,8 @@ export async function signOut() {
 export async function updateGoogleSignUp(user: UserLogin) {
 
   if (user?.app_metadata?.provider === "google") {
-    let username = await uniqueUsername(user.user_metadata.name)
-    let displayName = user.user_metadata.name.slice(0, 24)
+    const username = await uniqueUsername(user.user_metadata.name)
+    const displayName = user.user_metadata.name.slice(0, 24)
 
     await db.update(profiles).set({
       username: username,

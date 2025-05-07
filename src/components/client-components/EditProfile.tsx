@@ -176,7 +176,7 @@ const EditProfile = ({ userId, userProfiles }: editProps) => {
                                             <div className='text-blue-400 cursor-pointer font-medium' onClick={() => setOpen(false)}>Cancel</div>
                                         </div>
                                         <div className='text-white text-xl space-x-3'>
-                                            <div className='text-base text-white/50'>This should be the date of birth of the person using the account. Even if you're making an account for your business, event, or cat.</div>
+                                            <div className='text-base text-white/50'>This should be the date of birth of the person using the account. Even if you&apos;re making an account for your business, event, or cat.</div>
                                             <div className='text-base text-white/50'>X uses your age to customize your experience, including ads, as explained in our <span className='text-blue-400 cursor-pointer'>Privacy Policy</span> .</div>
                                             <select name="birthMonth" value={birthMonth} onChange={(e) => setBirthMonth(e.target.value)} className="bg-black px-22 py-4 text-base rounded-sm mt-4 border border-white/30 active:border-blue-400 cursor-pointer">
                                                 <option disabled value={""}>Months</option>

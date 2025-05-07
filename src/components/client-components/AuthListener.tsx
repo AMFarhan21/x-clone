@@ -21,6 +21,8 @@ const AuthListener = () => {
                 toast.info("You are logged out")
                 router.refresh()
             }
+
+            console.log("SESSION", session)
         })
 
         return () => {

@@ -16,7 +16,7 @@ const Repost = ({postId, userId, isRePosted, rePostCount, replyId}: RepostProps)
 
     const [reposted, setReposted] = useState(isRePosted)
     const [count, setCount] = useState(Number(rePostCount))
-    const router = useRouter()
+    // const router = useRouter()
 
     const handleRepost = async() => {
 

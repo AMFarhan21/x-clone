@@ -3,19 +3,12 @@ import { BsDot, BsGear, BsThreeDots } from 'react-icons/bs'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { IoHeart, IoStatsChart } from 'react-icons/io5';
 import { FaRetweet } from 'react-icons/fa6';
-import ReplyButton from '@/components/client-components/reply-button';
-import Repost from '@/components/client-components/rePost-button';
-import LikeButton from '@/components/client-components/like-button';
-import BookmarkButton from '@/components/client-components/bookmark-button';
-import DropdownButton from '@/components/client-components/DropdownButton';
-import { Dayjs } from 'dayjs';
 import { HiChatBubbleLeft } from 'react-icons/hi2';
 import { Bookmark } from 'lucide-react';
 import { FiShare } from 'react-icons/fi';
 import { FaUser } from 'react-icons/fa';
 import { createClient } from '@/utils/supabase/server';
 import Image from 'next/image';
-import { Profiles } from '@/types';
 
 
 const notifications = async () => {
