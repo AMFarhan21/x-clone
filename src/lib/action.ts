@@ -14,8 +14,8 @@ const uniqueUsername = async(base: string) => {
   let uniqueUsername = usernameBase
 
   while(true) {
-    const {data, error} = await db.select().from(profiles).where(eq(profiles.username, uniqueUsername))
-    if(!data || data.length === 0 || error) break
+    const res = await db.select().from(profiles).where(eq(profiles.username, uniqueUsername))
+    if(!res || res.length === 0) break
     suffix++
     const suffixStr = suffix.toString()
     const trimBase = usernameBase.slice(0, 24 - suffixStr.length)

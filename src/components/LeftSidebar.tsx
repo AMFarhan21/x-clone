@@ -109,7 +109,7 @@ const LeftSidebar = async () => {
               Add an existing account
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:bg-white/10 rounded-xl cursor-pointer px-4 py-3 mb-1 text-sm">
-              <LogoutButton userProfiles={userProfiles} />
+              <LogoutButton username={userProfiles?.username as string}  />
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>

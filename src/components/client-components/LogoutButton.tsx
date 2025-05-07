@@ -1,10 +1,9 @@
 'use client'
 import { signOut } from '@/lib/action'
-import { Profiles } from '@/types'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
-const LogoutButton = ({userProfiles}: {userProfiles?: Profiles} ) => {
+const LogoutButton = ({username}: {username?: string} ) => {
     const router = useRouter()
 
     const handleLogout = async() => {
@@ -15,7 +14,7 @@ const LogoutButton = ({userProfiles}: {userProfiles?: Profiles} ) => {
 
     return (
         <form>
-            <button formAction={handleLogout}>Log out <span>@{userProfiles?.username}</span></button>
+            <button formAction={handleLogout}>Log out <span>@{username}</span></button>
         </form>
     )
 }
