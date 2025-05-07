@@ -7,12 +7,8 @@ import { RiVerifiedBadgeFill } from 'react-icons/ri'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogOverlay, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { AlertDialogHeader } from '../ui/alert-dialog'
 import { XIcon } from 'lucide-react'
-import { IoCheckmark, IoCheckmarkCircleSharp, IoCheckmarkSharp } from 'react-icons/io5'
+import { IoCheckmark, IoCheckmarkSharp } from 'react-icons/io5'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
-import { Input } from '../ui/input'
-import { Label } from '../ui/label'
-import { features } from 'process'
 
 type verifiedButtonProps = {
     userProfiles: Profiles,

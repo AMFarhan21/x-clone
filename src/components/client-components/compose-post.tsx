@@ -10,7 +10,7 @@ import { MdOutlineGifBox } from 'react-icons/md';
 import { BiPoll } from 'react-icons/bi';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { useRouter } from 'next/navigation';
-import { Link, XIcon } from 'lucide-react';
+import { XIcon } from 'lucide-react';
 import Image from 'next/image';
 import { Profiles } from '@/types';
 

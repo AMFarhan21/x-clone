@@ -5,9 +5,7 @@ import FollowButton from '@/components/client-components/FollowButton';
 import Posts from '@/components/client-components/posts';
 import Replies from '@/components/client-components/replies';
 import VerifiedButton from '@/components/client-components/verifiedButton';
-import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { db } from '@/lib/db';
 import { Post, Profiles, Reply, UserLogin } from '@/types';
 import { createClient } from '@/utils/supabase/server'
 import Image from 'next/image';
@@ -20,7 +18,7 @@ import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
 import { IoLocationOutline } from 'react-icons/io5';
 import { LuBellPlus } from 'react-icons/lu';
 import { MdCalendarMonth } from 'react-icons/md';
-import { RiLinkM, RiVerifiedBadgeFill } from 'react-icons/ri';
+import { RiLinkM } from 'react-icons/ri';
 
 const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }) => {
     const supabase = await createClient();

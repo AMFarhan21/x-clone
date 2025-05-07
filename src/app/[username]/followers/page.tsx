@@ -2,18 +2,12 @@ import React from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import BackNavigation from '@/components/client-components/BackNavigation';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import { RiVerifiedBadgeFill } from 'react-icons/ri';
 import { db } from '@/lib/db';
-import { profiles } from '@/lib/db/schema';
 import Image from 'next/image';
 import { createClient } from '@/utils/supabase/server';
 import FollowButton from '@/components/client-components/FollowButton';
-import { BsThreeDots } from 'react-icons/bs';
-import { FaRegCircle, FaRegEnvelope } from 'react-icons/fa';
-import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
-import { LuBellPlus } from 'react-icons/lu';
-import { Follows, Profiles, UserLogin } from '@/types';
+import { UserLogin } from '@/types';
 
 
 const followersPage = async ({ params }: { params: Promise<{ username: string }> }) => {

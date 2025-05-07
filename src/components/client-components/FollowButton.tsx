@@ -1,14 +1,10 @@
 'use client'
-import { LuBellPlus } from "react-icons/lu";
 import { useRouter } from "next/navigation"
 import React from "react"
 import { useState } from "react"
-import { BsThreeDots } from "react-icons/bs"
-import { FaRegCircle, FaRegEnvelope } from "react-icons/fa"
-import { HiMiniMagnifyingGlass } from "react-icons/hi2"
 import { toast } from "sonner"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
-import { Profiles, UserLogin } from "@/types";
+import { UserLogin } from "@/types";
 
 type FollowButtonProps = {
     targetUsername: string,

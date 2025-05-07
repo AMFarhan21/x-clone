@@ -14,7 +14,6 @@ import { db } from '@/lib/db';
 import Image from 'next/image';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger, } from './ui/dropdown-menu';
 import LogoutButton from './client-components/LogoutButton';
-import { Profiles } from '@/types';
 
 const NAVIGATION_ITEMS = [
   {

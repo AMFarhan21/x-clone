@@ -1,6 +1,6 @@
 'use client'
 import { signOut } from '@/lib/action'
-import { Profiles, UserLogin } from '@/types'
+import { Profiles } from '@/types'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 

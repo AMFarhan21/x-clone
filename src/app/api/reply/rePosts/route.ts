@@ -1,6 +1,5 @@
 import { db } from "@/lib/db";
 import { rePost } from "@/lib/db/schema";
-import { error } from "console";
 import { randomUUID } from "crypto";
 import { and, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";

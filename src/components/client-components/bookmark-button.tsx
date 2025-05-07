@@ -1,5 +1,4 @@
 'use client'
-import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { MdBookmark, MdBookmarkBorder } from 'react-icons/md'
 import { toast } from 'sonner'

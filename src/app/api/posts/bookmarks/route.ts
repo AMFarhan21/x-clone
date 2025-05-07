@@ -1,6 +1,5 @@
 import { db } from "@/lib/db"
-import { bookmark, post } from "@/lib/db/schema"
-import { error } from "console"
+import { bookmark } from "@/lib/db/schema"
 import { randomUUID } from "crypto"
 import { and, eq } from "drizzle-orm"
 import { NextResponse } from "next/server"

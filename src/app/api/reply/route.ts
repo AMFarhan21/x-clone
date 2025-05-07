@@ -11,7 +11,7 @@ import {
 } from "@/lib/db/schema";
 import { createClient } from "@/utils/supabase/server";
 import { randomUUID } from "crypto";
-import { and, desc, eq, exists, like, sql } from "drizzle-orm";
+import { and, desc, eq, exists, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import { NextResponse } from "next/server";
 

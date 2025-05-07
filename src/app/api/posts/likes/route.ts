@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { likes, post, profiles } from "@/lib/db/schema";
+import { likes } from "@/lib/db/schema";
 import { randomUUID } from "crypto";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";

@@ -2,7 +2,7 @@ import BackNavigation from '@/components/client-components/BackNavigation';
 import ComposeReply from '@/components/client-components/compose-reply';
 import Posts from '@/components/client-components/posts';
 import Replies from '@/components/client-components/replies';
-import { Post, Reply } from '@/types';
+import { Reply } from '@/types';
 import { createClient } from '@/utils/supabase/server';
 import React from 'react'
 

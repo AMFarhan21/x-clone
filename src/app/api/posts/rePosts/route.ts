@@ -2,7 +2,6 @@ import { db } from "@/lib/db";
 import { rePost } from "@/lib/db/schema";
 import { randomUUID } from "crypto";
 import { and, eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {

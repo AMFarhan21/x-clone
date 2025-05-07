@@ -3,12 +3,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import BackNavigation from '@/components/client-components/BackNavigation';
 import Link from 'next/link';
 import { RiVerifiedBadgeFill } from 'react-icons/ri';
-import { Button } from '@/components/ui/button';
 import { db } from '@/lib/db';
 import Image from 'next/image';
 import FollowButton from '@/components/client-components/FollowButton';
 import { createClient } from '@/utils/supabase/server';
-import { Profiles, UserLogin } from '@/types';
+import { UserLogin } from '@/types';
 
 
 const followingPage = async ({ params }: { params: Promise<{ username: string }> }) => {
