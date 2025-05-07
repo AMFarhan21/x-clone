@@ -2,7 +2,6 @@
 
 import { db } from "@/lib/db";
 import { likes, post, reply } from "@/lib/db/schema";
-import { createClient } from "@/utils/supabase/server";
 import { randomUUID } from "crypto";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
