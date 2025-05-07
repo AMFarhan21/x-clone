@@ -6,77 +6,100 @@ import { and, desc, eq, exists, sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
-  try {
-    const { searchParams } = new URL(req.url);
-    const user = searchParams.get("userId") || null;
+  const { searchParams } = new URL(req.url);
+  const userId = searchParams.get("userId") || null;
 
 
-    const userProfiles = await db.query.profiles.findFirst({
-      where: (profiles, {eq}) => eq(profiles.id, user as string)
-    })
+  const userProfiles = await db.query.profiles.findFirst({
+    where: (profiles, { eq }) => eq(profiles.id, userId as string)
+  })
 
-    const result = await db
-      .select({
-        post,
-        id: post.id,
-        text: post.text,
-        imageUrl: post.imageUrl,
-        profilesId: post.profilesId,
-        created_at: post.created_at,
-        updated_at: post.updated_at,
-        username: profiles.username,
-        displayName: profiles.displayName,
-        profilePicture: profiles.profilePicture,
-        likesCount: sql<number>`count(distinct ${likes.id})`.as("likesCount"),
-        replyCount: sql<number>`count(distinct ${reply.id})`.as("replyCount"),
-        rePostCount: sql<number>`count(distinct ${rePost.id})`.as("rePostCount"),
-        isLiked: exists(
-          db
-            .select()
-            .from(likes)
-            .where(and(eq(likes.postId, post.id), eq(likes.profilesId, user as string)))
-        ).as("isLiked"),
-        isRePosted: exists(
-          db
-            .select()
-            .from(rePost)
-            .where(and(eq(rePost.postId, post.id), eq(rePost.profilesId, user as string)))
-        ).as("isRePosted"),
-        isBookmarked: exists(
-          db
+  const result = await db
+    .select({
+      post,
+      id: post.id,
+      text: post.text,
+      imageUrl: post.imageUrl,
+      profilesId: post.profilesId,
+      created_at: post.created_at,
+      updated_at: post.updated_at,
+      username: profiles.username,
+      displayName: profiles.displayName,
+      profilePicture: profiles.profilePicture,
+      likesCount: sql<number>`count(distinct ${likes.id})`.as("likesCount"),
+      replyCount: sql<number>`count(distinct ${reply.id})`.as("replyCount"),
+      rePostCount: sql<number>`count(distinct ${rePost.id})`.as("rePostCount"),
+      isLiked: exists(
+        db
+          .select()
+          .from(likes)
+          .where(and(eq(likes.postId, post.id), eq(likes.profilesId, userId as string)))
+      ).as("isLiked"),
+      isRePosted: exists(
+        db
+          .select()
+          .from(rePost)
+          .where(and(eq(rePost.postId, post.id), eq(rePost.profilesId, userId as string)))
+      ).as("isRePosted"),
+      isBookmarked: exists(
+        db
           .select()
           .from(bookmark)
-          .where(and(eq(bookmark.postId, post.id), eq(bookmark.profilesId, user as string)))
-        ).as("isBookmarked")
-      })
-      .from(post)
-      .leftJoin(likes, eq(post.id, likes.postId))
-      .leftJoin(reply, eq(post.id, reply.postId))
-      .leftJoin(rePost, eq(post.id, rePost.postId))
-      .leftJoin(bookmark, eq(post.id, bookmark.postId))
-      .innerJoin(profiles, eq(post.profilesId, profiles.id))
-      .groupBy(
-        post.id,
-        post.imageUrl,
-        profiles.username,
-        profiles.displayName,
-        post.created_at,
-        profiles.profilePicture
-      )
-      .orderBy(desc(post.created_at));
+          .where(and(eq(bookmark.postId, post.id), eq(bookmark.profilesId, userId as string)))
+      ).as("isBookmarked")
+    })
+    .from(post)
+    .leftJoin(likes, eq(post.id, likes.postId))
+    .leftJoin(reply, eq(post.id, reply.postId))
+    .leftJoin(rePost, eq(post.id, rePost.postId))
+    .leftJoin(bookmark, eq(post.id, bookmark.postId))
+    .innerJoin(profiles, eq(post.profilesId, profiles.id))
+    .groupBy(
+      post.id,
+      post.imageUrl,
+      profiles.username,
+      profiles.displayName,
+      post.created_at,
+      profiles.profilePicture
+    )
+    .orderBy(desc(post.created_at))
+    .catch((error) => {
+      console.log("GET post api ERROR: ", error);
+      return NextResponse.json({ success: false, message: "GET post api ERROR", error });
+    })
 
-    return NextResponse.json({ success: true, result, user, userProfiles });
-  } catch (error) {
-    console.log(
-      "GET post api ERROR: "
-      , error
-    );
-    return NextResponse.json({
-      success: false,
-      message: "GET post api ERROR",
-      error,
-    });
-  }
+
+  const likesNotif = await db
+    .select({
+      postId: post.id,
+      postText: post.text,
+      postImageUrl: post.imageUrl,
+      likerId: profiles.id,
+      likerUsername: profiles.username,
+      likerDisplayName: profiles.displayName,
+      likerProfilePicture: profiles.profilePicture
+    })
+    .from(likes)
+    .innerJoin(post, eq(likes.postId, post.id))
+    .innerJoin(profiles, eq(likes.profilesId, profiles.id))
+    .where(eq(post.profilesId, userId as string))
+    .orderBy(desc(likes.id))
+    .groupBy(
+      post.id,
+      post.text,
+      post.imageUrl,
+      profiles.id,
+      profiles.username,
+      profiles.displayName,
+      profiles.profilePicture,
+      likes.id,
+    ).catch((error) => {
+      console.log("ERROR ON LIKES ROUTE -> LIKES NOTIF: ", error)
+      return NextResponse.json({ success: false, error, message: "ERROR ON LIKES ROUTE -> LIKES NOTIF" })
+    })
+
+
+  return NextResponse.json({ success: true, result, userId, userProfiles, likesNotif });
 }
 
 export async function POST(req: Request) {

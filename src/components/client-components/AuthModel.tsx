@@ -120,7 +120,7 @@ const AuthModel = () => {
                             toast.success(data.message)
                             router.refresh()
                             router.push("/")
-                            // window.location.href = "/"
+                            setIsOpen(false)
                             // console.log(data.signedUp)
 
 
