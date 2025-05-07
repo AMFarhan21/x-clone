@@ -21,7 +21,7 @@ const LikeButton = ({ replyId, postId, likesCount, isLiked, userId }: likeButton
         setLiked(!liked)
         setCount(prev => liked ? prev - 1 : prev + 1)
 
-        const response = await fetch(`/api/posts/likes?postId=${postId}&userId=${userId}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/posts/likes?postId=${postId}&userId=${userId}`, {
             method: liked ? "DELETE" : "POST",
             cache: "no-store"
         })
@@ -39,7 +39,7 @@ const LikeButton = ({ replyId, postId, likesCount, isLiked, userId }: likeButton
         setLiked(!liked)
         setCount(prev => liked ? prev - 1 : prev + 1)
 
-        const response = await fetch(`/api/reply/likes?replyId=${replyId}&profilesId=${userId}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/reply/likes?replyId=${replyId}&profilesId=${userId}`, {
             method: liked ? "DELETE" : "POST",
             cache: "no-store"
         })

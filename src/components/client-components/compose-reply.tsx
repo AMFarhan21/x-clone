@@ -52,7 +52,7 @@ const ComposeReply = ({ userProfiles, userId, dataId, onReplySuccess }: ComposeR
             formData.append("text", reply);
             file.forEach((f) => formData.append("files", f))
 
-            const response = await fetch(`/api/reply?dataId=${dataId}&profilesId=${userId}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/reply?dataId=${dataId}&profilesId=${userId}`, {
                 method: "POST",
                 body: formData,
             })

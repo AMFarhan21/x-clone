@@ -57,7 +57,7 @@ const EditProfile = ({ userId, userProfiles }: editProps) => {
         };
 
 
-        const response = await fetch("/api/profiles", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/profiles`, {
             method: "POST",
             body: formData
         })
