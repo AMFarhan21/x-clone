@@ -59,7 +59,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
 
                             {
                                 data.getOneProfiles.profilePicture ? (
-                                    <Image alt='profilePicture' src={data.getOneProfiles.profilePicture} width={300} height={300} loading="eager" className='w-36 h-36 bg-gray-600 rounded-full mx-6 mb-5 mt-[-70px] border-3 border-black cursor-pointer object-cover' />
+                                    <Image alt='profilePicture' src={data.getOneProfiles.profilePicture} width={400} height={400} loading="eager" className='w-36 h-36 bg-gray-600 rounded-full mx-6 mb-5 mt-[-70px] border-3 border-black cursor-pointer object-cover' />
                                 ) : (
                                     <div className='w-33 h-33 bg-gray-600 rounded-full mx-6 mb-7 mt-[-70px] border-3 border-black cursor-pointer'></div>
                                 )

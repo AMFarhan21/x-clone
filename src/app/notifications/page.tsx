@@ -10,6 +10,24 @@ import { FaUser } from 'react-icons/fa';
 import { createClient } from '@/utils/supabase/server';
 import Image from 'next/image';
 
+type likesType = {
+  postId: string,
+  postText: string,
+  postImageUrl: string,
+  likerId: string,
+  likerUsername: string,
+  likerDisplayName: string,
+  likerProfilePicture: string
+}
+
+type groupedLIkesType = {
+  [postId: string]: {
+    postText: string,
+    postImageUrl: string,
+    likers: likesType[]
+  }
+}
+
 
 const notifications = async () => {
   const supabase = await createClient()
@@ -23,8 +41,8 @@ const notifications = async () => {
   const res = await response.json()
   const getNotifLikes = res.likesNotif
 
-  const groupedLikes = {}
-  getNotifLikes.forEach((item) => {
+  const groupedLikes: groupedLIkesType = {}
+  getNotifLikes.forEach((item: likesType) => {
     if (!groupedLikes[item.postId]) {
       groupedLikes[item.postId] = {
         postText: item.postText,
@@ -81,10 +99,10 @@ const notifications = async () => {
               const filteredLikers = data.likers.filter((l) => l.likerId !== user.user?.id)
               if (filteredLikers.length === 0) return null;
 
-              const display = filteredLikers.length > 1 ?  filteredLikers.slice(0, 2) : filteredLikers.slice(0, 1);
+              const display = filteredLikers.length > 1 ? filteredLikers.slice(0, 2) : filteredLikers.slice(0, 1);
               const otherAccount = filteredLikers.length - display.length
               const allLikers = display.map(liker => liker.likerUsername).join(", ") + (otherAccount > 0 ? `and ${otherAccount} others` : '')
-              
+
 
               return (
                 <div key={postId} className='flex items-top gap-x-2 border-b border-gray-600/60 mb-4'>

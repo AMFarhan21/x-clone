@@ -15,7 +15,31 @@ type verifiedButtonProps = {
     data: Profiles,
 }
 
-const PLANS = {
+type planType = {
+    name: string,
+    price: string,
+    total?: string,
+    billing: string,
+    discount?: string,
+    features: {
+        category: string,
+        items: string[]
+    }[]
+}
+
+type plansType = {
+    annual: {
+        premium: planType,
+        premiumPlus: planType
+    };
+    monthly: {
+        premium: planType,
+        premiumPlus: planType
+    }
+}
+
+
+const PLANS: plansType = {
     annual: {
         premium: {
             name: "Premium",
@@ -69,7 +93,7 @@ const PLANS = {
         premium: {
             name: "Premium",
             price: "IDR 120,000",
-            biling: '/ month',
+            billing: '/ month',
             features: [
                 {
                     category: 'Everything in Basic, and',
@@ -112,8 +136,18 @@ const PLANS = {
     }
 }
 
+type featureComparisonItemType = {
+    name: string,
+    premium: string | React.ReactElement,
+    premiumPlus: string | React.ReactElement,
+}
 
-const FEATURE_COMPARISON = [
+type featureType = {
+    category: string,
+    items: featureComparisonItemType[]
+}
+
+const FEATURE_COMPARISON: featureType[] = [
     {
         category: 'Enhanced Experience',
         items: [
@@ -164,7 +198,8 @@ const FEATURE_COMPARISON = [
 ]
 
 
-const PlanCard = ({ plan, isSelected, onClick }: { isSelected: boolean, onClick: () => void }) => {
+
+const PlanCard = ({ plan, isSelected, onClick }: {plan: planType, isSelected: boolean, onClick: () => void }) => {
     return (
         <div onClick={onClick} className={`bg-slate-400/23 w-85 h-110 ${isSelected ? "border-2 border-blue-400" : ""} rounded-2xl m-auto p-6 text-white cursor-pointer`}>
             <div className='flex justify-between items-center'>
