@@ -49,7 +49,7 @@ const AuthModel = () => {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: 'https://x-clone-gngx-3jxsjpu8g-amfhs-projects.vercel.app'
+                redirectTo: 'x-clone-gngx.vercel.app'
             }
         })
         if (error) {
