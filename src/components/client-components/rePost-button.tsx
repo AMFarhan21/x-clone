@@ -1,5 +1,4 @@
 'use client'
-import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { FaRetweet } from 'react-icons/fa6'
 import { toast } from 'sonner'

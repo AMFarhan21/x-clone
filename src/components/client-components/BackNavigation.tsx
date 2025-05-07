@@ -1,5 +1,4 @@
 'use client'
-import { Profiles } from '@/types';
 import { useRouter } from 'next/navigation';
 import { IoArrowBack } from 'react-icons/io5'
 
