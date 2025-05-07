@@ -25,7 +25,7 @@ const PostStatus = async ({ params }: { params: Promise<{ username: string; id: 
   return (
 
     <div className="w-full xl:max-w-[48%] h-full min-h-screen flex-col border-l border-r border-gray-600/50">
-      <BackNavigation user={null} />
+      <BackNavigation />
       {replies.resOnePost ? <Posts key={replies.resOnePost[0].id} userProfiles={replies.userProfiles} post={replies.resOnePost[0]} userId={userId} /> : <div>This post not exists</div>}
       <ComposeReply userProfiles={replies.userProfiles} userId={userId} dataId={replies.resOnePost[0].id} />
 

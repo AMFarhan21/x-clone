@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { IoArrowBack } from 'react-icons/io5'
 
-const BackNavigation = ({ user }: {user: string}) => {
+const BackNavigation = ({ user }: {user?: string}) => {
     const router = useRouter();
     return (
         <div className='flex items-center space-x-4 text-xl px-2 py-2 sticky top-0 bg-black/80'>
