@@ -17,7 +17,7 @@ const BookmarkButton = ({ postId, userId, replyId, isBookmarked }: bookmarkProps
     const handleBookmark = async () => {
         setBookmarked(!bookmarked)
 
-        const response = await fetch('http://localhost:3000/api/posts/bookmarks', {
+        const response = await fetch('/api/posts/bookmarks', {
             method: "POST",
             body: JSON.stringify({ postId, userId }),
             cache: "no-store"
@@ -37,7 +37,7 @@ const BookmarkButton = ({ postId, userId, replyId, isBookmarked }: bookmarkProps
     const handleReplyBookmark = async () => {
         setBookmarked(!bookmarked)
 
-        const response = await fetch('http://localhost:3000/api/reply/bookmarks', {
+        const response = await fetch('/api/reply/bookmarks', {
             method: "POST",
             body: JSON.stringify({ replyId, userId }),
             cache: 'no-store'

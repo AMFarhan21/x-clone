@@ -33,7 +33,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
     const { username } = await params
 
 
-    const response = await fetch(`http://localhost:3000/api/profiles?userId=${userId}&username=${username}`)
+    const response = await fetch(`/api/profiles?userId=${userId}&username=${username}`)
     const data = await response.json()
     // console.log(data.getOneProfiles.username)
 

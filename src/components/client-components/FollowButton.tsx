@@ -21,7 +21,7 @@ const FollowButton = ({ targetUsername, targetUserId, userId, isFollowed }: Foll
     const handleFollow = async () => {
         setFollow(!follow)
 
-        const response = await fetch(`http://localhost:3000/api/profiles/follows`, {
+        const response = await fetch(`/api/profiles/follows`, {
             method: "POST",
             body: JSON.stringify({ targetUserId, userId })
         })

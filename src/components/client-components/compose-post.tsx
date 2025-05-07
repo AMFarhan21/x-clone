@@ -48,7 +48,7 @@ const ComposePost = ({ userProfiles }: composePostProps) => {
       formData.append("text", post);
       file.forEach((f) => formData.append("files", f))
 
-      const response = await fetch('http://localhost:3000/api/posts', {
+      const response = await fetch('/api/posts', {
         method: "POST",
         body: formData,
       })

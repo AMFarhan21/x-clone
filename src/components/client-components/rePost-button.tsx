@@ -22,7 +22,7 @@ const Repost = ({postId, userId, isRePosted, rePostCount, replyId}: RepostProps)
         setReposted(!reposted)
         setCount(prev => reposted ? prev - 1 : prev + 1)
 
-        const response = await fetch("http://localhost:3000/api/posts/rePosts", {
+        const response = await fetch("/api/posts/rePosts", {
             method: "POST",
             body: JSON.stringify({postId, userId}),
             cache: "no-store"
@@ -44,7 +44,7 @@ const Repost = ({postId, userId, isRePosted, rePostCount, replyId}: RepostProps)
         setReposted(!reposted)
         setCount(prev => reposted ? prev - 1 : prev + 1)
 
-        const response = await fetch('http://localhost:3000/api/reply/rePosts', {
+        const response = await fetch('/api/reply/rePosts', {
             method: "POST",
             body: JSON.stringify({replyId, userId}),
             cache: "no-store"

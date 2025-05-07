@@ -17,7 +17,7 @@ const MainComponent = async () => {
   // console.log("MAIN COMPONENT ERRRRROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOR:", error)
 
 
-  const response = await fetch(`http://localhost:3000/api/posts?userId=${userId}`)
+  const response = await fetch(`/api/posts?userId=${userId}`)
   const posts = await response.json()
 
   return (

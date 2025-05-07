@@ -18,7 +18,7 @@ const PostStatus = async ({ params }: { params: Promise<{ username: string; id: 
   const { username, id } = await params
 
 
-  const response = await fetch(`http://localhost:3000/api/reply?userId=${userId}&dataId=${id}`)
+  const response = await fetch(`/api/reply?userId=${userId}&dataId=${id}`)
   const replies = await response.json();
 
 

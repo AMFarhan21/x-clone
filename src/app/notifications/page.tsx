@@ -37,7 +37,7 @@ const notifications = async () => {
     return
   }
 
-  const response = await fetch(`http://localhost:3000/api/posts?userId=${user.user?.id}`)
+  const response = await fetch(`/api/posts?userId=${user.user?.id}`)
   const res = await response.json()
   const getNotifLikes = res.likesNotif
 
