@@ -1,20 +1,13 @@
 import { relations } from "drizzle-orm/relations";
-import { usersInAuth, profiles, post, bookmark, likes, reply, hashtag, postHashtag } from "./schema";
+import { profiles, post, bookmark, likes, reply, hashtag, postHashtag } from "./schema";
 
 export const profilesRelations = relations(profiles, ({one, many}) => ({
-	usersInAuth: one(usersInAuth, {
-		fields: [profiles.id],
-		references: [usersInAuth.id]
-	}),
 	bookmarks: many(bookmark),
 	likes: many(likes),
 	replies: many(reply),
 	posts: many(post),
 }));
 
-export const usersInAuthRelations = relations(usersInAuth, ({many}) => ({
-	profiles: many(profiles),
-}));
 
 export const bookmarkRelations = relations(bookmark, ({one}) => ({
 	post: one(post, {
