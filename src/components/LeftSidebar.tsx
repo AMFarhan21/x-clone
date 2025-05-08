@@ -64,15 +64,15 @@ const LeftSidebar = async () => {
 
 
   return (
-    <section className="w-[24%] flex flex-col items-stretch h-screen space-y-4 sticky top-0">
-      <div className="flex flex-col h-full items-stretch mt-1 ml-2 pr-6">
+    <section className="hidden sticky sm:top-0 sm:w-20 lg:w-[24%] sm:flex sm:flex-col sm:items-stretch sm:h-screen sm:space-y-4 ">
+      <div className="sm:flex-col sm:h-screen sm:items-stretch sm:mt-1 sm:ml-2 sm:pr-6">
         {NAVIGATION_ITEMS.map((item) => (
           <Link href={item.title === "Twitter" || item.title === "Home" ? '/' : item.title === "Profile" ? `/${userProfiles?.username}` : `/${item.title.toLowerCase()}`} key={item.title}
             className="flex hover:bg-white/10 transition duration-200 text-2xl items-center justify-start w-fit space-x-4 rounded-3xl p-4 py-3">
             <div>
               <item.icon className="text-3xl" />
             </div>
-            {item.title !== "Twitter" && <div className="text-xl lg:flex hidden"> {item.title} </div>}
+            {item.title !== "Twitter" && <div className="text-xl hidden lg:flex"> {item.title} </div>}
           </Link>
 
         ))}
@@ -80,25 +80,24 @@ const LeftSidebar = async () => {
           Post
         </button>
         <div className='lg:hidden flex justify-start pl-2 py-2'>
-          <button className="min-w-12 h-12 items-center justify-center bg-white text-black rounded-full hover:bg-white/90 transition duration-200">
+          <button className="min-w-12 h-12 items-center justify-center bg-blue-400 text-white sm:bg-white sm:text-black rounded-full hover:bg-white/90 transition duration-200">
             <RiQuillPenAiLine className='text-2xl items-center justify-center m-auto' />
           </button>
         </div>
       </div>
 
 
-
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button className="flex items-center justify-between space-x-4 bg-transparent text-black rounded-full p-4 font-bold hover:bg-white/10 transition duration-200 w-full  pr-3">
+          <button className="flex items-center justify-between space-x-4 bg-transparent text-black rounded-full p-4 font-bold hover:bg-white/10 transition duration-200 w-full pr-3">
             <div className="flex items-center space-x-2">
-              <Image src={userProfiles?.profilePicture as string} alt='profilePicture' width={300} height={300} className="object-cover rounded-full bg-white w-10 h-10" />
-              <div className="text-left">
+              <Image src={userProfiles?.profilePicture as string} alt='profilePicture' width={300} height={300} className="object-cover rounded-full bg-white w-10 min-h-10" />
+              <div className="text-left hidden lg:inline-block ">
                 <div className="text-sm text-white font-semibold"> {userProfiles?.displayName ? userProfiles.displayName : userProfiles?.username} </div>
-                <div className="text-sm text-white/60 font-normal">@{userProfiles?.username}</div>
+                <div className="text-sm text-white/60 ont-normal">@{userProfiles?.username}</div>
               </div>
             </div>
-            <div className="text-white">
+            <div className="hidden lg:inline-block text-white">
               <BsThreeDots />
             </div>
           </button>
@@ -109,7 +108,7 @@ const LeftSidebar = async () => {
               Add an existing account
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:bg-white/10 rounded-xl cursor-pointer px-4 py-3 mb-1 text-sm">
-              <LogoutButton username={userProfiles?.username as string}  />
+              <LogoutButton username={userProfiles?.username as string} />
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>

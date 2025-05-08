@@ -21,7 +21,7 @@ const MainComponent = async () => {
   const posts = await response.json()
 
   return (
-    <main className="w-full xl:max-w-[48%] h-full min-h-screen flex-col border-l border-r border-gray-600/50">
+    <main className="w-full xl:w-[48%] h-full min-h-screen flex-col border-l border-r border-gray-600/50">
       <AuthModel />
       <div className="flex items-center">
         <div className="hover:bg-white/3 text-sm font-bold flex justify-around py-5 border-b border-gray-600/50 w-full backdrop-blur-md bg-black/3 sticky top-0 cursor-pointer">For you</div>
@@ -33,7 +33,7 @@ const MainComponent = async () => {
 
 
       {/* LIST OF POSTS */}
-      <div className="flex flex-col">
+      <div className="">
         {
           userId ? posts.result.map((post: Post) => (
             <Posts key={post.id} post={post} userId={userId || ""} userProfiles={posts.userProfiles} />

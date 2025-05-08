@@ -6,6 +6,7 @@ import AuthModel from "@/components/client-components/AuthModel";
 import LeftSidebar from "@/components/LeftSidebar";
 import RightSection from "@/components/RightSection";
 import AuthListener from "@/components/client-components/AuthListener";
+import Navbar from "@/components/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,19 +31,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-
         <div className="w-full h-full flex justify-center items-center relative ">
-
           <div className="max-w-screen-xl w-full h-full flex relative">
             <AuthModel />
             <AuthListener />
-            <LeftSidebar />
 
+            <LeftSidebar />
             <Toaster />
             {children}
             <RightSection />
           </div>
         </div>
+        <Navbar />
       </body>
     </html>
   );

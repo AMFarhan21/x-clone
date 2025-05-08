@@ -48,19 +48,25 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
 
 
     return (
-            <div key={post.id} onClick={handlePostClick} className="border-b border-gray-600/50 flex pt-3 px-4 cursor-pointer hover:bg-white/2">
+        <div key={post.id} onClick={handlePostClick} className="flex-shrink- border-b border-gray-600/50 pt-3 w-full cursor-pointer hover:bg-white/2">
+
+            <div className="flex px-4">
                 {post.profilePicture ? (
-                    <Image alt="profilePicture" src={post.profilePicture} width={300} height={300} loading="eager" className="bg-white/50 w-10 h-10 rounded-full object-cover" onClick={(e) => {e.stopPropagation(); handlePostProfileClick()}} />
+                    <Image alt="profilePicture" src={post.profilePicture} width={300} height={300} loading="eager" className="bg-white/50 w-10 h-10 rounded-full object-cover" onClick={(e) => { e.stopPropagation(); handlePostProfileClick() }} />
                 ) : (
-                    <div className="bg-white/50 min-w-10 h-10 rounded-full" onClick={(e) => {e.stopPropagation(); handlePostProfileClick()}}>  </div>
+                    <div className="bg-white/50 min-w-10 h-10 rounded-full" onClick={(e) => { e.stopPropagation(); handlePostProfileClick() }}>  </div>
                 )}
+
                 <div className="ml-4 w-full">
                     <div className="flex justify-between">
-                        <div className="flex items-center">
-                            <div className="font-semibold hover:border-b-2 border-white" onClick={(e) => {e.stopPropagation(); handlePostProfileClick()}}>{post.displayName ? post.displayName : post.username}</div>
-                            <div className="text-white/50 text-sm ml-1" onClick={(e) => {e.stopPropagation(); handlePostProfileClick()}}>@{post.username}</div>
-                            <div className="text-white/50 text-sm"> <BsDot /> </div>
-                            <div className="text-white/50 text-sm"> <DayJs date={post.created_at} profilesCreated={null} /> </div>
+                        <div className="sm:flex min-w-0 items-center">
+
+                            <div className="font-semibold hover:border-b-2 border-white whitespace-nowrap " onClick={(e) => { e.stopPropagation(); handlePostProfileClick() }}>{post.displayName ? post.displayName : post.username}</div>
+                            <div className="flex">
+                                <div className="text-white/50 text-sm ml-1 whitespace-nowrap text-ellipsis overflow-hidden" onClick={(e) => { e.stopPropagation(); handlePostProfileClick() }}>@{post.username}</div>
+                                <div className="text-white/50 text-sm"> <BsDot /> </div>
+                                <div className="text-white/50 text-sm whitespace-nowrap overflow-x-hidden"> <DayJs date={post.created_at} profilesCreated={null} /> </div>
+                            </div>
                         </div>
                         <div className="flex space-x-2 items-center">
                             <div>Grok</div>
@@ -72,19 +78,20 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
                     <div className="pb leading-4.5 text-[15px] mt-2"> {post.text} </div>
 
                     {
-                        imageArray.length > 0 && (<div className={`grid gap-[2px] roundex-2xl overflow-hidden ${imageArray.length === 1 ? "grid-cols-1" : "grid-cols-2"} ${imageArray.length === 2 && "grid-cols-2 h-75 w-full"} ${imageArray.length === 3 && "grid-cols-2 grid-rows-2"} mt-4 rounded-2xl`}>
-                            {imageArray.slice(0, 4).map((fileUrl : string, index : number) => {
+                        imageArray.length > 0 && (<div className={`grid gap-[2px] mt-4 rounded-2xl w-[100%] overflow-hidden ${imageArray.length === 1 ? "grid-cols-1" : "grid-cols-2"} ${imageArray.length === 2 && "grid-cols-2 h-75 w-full"} ${imageArray.length === 3 && "grid-cols-2 grid-rows-2"} `}>
+                            {imageArray.slice(0, 4).map((fileUrl: string, index: number) => {
                                 const isVideo = fileUrl.endsWith(".mp4") || fileUrl.endsWith(".mov")
 
                                 return (
                                     isVideo ? (
                                         <video key={index} controls autoPlay loop playsInline className="w-full h-full object-cover">
                                             <source src={fileUrl} type="video/mp4" />
-                                        </video> 
-                                    ): (
+                                        </video>
+                                    ) : (
                                         <Image src={fileUrl}
                                             alt="Post Image"
                                             width={500} height={500} loading="eager"
+                                            // sizes="10vw"
                                             key={index}
                                             className={`w-full h-full object-cover ${imageArray.length === 3 && index === 0 && "row-span-2"}`} />
                                     )
@@ -95,7 +102,7 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
 
 
                     <div className="flex justify-between items-center">
-                        <div className="flex items-center text-white/50 text-[18px] " onClick={(e) => {e.stopPropagation()}}>
+                        <div className="flex items-center text-white/50 text-[18px] " onClick={(e) => { e.stopPropagation() }}>
                             <ReplyButton userProfiles={userProfiles} post={post} userId={userId} dataId={post.id} postUsername={post.username} replyCount={post.replyCount} />
                         </div>
                         <div className="flex items-center text-white/50 text-[18px]">
@@ -114,6 +121,7 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
                     </div>
                 </div>
             </div>
+        </div>
     )
 }
 
