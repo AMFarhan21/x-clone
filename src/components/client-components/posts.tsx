@@ -50,14 +50,14 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
     return (
         <div key={post.id} onClick={handlePostClick} className="flex-shrink- border-b border-gray-600/50 pt-3 w-full cursor-pointer hover:bg-white/2">
 
-            <div className="flex px-4">
+            <div className="flex !px-2 sm:!px-4">
                 {post.profilePicture ? (
                     <Image alt="profilePicture" src={post.profilePicture} width={300} height={300} loading="eager" className="bg-white/50 w-10 h-10 rounded-full object-cover" onClick={(e) => { e.stopPropagation(); handlePostProfileClick() }} />
                 ) : (
                     <div className="bg-white/50 min-w-10 h-10 rounded-full" onClick={(e) => { e.stopPropagation(); handlePostProfileClick() }}>  </div>
                 )}
 
-                <div className="ml-4 w-full">
+                <div className="ml-2 sm:!ml-4 w-full">
                     <div className="flex justify-between">
                         <div className="sm:flex min-w-0 items-center">
 
@@ -68,7 +68,7 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
                                 <div className="text-white/50 text-sm whitespace-nowrap overflow-x-hidden"> <DayJs date={post.created_at} profilesCreated={null} /> </div>
                             </div>
                         </div>
-                        <div className="flex space-x-2 items-center">
+                        <div className="sm:flex space-x-2 items-center">
                             <div>Grok</div>
                             <div>
                                 <DropdownButton<Post> username={post.username} data={post} userId={userId} />
