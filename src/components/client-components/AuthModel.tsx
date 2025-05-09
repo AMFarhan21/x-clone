@@ -37,7 +37,7 @@ const AuthModel = () => {
 
 
                 setIsOpen(false)
-                toast.success("You have logged in")
+                // toast.success("You have logged in")
                 router.refresh()
             }
         }

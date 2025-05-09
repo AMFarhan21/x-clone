@@ -10,23 +10,68 @@ import { FaUser } from 'react-icons/fa';
 import { createClient } from '@/utils/supabase/server';
 import Image from 'next/image';
 
-type likesType = {
+type groupedType = {
   postId: string,
   postText: string,
   postImageUrl: string,
+  replyId: string,
+  replyText: string,
+  replyImageUrl: string,
   likerId: string,
   likerUsername: string,
   likerDisplayName: string,
-  likerProfilePicture: string
+  likerProfilePicture: string,
+  reposterId: string,
+  reposterUsername: string,
+  reposterDisplayName: string,
+  reposterProfilePicture: string,
+  likesId: string,
+  repostId: string,
+  createdAt: string
+
+  followersId: string,
+  id: string,
+  type: string,
+  action: string,
+  userId: string,
+  username: string,
+  displayName: string,
+  profilePicture: string,
+  latest: string
 }
 
-type groupedLIkesType = {
+type groupedPostLikesType = {
   [postId: string]: {
     postText: string,
     postImageUrl: string,
-    likers: likesType[]
+    otherUsers: groupedType[]
   }
 }
+
+type groupedReplyLikesType = {
+  [replyId: string]: {
+    replyText: string,
+    replyImageUrl: string,
+    otherUsers: groupedType[]
+  }
+}
+
+type groupedPostRepostType = {
+  [postId: string]: {
+    postText: string,
+    postImageUrl: string,
+    otherUsers: groupedType[]
+  }
+}
+
+type groupedReplyRepostType = {
+  [replyId: string]: {
+    replyText: string,
+    replyImageUrl: string,
+    otherUsers: groupedType[]
+  }
+}
+
 
 
 const notifications = async () => {
@@ -37,24 +82,146 @@ const notifications = async () => {
     return
   }
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/posts?userId=${user.user?.id}`)
+  const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/notifications?userId=${user.user?.id}`)
   const res = await response.json()
-  const getNotifLikes = res.likesNotif
+  const { postLikesNotif, replyLikesNotif, repostPostNotif, repostReplyNotif, followsNotif } = res
 
-  const groupedLikes: groupedLIkesType = {}
-  getNotifLikes.forEach((item: likesType) => {
-    if (!groupedLikes[item.postId]) {
-      groupedLikes[item.postId] = {
+  const postGroupLikes: groupedPostLikesType = {}
+  postLikesNotif.forEach((item: groupedType) => {
+    if (!postGroupLikes[item.postId]) {
+      postGroupLikes[item.postId] = {
         postText: item.postText,
         postImageUrl: item.postImageUrl,
-        likers: []
+        otherUsers: []
       }
 
     }
-    groupedLikes[item.postId].likers.push(item)
+    postGroupLikes[item.postId].otherUsers.push(item)
   })
+  const postGroupLikesArray = Object.entries(postGroupLikes)
 
-  const groupedLikesArray = Object.entries(groupedLikes)
+  // REPLY LIKES GROUP
+  const replyGroupLikes: groupedReplyLikesType = {}
+  replyLikesNotif.forEach((item: groupedType) => {
+    if (!replyGroupLikes[item.replyId]) {
+      replyGroupLikes[item.replyId] = {
+        replyText: item.replyText,
+        replyImageUrl: item.replyImageUrl,
+        otherUsers: []
+      }
+    }
+
+    replyGroupLikes[item.replyId].otherUsers.push(item)
+  })
+  const replyGroupLikesArray = Object.entries(replyGroupLikes)
+
+  // POST REPOST GROUP
+  const postGroupRepost: groupedPostRepostType = {}
+  repostPostNotif.forEach((item: groupedType) => {
+    if (!postGroupRepost[item.postId]) {
+      postGroupRepost[item.postId] = {
+        postText: item.postText,
+        postImageUrl: item.postImageUrl,
+        otherUsers: []
+      }
+    }
+    postGroupRepost[item.postId].otherUsers.push(item)
+  })
+  const postGroupRepostArray = Object.entries(postGroupRepost)
+
+  // REPLY REPOST GROUP
+  const replyGroupRepost: groupedReplyRepostType = {}
+  repostReplyNotif.forEach((item: groupedType) => {
+    if (!replyGroupRepost[item.replyId]) {
+      replyGroupRepost[item.replyId] = {
+        replyText: item.replyText,
+        replyImageUrl: item.replyImageUrl,
+        otherUsers: []
+      }
+    }
+
+    replyGroupRepost[item.replyId].otherUsers.push(item)
+  })
+  const replyGroupRepostArray = Object.entries(replyGroupRepost)
+
+  const followsNotifArray = followsNotif.map((item: groupedType) => ({
+    id: item.id,
+    type: "follow",
+    action: "follow",
+    userId: item.followersId,
+    username: item.username,
+    displayName: item.displayName,
+    profilePicture: item.profilePicture,
+    latest: item.createdAt
+  }))
+
+
+
+  // COMBINED
+  const combinedNotification = [
+    ...postGroupLikesArray.map(([postId, data]) => {
+      const sortedLikers = [...data.otherUsers].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      return {
+        id: postId,
+        type: "post",
+        action: "likes",
+        text: data.postText,
+        imageUrl: data.postImageUrl,
+        otherUsers: sortedLikers,
+        otherUsersId: sortedLikers[0].likesId,
+        latest: sortedLikers[0].createdAt
+      }
+    }),
+    ...replyGroupLikesArray.map(([replyId, data]) => {
+      const sortedLikers = [...data.otherUsers].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      return {
+        id: replyId,
+        type: "reply",
+        action: "likes",
+        text: data.replyText,
+        imageUrl: data.replyImageUrl,
+        otherUsers: sortedLikers,
+        otherUsersId: sortedLikers[0].likesId,
+        latest: sortedLikers[0].createdAt
+      }
+    }),
+    ...postGroupRepostArray.map(([postId, data]) => {
+      const sortedReposter = [...data.otherUsers].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      return {
+        id: postId,
+        type: "post",
+        action: "repost",
+        text: data.postText,
+        imageUrl: data.postImageUrl,
+        otherUsers: sortedReposter,
+        otherUsersId: sortedReposter[0].repostId,
+        latest: sortedReposter[0].createdAt
+      }
+    }),
+    ...replyGroupRepostArray.map(([replyId, data]) => {
+      const sortedReposter = [...data.otherUsers].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      return {
+        id: replyId,
+        type: "reply",
+        action: "repost",
+        text: data.replyText,
+        imageUrl: data.replyImageUrl,
+        otherUsers: sortedReposter,
+        otherUsersId: sortedReposter[0].repostId,
+        latest: sortedReposter[0].createdAt
+      }
+    }),
+    ...followsNotifArray
+    .map((data: groupedType) => ({
+      id: data.id,
+      type: data.type,
+      action: data.action,
+      userId: data.userId,
+      username: data.username,
+      profilePicture: data.profilePicture,
+      latest: data.latest
+    }))
+  ].sort((a, b) => new Date(b.latest).getTime() - new Date(a.latest).getTime())
 
 
   return (
@@ -95,74 +262,126 @@ const notifications = async () => {
         </TabsList>
         <TabsContent value="All" className='min-h-160 p-4'>
           {
-            groupedLikesArray.map(([postId, data]) => {
-              const filteredLikers = data.likers.filter((l) => l.likerId !== user.user?.id)
-              if (filteredLikers.length === 0) return null;
+            combinedNotification.map((item) => {
 
-              const display = filteredLikers.length > 1 ? filteredLikers.slice(0, 2) : filteredLikers.slice(0, 1);
-              const otherAccount = filteredLikers.length - display.length
-              const allLikers = display.map(liker => liker.likerUsername).join(", ") + (otherAccount > 0 ? `and ${otherAccount} others` : '')
+              if (!item.otherUsers) {
+                if (item.type === "follow") {
+                  return (
+                    <div key={item.id} className='flex items-top gap-x-2 border-b border-gray-600/60 mb-4'>
+                      <div> <FaUser className='text-blue-400/80 text-2xl' /> </div>
+                      <div>
+                        <div className='flex gap-x-2 mb-2'>
+                          <Image src={item.profilePicture} width={200} height={200} alt='profilePicture' className='w-8 h-8 rounded-full bg-gray-600 object-cover' />
+                        </div>
+                        <div className='font-bold mb-2'>
+                          {item.username} <span className='font-light'>followed you</span>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                }
+              }
+
+              const filteredUsers = item.otherUsers.filter((u: groupedType) => u.likerId !== user.user?.id && u.repostId !== user.user?.id)
+              if (filteredUsers.length === 0) return null;
+
+              const display = filteredUsers.length > 1 ? filteredUsers.slice(0, 2) : filteredUsers.slice(0, 1);
+              const otherAccount = filteredUsers.length - display.length
+              const likeUsers = display.map((users: groupedType) => users.likerUsername).join(", ") + (otherAccount > 0 ? `and ${otherAccount} others` : '')
+              const repostUsers = display.map((users: groupedType) => users.reposterUsername).join(", ") + (otherAccount > 0 ? `and ${otherAccount} other` : '')
 
 
-              return (
-                <div key={postId} className='flex items-top gap-x-2 border-b border-gray-600/60 mb-4'>
-                  <div> <IoHeart className='text-pink-700 text-3xl' /> </div>
-                  <div>
-                    <div className='flex gap-x-2 mb-2'>
-                      {
-                        display.map((l, idx) => ((
-                          <Image key={idx} alt="profilePicture" width={200} height={200} src={l.likerProfilePicture} className='w-8 h-8 rounded-full bg-gray-600 object-cover' />
-                        )))
-                      }
+              switch (item.type) {
+                case "post":
+                  return (
+                    <div key={item.id} className='flex items-top gap-x-2 border-b border-gray-600/60 mb-4'>
+                      <div>
+                        {
+                          item.action === "likes" ? (
+                            <IoHeart className='text-pink-700 text-3xl' />
+                          ) : (
+                            <FaRetweet className='text-green-400/80 text-2xl' />
+                          )
+                        }
+                      </div>
+                      <div>
+                        <div className='flex gap-x-2 mb-2'>
+                          {
+                            item.action === "likes" ? (
+                              display.map((u: groupedType) => ((
+                                <Image key={u.likerId} alt="profilePicture" width={200} height={200} src={u.likerProfilePicture} className='w-8 h-8 rounded-full bg-gray-600 object-cover' />
+                              )))
+                            ) : (
+                              display.map((u: groupedType) => ((
+                                <Image key={u.repostId} alt="profilePicture" width={200} height={200} src={u.reposterProfilePicture} className='w-8 h-8 rounded-full bg-gray-600 object-cover' />
+                              )))
+                            )
+                          }
+                        </div>
+                        {
+                          item.action === "likes" ? (
+                            <div className='font-bold mb-2'>
+                              {likeUsers} <span className='font-light'>liked your post</span>
+                            </div>
+                          ) : (
+                            <div className='font-bold mb-2'>
+                              {repostUsers} <span className='font-light'>reposted your reply</span>
+                            </div>
+                          )
+                        }
+                        <div className='text-gray-400/80 font-light leading-5 mb-4'>
+                          {item.text !== "" ? item.text : item.imageUrl}
+                        </div>
+                      </div>
                     </div>
-                    <div className='font-bold mb-2'>
-                      {allLikers} liked your post
+                  )
+                case "reply":
+                  return (
+                    <div key={item.id} className='flex items-top gap-x-2 border-b border-gray-600/60 mb-4'>
+                      <div>
+                        {
+                          item.action === "likes" ? (
+                            <IoHeart className='text-pink-700 text-3xl' />
+                          ) : (
+                            <FaRetweet className='text-green-400/80 text-2xl' />
+                          )
+                        }
+                      </div>
+                      <div>
+                        <div className='flex gap-x-2 mb-2'>
+                          {
+                            item.action === "likes" ? (
+                              display.map((u: groupedType) => ((
+                                <Image key={u.likerId} alt="profilePicture" width={200} height={200} src={u.likerProfilePicture} className='w-8 h-8 rounded-full bg-gray-600 object-cover' />
+                              )))
+                            ) : (
+                              display.map((u: groupedType) => ((
+                                <Image key={u.repostId} alt="profilePicture" width={200} height={200} src={u.reposterProfilePicture} className='w-8 h-8 rounded-full bg-gray-600 object-cover' />
+                              )))
+                            )
+                          }
+                        </div>
+                        {
+                          item.action === "likes" ? (
+                            <div className='font-bold mb-2'>
+                              {likeUsers} <span className='font-light'>liked your post</span>
+                            </div>
+                          ) : (
+                            <div className='font-bold mb-2'>
+                              {repostUsers} <span className='font-light'>reposted your reply</span>
+                            </div>
+                          )
+                        }
+                        <div className='text-gray-400/80 font-light leading-5 mb-4'>
+                          {item.text !== "" ? item.text : item.imageUrl}
+                        </div>
+                      </div>
                     </div>
-                    <div className='text-gray-400/80 font-light leading-5 mb-4'>
-                      {data.postText !== "" ? data.postText : data.postImageUrl}
-                    </div>
-                  </div>
-                </div>
-              )
-            }
-            )
+                  )
+              }
+            })
           }
-          {/* Likes */}
 
-
-          {/* Repost */}
-          <div className='flex items-top gap-x-2 border-b border-gray-600/60 mb-4'>
-            <div> <FaRetweet className='text-green-400/80 text-2xl' /> </div>
-            <div>
-              <div className='flex gap-x-2 mb-2'>
-                <div className='w-8 h-8 rounded-full bg-gray-600'></div>
-                <div className='w-8 h-8 rounded-full bg-gray-600'></div>
-              </div>
-              <div className='font-bold mb-2'>
-                Farhan and Nori liked your post
-              </div>
-              <div className='text-gray-400/80 font-light leading-5 mb-4'>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatum corrupti, consequuntur id eveniet optio, itaque tempore ad voluptatibus sed molestiae sint eius enim reprehenderit rem ut recusandae dolorum repudiandae exercitationem?
-              </div>
-            </div>
-          </div>
-
-          {/* Followed by */}
-          <div className='flex items-top gap-x-2 border-b border-gray-600/60 mb-4'>
-            <div> <FaUser className='text-blue-400/80 text-2xl' /> </div>
-            <div>
-              <div className='flex gap-x-2 mb-2'>
-                <div className='w-8 h-8 rounded-full bg-gray-600'></div>
-                <div className='w-8 h-8 rounded-full bg-gray-600'></div>
-              </div>
-              <div className='font-bold mb-2'>
-                Farhan and Nori liked your post
-              </div>
-              <div className='text-gray-400/80 font-light leading-5 mb-4'>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatum corrupti, consequuntur id eveniet optio, itaque tempore ad voluptatibus sed molestiae sint eius enim reprehenderit rem ut recusandae dolorum repudiandae exercitationem?
-              </div>
-            </div>
-          </div>
 
           {/* Reply */}
           <div className="border-b border-gray-600/50 flex cursor-pointer hover:bg-white/2">

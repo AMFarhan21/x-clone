@@ -36,7 +36,7 @@ const Replies = ({ reply, userId, username, userProfiles }: replyProps) => {
     // console.log(post)
 
     return (
-        <div key={reply.id} onClick={handleReplyClick} className="border-b border-gray-600/50 flex pt-3 px-4 cursor-pointer hover:bg-white/2">
+        <div key={reply.id} onClick={handleReplyClick} className="border-b border-gray-600/50 flex pt-3 px-2 sm:!px-4 cursor-pointer hover:bg-white/2">
             {
                 reply.profilePicture ? (
                     <Image alt='profilePicture' width={300} height={300} loading="eager" src={reply.profilePicture} className="bg-white/50 object-cover w-10 h-10 rounded-full p" onClick={(e) => { e.stopPropagation(); handleReplyProfile() }} />
@@ -44,15 +44,17 @@ const Replies = ({ reply, userId, username, userProfiles }: replyProps) => {
                     <div className="bg-white/50 min-w-10 h-10 rounded-full p">  </div>
                 )
             }
-            <div className="ml-4 w-full">
+            <div className="ml-2 sm:!ml-4 w-full">
                 <div className="flex justify-between">
-                    <div className="flex items-center">
+                    <div className="sm:flex items-center">
                         <div className="font-semibold hover:border-b-2 border-white" onClick={(e) => { e.stopPropagation(); handleReplyProfile() }}>{reply.username ?? ""}</div>
+                        <div className='flex'>
                         <div className="text-white/50 text-sm ml-1" onClick={(e) => { e.stopPropagation(); handleReplyProfile() }}>@{reply.username}</div>
                         <div className="text-white/50 text-sm"> <BsDot /> </div>
                         <div className="text-white/50 text-sm">
                             {/* {dayjs(reply.profiles.createdAt).fromNow()} */}
                             <DayJs date={reply.created_at} profilesCreated={null} />
+                        </div>
                         </div>
                     </div>
                     <div className="flex space-x-2 items-center">

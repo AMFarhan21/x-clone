@@ -69,37 +69,7 @@ export async function GET(req: Request) {
     })
 
 
-  const likesNotif = await db
-    .select({
-      postId: post.id,
-      postText: post.text,
-      postImageUrl: post.imageUrl,
-      likerId: profiles.id,
-      likerUsername: profiles.username,
-      likerDisplayName: profiles.displayName,
-      likerProfilePicture: profiles.profilePicture
-    })
-    .from(likes)
-    .innerJoin(post, eq(likes.postId, post.id))
-    .innerJoin(profiles, eq(likes.profilesId, profiles.id))
-    .where(eq(post.profilesId, userId as string))
-    .orderBy(desc(likes.id))
-    .groupBy(
-      post.id,
-      post.text,
-      post.imageUrl,
-      profiles.id,
-      profiles.username,
-      profiles.displayName,
-      profiles.profilePicture,
-      likes.id,
-    ).catch((error) => {
-      console.log("ERROR ON LIKES ROUTE -> LIKES NOTIF: ", error)
-      return NextResponse.json({ success: false, error, message: "ERROR ON LIKES ROUTE -> LIKES NOTIF" })
-    })
-
-
-  return NextResponse.json({ success: true, result, userId, userProfiles, likesNotif });
+  return NextResponse.json({ success: true, result, userId, userProfiles });
 }
 
 export async function POST(req: Request) {

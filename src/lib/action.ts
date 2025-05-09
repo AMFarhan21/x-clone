@@ -102,6 +102,10 @@ export async function signOut() {
 export async function updateGoogleSignUp(user: UserLogin) {
 
   if (user?.app_metadata?.provider === "google") {
+    const existing = await db.select().from(profiles).where(eq(profiles.id, user.id))
+
+    if(existing.length > 0 && existing[0].username) return 
+
     const username = await uniqueUsername(user.user_metadata.name)
     const displayName = user.user_metadata.name.slice(0, 24)
 

@@ -15,7 +15,7 @@ const AuthListener = () => {
             console.log("Auth Event", event)
             
             if(event == "SIGNED_IN") {
-                toast.success("You are logged in")
+                // toast.success("You are logged in")
                 router.refresh()
             } else if(event === "SIGNED_OUT") {
                 toast.info("You are logged out")

@@ -35,6 +35,10 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/profiles?userId=${userId}&username=${username}`)
     const data = await response.json()
+    if(data.success === false) {
+        console.log("INIIIIII ERROOOOORRRRNYYYYAAAAAA", data.message)
+    }
+
     // console.log(data.getOneProfiles.username)
 
 
@@ -203,8 +207,8 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                     <div className='text-white/50 font-thin mb-6'>When you post photos or videos, they will show up here.</div>
                 </TabsContent>
                 <TabsContent value='likes' className='m-auto flex flex-col w-80 py-6 min-h-160'>
-                    <div className='text-3xl font-bold mb-1'>You don’t have any likes yet</div>
-                    <div className='text-white/50 font-thin mb-6'>Tap the heart on any post to show it some love. When you do, it’ll show up here.</div>
+                    <div className='text-3xl font-bold mb-1'>You dont have any likes yet</div>
+                    <div className='text-white/50 font-thin mb-6'>Tap the heart on any post to show it some love. When you do, it will show up here.</div>
                 </TabsContent>
             </Tabs>
         </div>

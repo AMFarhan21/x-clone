@@ -12,7 +12,7 @@ const DayJs = ({date, profilesCreated}: {date: string | null, profilesCreated: s
   if(profilesCreated) {
     formatedDate = dayjs(profilesCreated).format('MMMM YYYY')
   } else {
-    formatedDate = dayjs(date).fromNow().replace("a ", "1").replace("ago", "").replace("our", "").replace("inute", "").replace("econds", "").replace("ay", "").replace("s", "").replace(" ", "").replace("1few", "a few seconds ago")
+    formatedDate = dayjs(date).fromNow().replace("a ", "1").replace("ago", "").replace("our", "").replace("inute", "").replace("econds", "").replace("ay", "").replace("s", "").replace(" ", "").replace("1few", "few seconds ago")
   }
 
 
