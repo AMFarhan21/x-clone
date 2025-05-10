@@ -15,7 +15,7 @@ import Image from 'next/image';
 import { Profiles } from '@/types';
 
 type composePostProps = {
-  userProfiles: Profiles,
+  userProfiles: Profiles | undefined,
 }
 
 const ComposePost = ({ userProfiles }: composePostProps) => {
@@ -81,11 +81,11 @@ const ComposePost = ({ userProfiles }: composePostProps) => {
 
 
   return (
-    <div>
+    <div className=''>
       <form onSubmit={handleSubmit}>
         <div className="text-sm font-bold flex h-3xl space-x-3 pt-5 pb-2 px-4 border-b border-gray-600/50">
           {
-            userProfiles.profilePicture ? (
+            userProfiles?.profilePicture ? (
               <Image onClick={() => router.push(`/${userProfiles.username}`)} src={userProfiles.profilePicture} alt='profilePicture' width={300} height={300} loading="eager" className="cursor-pointer object-cover w-10 h-10 bg-slate-400 rounded-full" />
             ) : (
               <div className="min-w-10 h-10 bg-slate-400 rounded-full"></div>

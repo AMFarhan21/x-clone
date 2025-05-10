@@ -29,7 +29,11 @@ const MainComponent = async () => {
       </div>
 
       {/* CREATE POST */}
-      {userId && <ComposePost userProfiles={posts.userProfiles} />}
+      {userId && (
+        <div className="hidden sm:block">
+          <ComposePost userProfiles={posts.userProfiles} />
+        </div>
+      )}
 
 
       {/* LIST OF POSTS */}

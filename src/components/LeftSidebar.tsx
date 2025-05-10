@@ -14,6 +14,9 @@ import { db } from '@/lib/db';
 import Image from 'next/image';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger, } from './ui/dropdown-menu';
 import LogoutButton from './client-components/LogoutButton';
+import { Dialog, DialogContent, DialogOverlay, DialogTrigger } from './ui/dialog';
+import ComposePost from './client-components/compose-post';
+import { Profiles } from '@/types';
 
 const NAVIGATION_ITEMS = [
   {
@@ -62,6 +65,8 @@ const LeftSidebar = async () => {
     where: (profiles, { eq }) => eq(profiles.id, data.user?.id)
   })
 
+  // console.log(userProfiles)
+
 
   return (
     <section className="hidden sticky sm:top-0 sm:w-20 lg:w-[24%] sm:flex sm:flex-col sm:items-stretch sm:h-screen sm:space-y-4 ">
@@ -76,12 +81,26 @@ const LeftSidebar = async () => {
           </Link>
 
         ))}
-        <button className="my-2 w-full bg-white text-black rounded-full p-4 font-bold hover:bg-white/90 transition duration-200 lg:flex hidden justify-around">
-          Post
-        </button>
+
+        <Dialog>
+          <DialogTrigger className="my-2 w-full bg-white text-black rounded-full p-4 font-bold hover:bg-white/90 transition duration-200 lg:flex hidden justify-around">Post</DialogTrigger>
+          <DialogOverlay className='bg-blue-300/15'></DialogOverlay>
+          <DialogContent className='bg-black text-white border border-transparent'>
+            <ComposePost userProfiles={userProfiles as Profiles | undefined} />
+          </DialogContent>
+        </Dialog>
+
         <div className='lg:hidden flex justify-start pl-2 py-2'>
-          <button className="min-w-12 h-12 items-center justify-center bg-blue-400 text-white sm:bg-white sm:text-black rounded-full hover:bg-white/90 transition duration-200">
-            <RiQuillPenAiLine className='text-2xl items-center justify-center m-auto' />
+          <Dialog>
+            <DialogTrigger className="min-w-12 h-12 items-center justify-center bg-blue-400 text-white sm:bg-white sm:text-black rounded-full hover:bg-white/90 transition duration-200">
+              <RiQuillPenAiLine className='text-2xl items-center justify-center m-auto' />
+            </DialogTrigger>
+            <DialogOverlay className='bg-blue-300/15'></DialogOverlay>
+            <DialogContent className='bg-black text-white border border-transparent'>
+              <ComposePost userProfiles={userProfiles as Profiles | undefined} />
+            </DialogContent>
+          </Dialog>
+          <button >
           </button>
         </div>
       </div>
