@@ -83,61 +83,63 @@ const ComposePost = ({ userProfiles }: composePostProps) => {
   return (
     <div className=''>
       <form onSubmit={handleSubmit}>
-        <div className="text-sm font-bold flex h-3xl space-x-3 pt-5 pb-2 px-4 border-b border-gray-600/50">
-          {
-            userProfiles?.profilePicture ? (
-              <Image onClick={() => router.push(`/${userProfiles.username}`)} src={userProfiles.profilePicture} alt='profilePicture' width={300} height={300} loading="eager" className="cursor-pointer object-cover w-10 h-10 bg-slate-400 rounded-full" />
-            ) : (
-              <div className="min-w-10 h-10 bg-slate-400 rounded-full"></div>
-            )
-          }
-          <div className="flex flex-col w-full pr-4">
-            <div className="w-full">
-              <textarea
-                value={post}
-                onChange={e => setPost(e.target.value)}
-                typeof="text"
-                name="post"
-                placeholder="What is happening?!"
-                className="min-h-[40px] font-normal text-xl w-full text-wrap border border-transparent focus:outline-none resize-none"
-              ></textarea>
-            </div>
-
+        <div className="text-sm font-bold flex h-3xl space-x-3 pt-5 pb-2 px-4 border-b border-gray-600/50 flex-col ">
+          <div className='flex'>
             {
-              previewImage.length > 0 && (
-                <div className={`grid overflow-hidden ${previewImage.length === 1 && "grid-cols-1"} ${previewImage.length === 2 && "grid-cols-2"} ${previewImage.length === 3 && "grid-cols-2 grid-rows-2"} ${previewImage.length >= 4 && "grid-cols-2 grid-rows-2"} rounded-2xl gap-[2px] h-75 w-full`}>
-                  {
-                    previewImage.map((image, i) => (
-                      <div key={i} className='relative w-full h-full'>
-                        <Image alt='image' src={image} width={500} height={500} className={`w-full h-full object-cover ${previewImage.length === 3 && i === 0 && "row-span-2"}`} />
-                        <button className='absolute bg-black/50 p-1 rounded-full top-2 right-2' onClick={(e) => {
-                          e.preventDefault();
-                          setPreviewImage(prev => prev.filter((img, index) => index !== i)); 
-                          setFile(prev => prev.filter((img, index) => index !== i));
-                        }} ><XIcon /></button>
-                      </div>
-                    ))
-                  }
-                </div>
+              userProfiles?.profilePicture ? (
+                <Image onClick={() => router.push(`/${userProfiles.username}`)} src={userProfiles.profilePicture} alt='profilePicture' width={300} height={300} loading="eager" className="cursor-pointer object-cover w-10 h-10 bg-slate-400 rounded-full" />
+              ) : (
+                <div className="min-w-10 h-10 bg-slate-400 rounded-full"></div>
               )
             }
-            <div className="flex justify-between w-full items-center mt-4">
-              <div className="flex space-x-4">
-                <div className="text-blue-400 text-[18px] cursor-pointer flex items-center" onClick={() => fileInputRef.current?.click()}>
-                  <RiImage2Line />
-                  <input className='hidden' type='file' name='files' accept='image/*, video/*' ref={fileInputRef} onChange={handleFileChange} multiple />
-                </div>
-                <div className="text-blue-400 text-[18px] cursor-pointer"> <MdOutlineGifBox /> </div>
-                <div className="text-blue-400 text-[18px] cursor-pointer"> <FaRegCircle /> </div>
-                <div className="text-blue-400 text-[18px] cursor-pointer"> <BiPoll /> </div>
-                <div className="text-blue-400 text-[18px] cursor-pointer"> <BsEmojiSmile /> </div>
-                <div className="text-blue-400 text-[18px] cursor-pointer"> <RiCalendarScheduleLine /> </div>
-                <div className="text-blue-400/50 text-[18px] cursor-pointer"> <IoLocationOutline /> </div>
+            <div className="flex flex-col w-full sm:pr-4 ml-3">
+              <div className="w-full">
+                <textarea
+                  value={post}
+                  onChange={e => setPost(e.target.value)}
+                  typeof="text"
+                  name="post"
+                  placeholder="What is happening?!"
+                  className="min-h-[40px] font-normal text-md sm:text-xl w-full text-wrap border border-transparent focus:outline-none resize-none"
+                ></textarea>
               </div>
-              <Button disabled={loading || (post.length === 0 && previewImage.length === 0)} type="submit" className="py-2 px-5 rounded-full text-black font-bold bg-white/100 hover:bg-white/90">
-                Post
-              </Button>
+
+              {
+                previewImage.length > 0 && (
+                  <div className={`grid overflow-hidden ${previewImage.length === 1 && "grid-cols-1"} ${previewImage.length === 2 && "grid-cols-2"} ${previewImage.length === 3 && "grid-cols-2 grid-rows-2"} ${previewImage.length >= 4 && "grid-cols-2 grid-rows-2"} rounded-2xl gap-[2px] h-75 w-full`}>
+                    {
+                      previewImage.map((image, i) => (
+                        <div key={i} className='relative w-full h-full'>
+                          <Image alt='image' src={image} width={500} height={500} className={`w-full h-full object-cover ${previewImage.length === 3 && i === 0 && "row-span-2"}`} />
+                          <button className='absolute bg-black/50 p-1 rounded-full top-2 right-2' onClick={(e) => {
+                            e.preventDefault();
+                            setPreviewImage(prev => prev.filter((img, index) => index !== i));
+                            setFile(prev => prev.filter((img, index) => index !== i));
+                          }} ><XIcon /></button>
+                        </div>
+                      ))
+                    }
+                  </div>
+                )
+              }
             </div>
+          </div>
+          <div className="flex justify-between w-full items-center mt-4">
+            <div className="flex space-x-2 sm:space-x-4">
+              <div className="text-blue-400 text-[18px] cursor-pointer flex items-center" onClick={() => fileInputRef.current?.click()}>
+                <RiImage2Line />
+                <input className='hidden' type='file' name='files' accept='image/*, video/*' ref={fileInputRef} onChange={handleFileChange} multiple />
+              </div>
+              <div className="text-blue-400 text-[18px] cursor-pointer"> <MdOutlineGifBox /> </div>
+              <div className="text-blue-400 text-[18px] cursor-pointer"> <FaRegCircle /> </div>
+              <div className="text-blue-400 text-[18px] cursor-pointer"> <BiPoll /> </div>
+              <div className="text-blue-400 text-[18px] cursor-pointer"> <BsEmojiSmile /> </div>
+              <div className="text-blue-400 text-[18px] cursor-pointer"> <RiCalendarScheduleLine /> </div>
+              <div className="text-blue-400/50 text-[18px] cursor-pointer"> <IoLocationOutline /> </div>
+            </div>
+            <Button disabled={loading || (post.length === 0 && previewImage.length === 0)} type="submit" className="py-4 px-2 sm:px-5 rounded-full text-black font-bold bg-white/100 hover:bg-white/90">
+              Post
+            </Button>
           </div>
         </div>
       </form>
