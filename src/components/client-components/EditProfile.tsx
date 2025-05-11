@@ -102,9 +102,9 @@ const EditProfile = ({ userId, userProfiles }: editProps) => {
             </DialogTrigger>
             <form id="form-editProfile" onSubmit={updateProfileDetails}>
                 <DialogOverlay className="bg-blue-300/20" />
-                <DialogContent className='bg-black border border-transparent min-w-[600px] max-h-[650px] overflow-y-auto rounded-2xl pb-16'>
+                <DialogContent className='bg-black border border-transparent sm:min-w-[600px] max-h-[650px] overflow-y-auto rounded-2xl pb-16'>
                     <DialogHeader>
-                        <DialogTitle className='pl-3 py-2 font-semibold text-xl gap-x-4 flex items-center sticky top-0 bg-black/60'>
+                        <DialogTitle className='pl-3 py-2 font-semibold text-xl gap-x-4 flex flex-wrap items-center sticky top-0 bg-black/60'>
                             {/* <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj5Z6h2su_P2Dpy48AmTVcigVGKB5bsYuMZQ&s' className='w-8 mx-auto' /> */}
 
                             <DialogClose className="cursor-pointer">
@@ -160,7 +160,7 @@ const EditProfile = ({ userId, userProfiles }: editProps) => {
                                     }
                                 }} form='form-editProfile' name='profileImage' type='file' accept='image/*' className='hidden' />
                             </label>
-                            <div className='px-4 space-y-8 flex flex-col text-base text-white/80' >
+                            <div className='px-4 space-y-8 flex flex-wrap flex-col text-base text-white/80' >
                                 <input form='form-editProfile' value={name} onChange={(e) => setName(e.target.value)} name='name' className={`border border-white/20 rounded-[4px] py-4 px-2 ${name.length > 0 && "text-white"}`} placeholder='Name' />
                                 <textarea form='form-editProfile' value={bio} onChange={(e) => setBio(e.target.value)} name='bio' className={`border border-white/20 w-full p-2 rounded-[4px] py-6 px-2 ${bio.length > 0 && "text-white"}`} placeholder='Bio'></textarea>
                                 <input form='form-editProfile' value={location} onChange={(e) => setLocation(e.target.value)} name='location' className={`border border-white/20 rounded-[4px] py-4 px-2 ${location.length > 0 && "text-white"}`} placeholder='Location' />
@@ -170,7 +170,7 @@ const EditProfile = ({ userId, userProfiles }: editProps) => {
                             {
                                 open ? (
                                     <div className='px-4 mt-4'>
-                                        <div className='flex text-white font-bold text-base'>
+                                        <div className='flex flex-wrap text-white font-bold text-base'>
                                             <div className=''>Birth date</div>
                                             <DotIcon className='text-white/50' />
                                             <div className='text-blue-400 cursor-pointer font-medium' onClick={() => setOpen(false)}>Cancel</div>
@@ -206,7 +206,7 @@ const EditProfile = ({ userId, userProfiles }: editProps) => {
                                     </div>
                                 ) : (
                                     <div className='px-4 mt-4'>
-                                        <div className='flex'>
+                                        <div className='flex flex-wrap'>
                                             <div className=''>Birth date</div>
                                             <DotIcon />
                                             <div className='text-blue-400 cursor-pointer' onClick={() => setOpen(true)}>Edit</div>
@@ -217,13 +217,13 @@ const EditProfile = ({ userId, userProfiles }: editProps) => {
                             }
 
                             <div className='mt-4 cursor-pointer'>
-                                <div className='text-white text-xl hover:bg-white/10 px-4 py-2 flex items-center'>
+                                <div className='text-white text-xl hover:bg-white/10 px-4 py-2 flex flex-wrap items-center'>
                                     <div>
                                         Create expanded bio
                                     </div>
                                     <IoIosArrowForward className='ml-auto text-white/40' />
                                 </div>
-                                <div className='text-white text-xl hover:bg-white/10 px-4 py-2 flex items-center'>
+                                <div className='text-white text-xl hover:bg-white/10 px-4 py-2 flex flex-wrap items-center'>
                                     <div>
                                         Edit professional profile
                                     </div>

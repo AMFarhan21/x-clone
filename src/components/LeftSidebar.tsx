@@ -69,11 +69,11 @@ const LeftSidebar = async () => {
 
 
   return (
-    <section className="hidden sticky sm:top-0 sm:w-20 lg:w-[24%] sm:flex sm:flex-col sm:items-stretch sm:h-screen sm:space-y-4 ">
-      <div className="sm:flex-col sm:h-screen sm:items-stretch sm:mt-1 sm:ml-2 sm:pr-6">
+    <section className="hidden sticky sm:top-0 sm:w-20 lg:w-[24%] sm:flex sm:flex-col justify-between sm:items-stretch sm:h-screen sm:space-y-4 sm:overflow-y-scroll  ">
+      <div className="">
         {NAVIGATION_ITEMS.map((item) => (
           <Link href={item.title === "Twitter" || item.title === "Home" ? '/' : item.title === "Profile" ? `/${userProfiles?.username}` : `/${item.title.toLowerCase()}`} key={item.title}
-            className="flex hover:bg-white/10 transition duration-200 text-2xl items-center justify-start w-fit space-x-4 rounded-3xl p-4 py-3">
+            className="flex hover:bg-white/10 transition duration-200 text-2xl items-center justify-start w-fit space-x-4 rounded-3xl sm:pl-4 lg:p-4 py-3">
             <div>
               <item.icon className="text-3xl" />
             </div>
@@ -110,10 +110,10 @@ const LeftSidebar = async () => {
         <DropdownMenuTrigger asChild>
           <button className="flex items-center justify-between space-x-4 bg-transparent text-black rounded-full p-4 font-bold hover:bg-white/10 transition duration-200 w-full pr-3">
             <div className="flex items-center space-x-2">
-              <Image src={userProfiles?.profilePicture as string} alt='profilePicture' width={300} height={300} className="object-cover rounded-full bg-white w-10 min-h-10" />
+              <Image src={userProfiles?.profilePicture as string} alt='profilePicture' width={300} height={300} className="object-cover rounded-full bg-white min-w-10 min-h-10" />
               <div className="text-left hidden lg:inline-block ">
                 <div className="text-sm text-white font-semibold"> {userProfiles?.displayName ? userProfiles.displayName : userProfiles?.username} </div>
-                <div className="text-sm text-white/60 ont-normal">@{userProfiles?.username}</div>
+                <div className="text-sm text-white/60 font-normal">@{userProfiles?.username}</div>
               </div>
             </div>
             <div className="hidden lg:inline-block text-white">

@@ -35,7 +35,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/profiles?userId=${userId}&username=${username}`)
     const data = await response.json()
-    if(data.success === false) {
+    if (data.success === false) {
         console.log("INIIIIII ERROOOOORRRRNYYYYAAAAAA", data.message)
     }
 
@@ -53,17 +53,17 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                 <div>
                     {
                         data.getOneProfiles.backgroundPicture ? (
-                            <Image alt='backgroundPicture' src={data.getOneProfiles.backgroundPicture} width={500} height={500} className='w-full h-[27vh] bg-gray-600 cursor-pointer object-cover' />
+                            <Image alt='backgroundPicture' src={data.getOneProfiles.backgroundPicture} width={500} height={500} className='w-{100%} h-{100%} sm:w-full sm:h-[27vh] bg-gray-600 cursor-pointer object-cover' />
                         ) : (
                             <div className='w-full h-[27vh] bg-gray-600 cursor-pointer'></div>
                         )
                     }
                     <div>
-                        <div className='flex'>
+                        <div className='flex flex-wrap '>
 
                             {
                                 data.getOneProfiles.profilePicture ? (
-                                    <Image alt='profilePicture' src={data.getOneProfiles.profilePicture} width={400} height={400} loading="eager" className='w-36 h-36 bg-gray-600 rounded-full mx-6 mb-5 mt-[-70px] border-3 border-black cursor-pointer object-cover' />
+                                    <Image alt='profilePicture' src={data.getOneProfiles.profilePicture} width={400} height={400} loading="eager" className=' w-25 h-25 sm:w-36 sm:h-36 bg-gray-600 rounded-full mx-6 mb-5 mt-[-70px] border-3 border-black cursor-pointer object-cover' />
                                 ) : (
                                     <div className='w-33 h-33 bg-gray-600 rounded-full mx-6 mb-7 mt-[-70px] border-3 border-black cursor-pointer'></div>
                                 )
@@ -74,14 +74,14 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                                 user.user?.id === data.getOneProfiles.id ? (
                                     <EditProfile userId={userId} userProfiles={data.userProfiles[0]} />
                                 ) : (
-                                    <div className='flex ml-auto mr-4 mt-3 gap-x-2'>
+                                    <div className='flex flex-wrap ml-auto mr-4 mt-3 gap-2 justify-end'>
                                         <button className='bg-black border border-white/50 rounded-full cursor-pointer max-h-9 hover:bg-white/7 transition duration-200 '><BsThreeDots className="text-white text-[27px] p-1 w-9 " /></button>
                                         <button className='bg-black border border-white/50 rounded-full cursor-pointer max-h-9 hover:bg-white/7 transition duration-200 '><FaRegCircle className="text-white text-[27px] p-1 w-9 " /></button>
                                         <button className='bg-black border border-white/50 rounded-full cursor-pointer max-h-9 hover:bg-white/7 transition duration-200 '><HiMiniMagnifyingGlass className="text-white text-[27px] p-1 w-9 " /></button>
                                         <button className='bg-black border border-white/50 rounded-full cursor-pointer max-h-9 hover:bg-white/7 transition duration-200 '><FaRegEnvelope className="text-white text-[27px] p-1 w-9 " /></button>
                                         <button className='bg-black border border-white/50 rounded-full cursor-pointer max-h-9 hover:bg-white/7 transition duration-200 '><LuBellPlus className="text-white text-[27px] p-1 w-9 " /></button>
                                         <FollowButton userLogin={user.user as UserLogin} userId={userId} targetUsername={data.getOneProfiles.username} targetUserId={data.getOneProfiles.id} isFollowed={data.isFollowed[0].isFollowed} />
-                                        </div>
+                                    </div>
 
                                 )
                             }
@@ -116,7 +116,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
 
 
             <Tabs defaultValue="posts">
-                <TabsList className="grid grid-cols-6 bg-black/0 text-white/50 font-semibold items-center w-full border-b border-white/15 text-sm">
+                <TabsList className="grid grid-cols-6 bg-black/0 text-white/50 font-semibold items-center w-full border-b border-white/15 text-sm overflow-x-scroll">
                     <TabsTrigger
                         className='hover:bg-white/10 py-3 focus:text-white text-white/50 relative
                        after:content-[""] after:absolute after:bottom-0 after:left-[15%]
@@ -182,7 +182,7 @@ const ProfilePage = async ({ params }: { params: Promise<{ username: string }> }
                         ))}
                     </div>
                 </TabsContent>
-                <TabsContent value='replies' className='min-h-160'>
+                <TabsContent value='replies' className='min-h-160 mb-10 pb-10'>
                     <div>
                         {data.replies.map((reply: Reply) => (
                             <div key={reply.id}>

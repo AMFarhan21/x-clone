@@ -28,6 +28,8 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
         e.stopPropagation();
     }
 
+
+
     const handlePostClick = () => {
         const select = window.getSelection();
         if (select && select.toString().length > 0) {
@@ -39,7 +41,7 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
 
 
     const handlePostProfileClick = () => {
-        router.push(`/${post.username}`)
+        window.location.href = `/${post.username}`
     }
 
 
@@ -48,7 +50,7 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
 
 
     return (
-        <div key={post.id} onClick={handlePostClick} className="flex-shrink- border-b border-gray-600/50 pt-3 w-full cursor-pointer hover:bg-white/2">
+        <div key={post.id} onClick={handlePostClick} className="border-b border-gray-600/50 pt-3 w-full cursor-pointer hover:bg-white/2">
 
             <div className="flex !px-2 sm:!px-4">
                 {post.profilePicture ? (
@@ -57,25 +59,25 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
                     <div className="bg-white/50 min-w-10 h-10 rounded-full" onClick={(e) => { e.stopPropagation(); handlePostProfileClick() }}>  </div>
                 )}
 
-                <div className="ml-2 sm:!ml-4 w-full">
-                    <div className="flex justify-between">
-                        <div className="sm:flex min-w-0 items-center">
+                <div className="ml-2 sm:!ml-4 sm:w-full w-[85%]">
+                    <div className="flex justify-between ">
+                        <div className="flex flex-wrap min-w-0 items-center">
 
                             <div className="font-semibold hover:border-b-2 border-white whitespace-nowrap " onClick={(e) => { e.stopPropagation(); handlePostProfileClick() }}>{post.displayName ? post.displayName : post.username}</div>
-                            <div className="flex">
-                                <div className="text-white/50 text-sm ml-1 whitespace-nowrap text-ellipsis overflow-hidden" onClick={(e) => { e.stopPropagation(); handlePostProfileClick() }}>@{post.username}</div>
-                                <div className="text-white/50 text-sm"> <BsDot /> </div>
-                                <div className="text-white/50 text-sm whitespace-nowrap overflow-x-hidden"> <DayJs date={post.created_at} profilesCreated={null} /> </div>
-                            </div>
+
+                            <div className="text-white/50 text-sm ml-1 whitespace-nowrap text-ellipsis overflow-hidden" onClick={(e) => { e.stopPropagation(); handlePostProfileClick() }}>@{post.username}</div>
+                            <div className="text-white/50 text-sm"> <BsDot /> </div>
+                            <div className="text-white/50 text-sm whitespace-nowrap overflow-x-hidden"> <DayJs date={post.created_at} profilesCreated={null} /> </div>
+
                         </div>
-                        <div className="sm:flex space-x-2 items-center">
+                        <div className="flex flex-wrap space-x-2 items-center">
                             <div>Grok</div>
                             <div>
                                 <DropdownButton<Post> username={post.username} data={post} userId={userId} />
                             </div>
                         </div>
                     </div>
-                    <div className="pb leading-4.5 text-[15px] mt-2"> {post.text} </div>
+                    <div className="pb leading-4.5 text-[15px] mt-2 overflow-x-scroll overflow-clip"> {post.text} </div>
 
                     {
                         imageArray.length > 0 && (<div className={`grid gap-[2px] mt-4 rounded-2xl w-[100%] overflow-hidden ${imageArray.length === 1 ? "grid-cols-1" : "grid-cols-2"} ${imageArray.length === 2 && "grid-cols-2 h-75 w-full"} ${imageArray.length === 3 && "grid-cols-2 grid-rows-2"} `}>

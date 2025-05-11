@@ -81,7 +81,7 @@ const ComposeReply = ({ userProfiles, userId, dataId, onReplySuccess }: ComposeR
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <div className={`text-sm font-bold flex h-3xl space-x-3 pt-4 px-4 ${hide ? "border-b border-white/20" : ""} `}>
+                <div className={`text-sm font-bold flex h-3xl space-x-3 pt-4 px-2 sm:px-4 ${hide ? "border-b border-white/20" : ""} `}>
                     {
                         userProfiles?.profilePicture ? (
                             <Image src={userProfiles?.profilePicture} alt="profilePicture" width={300} height={300} loading="eager" className="object-cover w-10 h-10 bg-slate-400 rounded-full" />
@@ -98,7 +98,7 @@ const ComposeReply = ({ userProfiles, userId, dataId, onReplySuccess }: ComposeR
                                 typeof="text"
                                 name="reply"
                                 placeholder="Post your reply"
-                                className="min-h-[40px] font-normal text-xl w-full text-wrap border border-transparent focus:outline-none resize-none  mt-1"
+                                className="min-h-[40px] font-normal text-md sm:text-xl w-full text-wrap border border-transparent focus:outline-none resize-none  mt-1"
                             ></textarea>
                         </div>
                         {
@@ -127,8 +127,8 @@ const ComposeReply = ({ userProfiles, userId, dataId, onReplySuccess }: ComposeR
 
 
                 </div>
-                <div className="flex justify-between w-full items-center px-4 pb-2 pt-8 border-b border-white/20" hidden={hide}>
-                    <div className="flex space-x-3">
+                <div className="flex justify-between w-full items-center px-2 sm:px-4 pb-2 pt-8 border-b border-white/20" hidden={hide}>
+                    <div className="flex space-x-2 sm:space-x-3">
                         <div className='text-blue-400 text-[18px] cursor-pointer flex items-center' onClick={(e) => {
                             e.stopPropagation();
                             fileInputRef.current?.click()

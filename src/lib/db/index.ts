@@ -8,7 +8,10 @@ import * as schema from "./schema"
 //   allowExitOnIdle: true,
 // });
 
-const queryClient = postgres(process.env.DATABASE_CONNECTION_STRING as string);
+const queryClient = postgres(process.env.DATABASE_CONNECTION_STRING as string, {
+    max: 5,
+    idle_timeout: 20,
+});
 
 export const db = drizzle(queryClient, {
     schema,
