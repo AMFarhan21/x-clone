@@ -36,11 +36,13 @@ const Navbar = async () => {
     const { data, error } = await supabase.auth.getUser()
     if (error) {
         console.log(error)
+        return;
     }
 
     const userProfiles = await db.query.profiles.findFirst({
         where: (profiles, { eq }) => eq(profiles.id, data.user?.id as string)
     })
+    
 
     return (
         <section className='sm:hidden w-full fixed bottom-0 z-50 bg-black h-14'>

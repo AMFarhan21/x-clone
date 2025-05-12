@@ -63,15 +63,15 @@ const AuthModel = () => {
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
                 <DialogTitle></DialogTitle>
                 <DialogOverlay className="bg-blue-300/20" />
-                <DialogContent className='bg-black min-w-screen h-screen border border-transparent flex justify-center items-center' onInteractOutside={(e) => e.preventDefault()}>
+                <DialogContent className='bg-black min-w-screen h-screen border border-transparent flex flex-wrap justify-center items-center overflow-y-scroll p-5' onInteractOutside={(e) => e.preventDefault()}>
                     {(signUp || signIn) && <div className="absolute inset-0 bg-blue-300/20" />}
-                    <div className='w-2xl mr-30 '>
-                        <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj5Z6h2su_P2Dpy48AmTVcigVGKB5bsYuMZQ&s' className='w-xs mx-auto' />
+                    <div className='w-2xl sm:mr-30 '>
+                        <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj5Z6h2su_P2Dpy48AmTVcigVGKB5bsYuMZQ&s' className='w-[100px] sm:w-[400px] mx-auto' />
                     </div>
-                    <div className=''>
-                        <div className='text-6xl font-bold pb-8'>Happening now</div>
+                    <div className='overflow-y-scroll'>
+                        <div className='text-5xl sm:text-6xl font-bold pb-8'>Happening now</div>
                         <div className='max-w-2xs'>
-                            <div className='text-3xl font-bold pb-6'>Join today.</div>
+                            <div className='text-2xl sm:text-3xl font-bold pb-6'>Join today.</div>
                             <div className='space-y-3'>
                                 <Button onClick={signUpWithGoogle} className='rounded-full py-5 font-normal bg-white text-black w-full border border-transparent hover:bg-white/90'>
                                     <FcGoogle />
@@ -151,7 +151,7 @@ const AuthModel = () => {
 
                 <DialogOverlay className='bg-blue-300/20' />
 
-                <DialogContent className='bg-black px-26 border border-transparent py-4' onInteractOutside={(e) => e.preventDefault()}>
+                <DialogContent className='bg-black px-9 sm:px-26 border border-transparent sm:py-4' onInteractOutside={(e) => e.preventDefault()}>
                     <DialogTitle>
                         <DialogClose className='cursor-pointer absolute left-4 top-4'>
                             <XIcon />
@@ -173,7 +173,7 @@ const AuthModel = () => {
 
 
                     <Button className='rounded-full py-5 border border-gray-400 bg-black text-white w-full font-bold hover:bg-white/90'>Forgot password?</Button>
-                    <div className='text-gray-500 mt-8 mb-14'> Don&apos;t have an account? <Link href={'/'} className='text-blue-400'>Sign up</Link> </div>
+                    <div className='text-gray-500 mt-4 sm:mt-8 mb-6 sm:mb-14'> Don&apos;t have an account? <Link href={'/'} className='text-blue-400'>Sign up</Link> </div>
                 </DialogContent>
             </Dialog>
 

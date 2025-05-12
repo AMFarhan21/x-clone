@@ -13,6 +13,7 @@ const MainComponent = async () => {
   const { data: userData, error } = await supabase.auth.getUser();
   if (error) {
     console.log(error)
+    return;
   }
   const userId = userData.user?.id as string
 
