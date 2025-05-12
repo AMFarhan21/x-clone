@@ -4,18 +4,18 @@ import { createClient } from "@/utils/supabase/server";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { profiles } from "./db/schema";
-import { db } from "./db";
+import { profiles } from "../../lib/db/schema";
+import { db } from "../../lib/db";
 import { UserLogin } from "@/types";
 
-const uniqueUsername = async(base: string) => {
+const uniqueUsername = async (base: string) => {
   const usernameBase = base.trim().toLowerCase().replace(/\s+/g, "_").slice(0, 24);
   let suffix = 0
   let uniqueUsername = usernameBase
 
-  while(true) {
+  while (true) {
     const res = await db.select().from(profiles).where(eq(profiles.username, uniqueUsername))
-    if(!res || res.length === 0) break
+    if (!res || res.length === 0) break
     suffix++
     const suffixStr = suffix.toString()
     const trimBase = usernameBase.slice(0, 24 - suffixStr.length)
@@ -104,7 +104,7 @@ export async function updateGoogleSignUp(user: UserLogin) {
   if (user?.app_metadata?.provider === "google") {
     const existing = await db.select().from(profiles).where(eq(profiles.id, user.id))
 
-    if(existing.length > 0 && existing[0].username) return 
+    if (existing.length > 0 && existing[0].username) return
 
     const username = await uniqueUsername(user.user_metadata.name)
     const displayName = user.user_metadata.name.slice(0, 24)
@@ -116,4 +116,22 @@ export async function updateGoogleSignUp(user: UserLogin) {
       profilePicture: user.user_metadata.picture,
     }).where(eq(profiles.id, user.id))
   }
+}
+
+
+export const searchUser = async(searchQuery: string) => {
+  return await db.query.profiles.findMany({
+    where: (profiles, { or, like }) => or(
+      like(profiles.username, `%${searchQuery}%`),
+      like(profiles.displayName, `%${searchQuery}%`)
+    ),
+  });
+}
+
+
+export const userIsLogin = async() => {
+  const supabase = await createClient()
+  const { data, error } = await supabase.auth.getUser()
+
+  return { data, error }
 }

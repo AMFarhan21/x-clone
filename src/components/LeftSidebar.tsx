@@ -83,7 +83,7 @@ const LeftSidebar = async () => {
         ))}
 
         <Dialog>
-          <DialogTrigger className="my-2 w-full bg-white text-black rounded-full p-4 font-bold hover:bg-white/90 transition duration-200 lg:flex hidden justify-around">Post</DialogTrigger>
+          <DialogTrigger className="my-2 bg-white text-black rounded-full py-4 px-[40%] font-bold hover:bg-white/90 transition duration-200 lg:flex hidden justify-around">Post</DialogTrigger>
           <DialogOverlay className='bg-blue-300/15'></DialogOverlay>
           <DialogContent className='bg-black text-white border border-transparent'>
             <ComposePost userProfiles={userProfiles as Profiles | undefined} />

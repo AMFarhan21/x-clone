@@ -1,5 +1,5 @@
 'use client'
-import { signOut } from '@/lib/action'
+import { signOut } from '@/components/server-components/action'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
