@@ -22,7 +22,7 @@ const SearchBar = ({
     e.preventDefault();
     try {
       if (!searchQuery.trim()) return;
-      const findUser = await searchUser(searchQuery.trim());
+      const findUser = await searchUser(searchQuery.toLowerCase().trim());
       const cleanedFindUser = findUser.filter((user) => user !== null);
       setFoundQuery(cleanedFindUser as Profiles[]);
     } catch (error) {
@@ -31,8 +31,8 @@ const SearchBar = ({
   };
 
   return (
-    <div className="mt-2">
-      <form onSubmit={handleSearch} className="relative w-full h-full">
+    <div className="mt-2 mr-2">
+      <form onSubmit={handleSearch} className="relative w-full h-full ml-1">
         <input
           id="searchBox"
           type="text"
