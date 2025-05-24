@@ -132,6 +132,5 @@ export const searchUser = async(searchQuery: string) => {
 export const userIsLogin = async() => {
   const supabase = await createClient()
   const { data, error } = await supabase.auth.getUser()
-
   return { data, error }
 }

@@ -152,7 +152,6 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
                   <video
                     key={index}
                     controls
-                    autoPlay
                     loop
                     playsInline
                     className="w-full h-full object-cover"

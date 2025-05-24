@@ -1,15 +1,17 @@
 import Posts from "./client-components/posts";
-import { createClient } from "@/utils/supabase/server";
 import ComposePost from "./client-components/compose-post";
 import { Post } from "@/types";
 import AuthModel from "./client-components/AuthModel";
 import Image from "next/image";
 import { db } from "@/lib/db";
 import Link from "next/link";
+import { userIsLogin } from "./server-components/action";
+import { getPostsAction } from "./server-components/postAction";
+import { Suspense } from "react";
+import Loading from "./client-components/Loading";
 
 const MainComponent = async () => {
-  const supabase = await createClient();
-  const { data: userData, error } = await supabase.auth.getUser();
+  const { data: userData, error } = await userIsLogin();
   if (error) {
     console.log(error);
     return;
@@ -20,9 +22,7 @@ const MainComponent = async () => {
     where: (profiles, { eq }) => eq(profiles.id, userId),
   });
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_SITE_URL}/api/posts?userId=${userId}`
-  );
+  const response = await getPostsAction(userId);
   const posts = await response.json();
 
   return (
@@ -75,12 +75,13 @@ const MainComponent = async () => {
       <div className="mb-10 sm:mb-0">
         {userId ? (
           posts.result.map((post: Post) => (
-            <Posts
-              key={post.id}
-              post={post}
-              userId={userId || ""}
-              userProfiles={posts.userProfiles}
-            />
+            <Suspense key={post.id} fallback={<div><Loading /></div>}>
+              <Posts
+                post={post}
+                userId={userId || ""}
+                userProfiles={posts.userProfiles}
+              />
+            </Suspense>
           ))
         ) : (
           <div></div>
