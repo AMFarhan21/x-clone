@@ -14,7 +14,6 @@ import { XIcon } from "lucide-react";
 import Image from "next/image";
 import { Profiles } from "@/types";
 import imageCompression from "browser-image-compression";
-import Loading from "./Loading";
 
 type composePostProps = {
   userProfiles: Profiles | undefined;
@@ -216,8 +215,7 @@ const ComposePost = ({ userProfiles }: composePostProps) => {
               </Button>
             ) : (
               <div className="z-50 bg-black/70">
-                {" "}
-                <Loading />{" "}
+                <div className="w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
               </div>
             )}
           </div>

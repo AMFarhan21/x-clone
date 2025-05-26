@@ -110,14 +110,14 @@ const ComposeReply = ({ userProfiles, userId, dataId, onReplySuccess }: ComposeR
                             `}>
                                 {
                                     previewImage.map((image, i) => (
-                                       <div  key={i} className='relative w-full h-full'>
-                                         <Image alt='image' src={image} width={300} height={300} className={`object-cover w-full h-full ${previewImage.length === 3 && i === 0 && "row-span-2"}`} />
-                                         <button className='bg-black rounded-full text-white absolute top-2 right-2 p-1' onClick={(e) => {
-                                            e.preventDefault()
-                                            setPreviewImage(prev => prev.filter((img, index) => index !== i));
-                                            setFile(prev => prev.filter((img, index) => index !== i));
-                                         }}><XIcon /></button>
-                                       </div>
+                                        <div key={i} className='relative w-full h-full'>
+                                            <Image alt='image' src={image} width={300} height={300} className={`object-cover w-full h-full ${previewImage.length === 3 && i === 0 && "row-span-2"}`} />
+                                            <button className='bg-black rounded-full text-white absolute top-2 right-2 p-1' onClick={(e) => {
+                                                e.preventDefault()
+                                                setPreviewImage(prev => prev.filter((img, index) => index !== i));
+                                                setFile(prev => prev.filter((img, index) => index !== i));
+                                            }}><XIcon /></button>
+                                        </div>
                                     ))
                                 }
 
@@ -143,9 +143,17 @@ const ComposeReply = ({ userProfiles, userId, dataId, onReplySuccess }: ComposeR
                         <div className="text-blue-400 text-[18px] cursor-pointer"> <RiCalendarScheduleLine /> </div>
                         <div className="text-blue-400/50 text-[18px] cursor-pointer"> <IoLocationOutline /> </div>
                     </div>
-                    <Button disabled={loading || (reply.length === 0 && previewImage.length === 0)} type="submit" className="rounded-full text-black font-bold bg-white hover:bg-white/80">
-                        Reply
-                    </Button>
+                    {
+                        !loading ? (
+                            <Button disabled={loading || (reply.length === 0 && previewImage.length === 0)} type="submit" className="rounded-full text-black font-bold bg-white hover:bg-white/80">
+                                Reply
+                            </Button>
+                        ) : (
+                            <div className="z-50 bg-black/70">
+                                <div className="w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                            </div>
+                        )
+                    }
                 </div>
             </form>
         </div>

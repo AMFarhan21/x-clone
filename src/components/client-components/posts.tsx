@@ -14,6 +14,8 @@ import Image from "next/image";
 import { Post, Profiles } from "@/types";
 import { useEffect, useState } from "react";
 import { XIcon } from "lucide-react";
+import { Grok } from '@lobehub/icons';
+
 
 type postProps = {
   post: Post;
@@ -121,7 +123,7 @@ const Posts = ({ post, userId, userProfiles }: postProps) => {
               </div>
             </div>
             <div className="flex flex-wrap space-x-2 items-center">
-              <div>Grok</div>
+              <Grok />
               <div>
                 <DropdownButton<Post>
                   username={post.username}

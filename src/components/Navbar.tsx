@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
-import { FaRegBell, FaRegEnvelope } from 'react-icons/fa'
+import { FaRegBell } from 'react-icons/fa'
 import { GoHome } from 'react-icons/go'
 import { HiMiniMagnifyingGlass } from 'react-icons/hi2'
 import ComposePost from './client-components/compose-post'
@@ -9,6 +9,7 @@ import { db } from '@/lib/db'
 import { Profiles } from '@/types'
 import { Dialog, DialogContent, DialogOverlay, DialogTrigger } from './ui/dialog'
 import { RiQuillPenAiLine } from 'react-icons/ri'
+import { FiBookmark } from 'react-icons/fi'
 
 const NAVIGATION_ITEMS = [
     {
@@ -24,8 +25,8 @@ const NAVIGATION_ITEMS = [
         icon: FaRegBell
     },
     {
-        title: "Messages",
-        icon: FaRegEnvelope
+        title: "Bookmarks",
+        icon: FiBookmark
     },
 
 ]
@@ -42,7 +43,7 @@ const Navbar = async () => {
     const userProfiles = await db.query.profiles.findFirst({
         where: (profiles, { eq }) => eq(profiles.id, data.user?.id as string)
     })
-    
+
 
     return (
         <section className='sm:hidden w-full fixed bottom-0 z-50 bg-black h-14'>

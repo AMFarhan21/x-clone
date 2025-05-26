@@ -11,6 +11,8 @@ import BookmarkButton from './bookmark-button'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Post, Profiles, Reply } from '@/types'
+import { Grok } from '@lobehub/icons';
+
 
 type replyProps = {
     reply: Reply;
@@ -58,7 +60,7 @@ const Replies = ({ reply, userId, username, userProfiles }: replyProps) => {
                         </div>
                     </div>
                     <div className="flex space-x-2 items-center">
-                        <div>grok</div>
+                        <Grok />
                         <div> <DropdownButton<Reply> username={reply.username} data={reply} userId={userId} /> </div>
                     </div>
                 </div>

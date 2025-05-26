@@ -35,10 +35,10 @@ const MainComponent = async () => {
               <Image
                 alt="profilePicture"
                 src={loggedInUser?.profilePicture as string}
-                width={20}
-                height={20}
+                width={200}
+                height={200}
                 loading="eager"
-                className="object-cover ml-4 min-w-10 h-10 rounded-full cursor-pointer"
+                className="object-cover ml-4 max-w-10 h-10 rounded-full cursor-pointer"
               />
             ) : (
               <div className="ml-4 min-w-10 h-10 rounded-full py-5 border-b border-gray-600/50 bg-gray-400 sticky top-0 cursor-pointer"></div>
