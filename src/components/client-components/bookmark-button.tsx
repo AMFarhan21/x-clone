@@ -1,4 +1,5 @@
 'use client'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { MdBookmark, MdBookmarkBorder } from 'react-icons/md'
 import { toast } from 'sonner'
@@ -13,6 +14,7 @@ type bookmarkProps = {
 const BookmarkButton = ({ postId, userId, replyId, isBookmarked }: bookmarkProps) => {
 
     const [bookmarked, setBookmarked] = useState(isBookmarked)
+    const router = useRouter()
 
     const handleBookmark = async () => {
         setBookmarked(!bookmarked)
@@ -26,7 +28,7 @@ const BookmarkButton = ({ postId, userId, replyId, isBookmarked }: bookmarkProps
         if (data.success) {
             console.log(data.message)
             toast.success(data.message)
-            // router.refresh()
+            router.refresh()
         } else {
             console.log(data.message)
             toast.error(data.message)

@@ -13,12 +13,18 @@ const page = async () => {
     const bookmarks = await response.json()
     
     return (
-        <div className='w-full xl:w-[48%]'>
+        <div className='w-full xl:w-[48%] mb-10'>
             <BackNavigation location={"Bookmarks"} />
             {
-                bookmarks.result.map((bookmark: Post) => (
+                bookmarks.result.length ? (
+                    bookmarks.result.map((bookmark: Post) => (
                     <Posts key={bookmark.id} post={bookmark} userProfiles={bookmarks.userProfiles} userId={userId}/>
                 ))
+                ) : (
+                    <div className="m-auto font-bold text-3xl flex flex-wrap "> 
+                        You dont have any bookmarks yet bro, bookmark something then comeback
+                    </div>
+                )
             }
         </div>
     )

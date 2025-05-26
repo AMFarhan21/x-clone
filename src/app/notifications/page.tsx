@@ -1,14 +1,12 @@
 "use server";
-import { BsDot, BsGear, BsThreeDots } from "react-icons/bs";
+import { BsGear } from "react-icons/bs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { IoHeart, IoStatsChart } from "react-icons/io5";
+import { IoHeart } from "react-icons/io5";
 import { FaRetweet } from "react-icons/fa6";
-import { HiChatBubbleLeft } from "react-icons/hi2";
-import { Bookmark } from "lucide-react";
-import { FiShare } from "react-icons/fi";
 import { FaUser } from "react-icons/fa";
 import Image from "next/image";
 import { userIsLogin } from "@/components/server-components/action";
+import BackNavigation from "@/components/client-components/BackNavigation";
 
 type groupedType = {
   postId: string;
@@ -237,9 +235,9 @@ const notifications = async () => {
   ].sort((a, b) => new Date(b.latest).getTime() - new Date(a.latest).getTime());
 
   return (
-    <div className="w-full border-l border-r border-gray-600/50 h-screen xl:max-w-[48%]">
-      <div className="flex items-center justify-between text-xl p-4">
-        <div className="font-bold">Notifications</div>
+    <div className="w-full border-l border-r border-gray-600/50 h-full xl:max-w-[48%]">
+      <div className="flex sticky top-0 items-center justify-between text-xl px-4">
+        <BackNavigation location="Notifications" />
         <div>
           {" "}
           <BsGear />{" "}
@@ -325,9 +323,11 @@ const notifications = async () => {
             return (
               <div
                 key={`${item.type}-${item.action}-${item.id}`}
-                className="flex items-top gap-x-2 border-b border-gray-600/60 mb-4"
+                className="flex items-top gap-x-2 border-b border-gray-600/60 mb-10"
               >
-                {actionIcon}
+                <div className="w-8 h-8 flex items-start justify-center mt-1">
+                  {actionIcon}
+                </div>
                 <div>
                   <div className="flex gap-x-2 mb-2">
                     {
@@ -346,7 +346,7 @@ const notifications = async () => {
                   <div className="font-bold mb-2">
                     {username} <span className="font-light">{item.action} your {item.type}</span>
                   </div>
-                  <div className="text-gray-400/80 font-light leading-5 mb-4">
+                  <div className="text-gray-400/80 font-light leading-5 mb-4 text-sm">
                     {item.text !== "" ? item.text : item.imageUrl}
                   </div>
                 </div>
@@ -355,7 +355,7 @@ const notifications = async () => {
           })}
 
           {/* Reply */}
-          <div className="border-b border-gray-600/50 flex cursor-pointer hover:bg-white/2">
+          {/* <div className="border-b border-gray-600/50 flex cursor-pointer hover:bg-white/2">
             <div className="min-w-8 h-8 rounded-full bg-gray-600"></div>
             <div>
               <div className="ml-4 w-full">
@@ -412,7 +412,7 @@ const notifications = async () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </TabsContent>
         <TabsContent value="Verified" className="min-h-160 p-4">
           <div>Hello world 2</div>
