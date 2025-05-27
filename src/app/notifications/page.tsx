@@ -236,13 +236,8 @@ const notifications = async () => {
 
   return (
     <div className="w-full border-l border-r border-gray-600/50 h-full xl:max-w-[48%]">
-      <div className="flex sticky top-0 items-center justify-between text-xl px-4">
         <BackNavigation location="Notifications" />
-        <div>
-          {" "}
-          <BsGear />{" "}
-        </div>
-      </div>
+          <BsGear className="fixed right-5 top-5"/>
       <Tabs defaultValue="All">
         <TabsList className="grid grid-cols-3 bg-black/0 text-white/50 font-semibold items-center w-full border-b border-white/15 text-sm">
           <TabsTrigger
@@ -346,7 +341,7 @@ const notifications = async () => {
                   <div className="font-bold mb-2">
                     {username} <span className="font-light">{item.action} your {item.type}</span>
                   </div>
-                  <div className="text-gray-400/80 font-light leading-5 mb-4 text-sm">
+                  <div className="w-full max-w-full text-gray-400/80 font-light leading-5 mb-4 text-sm break-words overflow-hidden">
                     {item.text !== "" ? item.text : item.imageUrl}
                   </div>
                 </div>
